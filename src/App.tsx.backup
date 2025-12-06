@@ -1,0 +1,266 @@
+import { useState, useCallback } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { DropZone } from './components/DropZone';
+import { ImageItem, ProcessedImage } from './components/ImageItem';
+import { SettingsPanel } from './components/SettingsPanel';
+import { IconGenerator } from './components/IconGenerator';
+import { ImageEnhancer } from './components/ImageEnhancer';
+import { ImageEditor } from './components/ImageEditor';
+import { QRGenerator } from './components/QRGenerator';
+import { GlobalSettingsModal } from './components/GlobalSettingsModal';
+import { ThemeProvider } from './contexts/ThemeContext';
+import { processImage, createDownloadUrl } from './utils/imageProcessor';
+import { Play, Trash2, Image as ImageIcon, Layers, Settings, Sparkles, Edit3, QrCode } from 'lucide-react';
+import { clsx } from 'clsx';
+import './i18n';
+import { useTranslation } from 'react-i18next';
+
+function AppContent() {
+  const [activeTab, setActiveTab] = useState<'optimizer' | 'generator' | 'enhancer' | 'editor' | 'qr'>('optimizer');
+  const [images, setImages] = useState<ProcessedImage[]>([]);
+  const [defaultFormat, setDefaultFormat] = useState<'image/jpeg' | 'image/png' | 'image/webp'>('image/webp');
+  const [defaultQuality, setDefaultQuality] = useState(0.8);
+  const [isProcessingAll, setIsProcessingAll] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const { t } = useTranslation();
+
+  const handleFilesDropped = useCallback((files: File[]) => {
+    const newImages: ProcessedImage[] = files.map(file => ({
+      id: uuidv4(),
+      originalFile: file,
+      previewUrl: URL.createObjectURL(file),
+      targetFormat: defaultFormat,
+      quality: defaultQuality,
+      status: 'pending'
+    }));
+    setImages(prev => [...prev, ...newImages]);
+  }, [defaultFormat, defaultQuality]);
+
+  const handleRemove = useCallback((id: string) => {
+    setImages(prev => {
+      const img = prev.find(i => i.id === id);
+      if (img?.previewUrl) URL.revokeObjectURL(img.previewUrl);
+      if (img?.processedUrl) URL.revokeObjectURL(img.processedUrl);
+      return prev.filter(i => i.id !== id);
+    });
+  }, []);
+
+  const handleUpdate = useCallback((id: string, updates: Partial<ProcessedImage>) => {
+    setImages(prev => prev.map(img => img.id === id ? { ...img, ...updates, status: 'pending' } : img));
+  }, []);
+
+  const processSingleImage = async (img: ProcessedImage): Promise<ProcessedImage> => {
+    try {
+      const blob = await processImage(img.originalFile, img.targetFormat, img.quality);
+      const url = createDownloadUrl(blob);
+      return {
+        ...img,
+        status: 'done',
+        processedBlob: blob,
+        processedUrl: url,
+        error: undefined
+      };
+    } catch (error) {
+      return {
+        ...img,
+        status: 'error',
+        error: 'Failed to process'
+      };
+    }
+  };
+
+  const handleProcess = useCallback(async (id: string) => {
+    setImages(prev => prev.map(img => img.id === id ? { ...img, status: 'processing' } : img));
+
+    const img = images.find(i => i.id === id);
+    if (!img) return;
+
+    const processed = await processSingleImage(img);
+    setImages(prev => prev.map(i => i.id === id ? processed : i));
+  }, [images]);
+
+  const handleProcessAll = useCallback(async () => {
+    setIsProcessingAll(true);
+    const pendingImages = images.filter(img => img.status === 'pending' || img.status === 'error');
+
+    // Mark all as processing
+    setImages(prev => prev.map(img => pendingImages.find(p => p.id === img.id) ? { ...img, status: 'processing' } : img));
+
+    // Process sequentially to avoid freezing UI
+    for (const img of pendingImages) {
+      const processed = await processSingleImage(img);
+      setImages(prev => prev.map(i => i.id === img.id ? processed : i));
+    }
+    setIsProcessingAll(false);
+  }, [images]);
+
+  const handleDownload = useCallback((id: string) => {
+    const img = images.find(i => i.id === id);
+    if (img && img.processedUrl) {
+      const a = document.createElement('a');
+      a.href = img.processedUrl;
+      const ext = img.targetFormat.split('/')[1];
+      const name = img.originalFile.name.substring(0, img.originalFile.name.lastIndexOf('.'));
+      a.download = `${name}_optimized.${ext}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  }, [images]);
+
+  const handleClearAll = useCallback(() => {
+    images.forEach(img => {
+      if (img.previewUrl) URL.revokeObjectURL(img.previewUrl);
+      if (img.processedUrl) URL.revokeObjectURL(img.processedUrl);
+    });
+    setImages([]);
+  }, [images]);
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col transition-colors">
+      {/* Tab Navigation */}
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 pt-4">
+        <div className="flex gap-6 max-w-5xl mx-auto items-center justify-between">
+          <div className="flex gap-6">
+            <button
+              onClick={() => setActiveTab('optimizer')}
+              className={clsx(
+                "pb-4 px-2 text-sm font-medium flex items-center gap-2 border-b-2 transition-colors",
+                activeTab === 'optimizer'
+                  ? "border-blue-600 text-blue-600 dark:text-blue-400"
+                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
+              )}
+            >
+              <ImageIcon size={18} />
+              {t('app.optimizerTab')}
+            </button>
+            <button
+              onClick={() => setActiveTab('generator')}
+              className={clsx(
+                "pb-4 px-2 text-sm font-medium flex items-center gap-2 border-b-2 transition-colors",
+                activeTab === 'generator'
+                  ? "border-blue-600 text-blue-600 dark:text-blue-400"
+                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
+              )}
+            >
+              <Layers size={18} />
+              {t('app.generatorTab')}
+            </button>
+            <button
+              onClick={() => setActiveTab('enhancer')}
+              className={clsx(
+                "pb-4 px-2 text-sm font-medium flex items-center gap-2 border-b-2 transition-colors",
+                activeTab === 'enhancer'
+                  ? "border-blue-600 text-blue-600 dark:text-blue-400"
+                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
+              )}
+            >
+              <Sparkles size={18} />
+              {t('app.enhancerTab')}
+            </button>
+            <button
+              onClick={() => setActiveTab('editor')}
+              className={clsx(
+                "pb-4 px-2 text-sm font-medium flex items-center gap-2 border-b-2 transition-colors",
+                activeTab === 'editor'
+                  ? "border-blue-600 text-blue-600 dark:text-blue-400"
+                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
+              )}
+            >
+              <Edit3 size={18} />
+              {t('app.editorTab')}
+            </button>
+            <button
+              onClick={() => setActiveTab('qr')}
+              className={clsx(
+                "pb-4 px-2 text-sm font-medium flex items-center gap-2 border-b-2 transition-colors",
+                activeTab === 'qr'
+                  ? "border-blue-600 text-blue-600 dark:text-blue-400"
+                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
+              )}
+            >
+              <QrCode size={18} />
+              {t('app.qrTab')}
+            </button>
+          </div>
+          <button
+            onClick={() => setIsSettingsOpen(true)}
+            className="pb-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+          >
+            <Settings size={20} />
+          </button>
+        </div>
+      </div>
+
+      {activeTab === 'optimizer' ? (
+        <>
+          <SettingsPanel
+            defaultFormat={defaultFormat}
+            defaultQuality={defaultQuality}
+            onFormatChange={setDefaultFormat}
+            onQualityChange={setDefaultQuality}
+          />
+
+          <main className="flex-1 p-6 max-w-5xl mx-auto w-full flex flex-col gap-6">
+            <DropZone onFilesDropped={handleFilesDropped} />
+
+            {images.length > 0 && (
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{t('app.queue')} ({images.length})</h2>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={handleClearAll}
+                      className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                      disabled={isProcessingAll}
+                    >
+                      <Trash2 size={18} />
+                      {t('app.clearAll')}
+                    </button>
+                    <button
+                      onClick={handleProcessAll}
+                      disabled={isProcessingAll || !images.some(i => i.status === 'pending')}
+                      className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+                    >
+                      {isProcessingAll ? (
+                        <>
+                          {t('app.processing')}
+                        </>
+                      ) : (
+                        <>
+                          <Play size={18} />
+                          {t('app.processAll')}
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  {images.map(img => (
+                    <ImageItem
+                      key={img.id}
+                      item={img}
+                      onRemove={handleRemove}
+                      onUpdate={handleUpdate}
+                      onProcess={handleProcess}
+                      onDownload={handleDownload}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </main>
+        </>
+      ) : activeTab === 'generator' ? (
+        <main className="flex-1 p-6">
+          <IconGenerator />
+          function App() {
+  return (
+          <ThemeProvider>
+            <AppContent />
+          </ThemeProvider>
+          );
+}
+
+          export default App;

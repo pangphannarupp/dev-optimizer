@@ -1,0 +1,17 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import url('https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root[data-font-size="small"] {
+    font-size: 14px;
+}
+
+:root[data-font-size="medium"] {
+    font-size: 16px;
+}
+
+:root[data-font-size="large"] {
+    font-size: 18px;
+}
