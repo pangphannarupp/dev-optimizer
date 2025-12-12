@@ -19,7 +19,8 @@
         "processing": "Procesando...",
         "csvJsonTab": "CSV a JSON",
         "settings": "Configuración",
-        "validateTranslation": "Validar Traducción"
+        "validateTranslation": "Validar Traducción",
+        "sourceCompare": "Comparación de fuentes"
     },
     "settings": {
         "title": "Ajustes",
@@ -38,7 +39,10 @@
         "version": "Versión",
         "author": "Autor",
         "copyright": "Derechos de autor",
-        "language": "Idioma"
+        "language": "Idioma",
+        "releaseNotes": "Notas de la Versión",
+        "latest": "Último",
+        "noReleaseNotes": "No hay notas de la versión disponibles"
     },
     "dropzone": {
         "dragDrop": "Arrastra y suelta imágenes aquí",
@@ -175,7 +179,8 @@
     "common": {
         "copy": "Copiar",
         "copied": "¡Copiado!",
-        "remove": "Eliminar"
+        "remove": "Eliminar",
+        "ok": "OK"
     },
     "encryption": {
         "title": "Herramienta de Cifrado/Descifrado",
@@ -248,11 +253,27 @@
         "successMessage": "Se procesaron {{count}} filas con éxito. Se generaron archivos para {{languages}} idiomas.",
         "detectedLanguages": "Idiomas detectados:",
         "downloadAll": "Descargar todos los formatos (ZIP)",
+        "downloadCsv": "Descargar CSV",
+        "downloadExcel": "Descargar Excel",
+        "importMode": "Importar CSV / Excel",
+        "exportMode": "Exportar a CSV / Excel",
+        "selectSheet": "Seleccionar Hoja",
+        "selectSheetDesc": "Este archivo Excel contiene varias hojas. Por favor seleccione la que desea importar.",
+        "selectKey": "Seleccionar Columna Clave",
+        "selectKeyDesc": "No pudimos encontrar automáticamente la columna \"JSON KEY\". Seleccione la columna que contiene sus claves de traducción.",
+        "processing": "Procesando archivos...",
+        "dragDropExport": "Arrastre y suelte archivos de traducción individuales (json, xml, strings)",
+        "supportsExport": "Soporta .json, .xml (Android), .strings (iOS)",
+        "processedFiles": "Archivos Procesados:",
         "formats": {
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
         }
+    },
+    "whatsNew": {
+        "title": "Novedades",
+        "description": "¡Una nueva versión de Dev Optimizer está disponible!"
     },
     "validation": {
         "title": "Validar Traducción",
@@ -283,5 +304,39 @@
         "contextMessage": "Contexto / Mensaje",
         "noUntranslatedFound": "No se encontraron cadenas no traducidas.",
         "close": "Cerrar"
+    },
+    "sourceCompare": {
+        "title": "Comparación de fuentes",
+        "description": "Comparar contenido de archivos o archivos comprimidos Zip.",
+        "dragSourceOne": "Soltar fuente A (Archivo o Zip)",
+        "dragSourceTwo": "Soltar fuente B (Archivo o Zip)",
+        "compare": "Comparar",
+        "reset": "Restablecer",
+        "sourceA": "Fuente A",
+        "sourceB": "Fuente B",
+        "files": "Archivos",
+        "modified": "Modificado",
+        "added": "Añadido",
+        "deleted": "Eliminado",
+        "identical": "Idéntico",
+        "noDifferences": "No se encontraron diferencias",
+        "merge": "Fusionar / Descargar resultado",
+        "selectForMerge": "Seleccionar versión para fusionar",
+        "supports": "Admite archivos Zip y archivos de texto (código, json, txt...)",
+        "totalFiles": "Total de archivos",
+        "differentFiles": "Archivos diferentes",
+        "archiveContentComparison": "Comparación de contenido de archivo",
+        "downloadMerge": "Fusionar y Descargar",
+        "downloadMergeDesc": "Incluye versiones seleccionadas (A/B)",
+        "downloadDiff": "Solo Diff/Modificado",
+        "downloadDiffDesc": "Solo archivos modificados (de B)",
+        "downloadIdentical": "Solo Idéntico",
+        "downloadIdenticalDesc": "Solo archivos sin cambios",
+        "filesData": "{{count}} Archivos",
+        "modifiedCount": "Modificado",
+        "addedCount": "Añadido",
+        "deletedCount": "Eliminado",
+        "comparisonResult": "Resultado de la comparación",
+        "sizeDiff": "Diferencia de tamaño"
     }
 }

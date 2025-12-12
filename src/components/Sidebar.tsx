@@ -1,9 +1,9 @@
-import { Image as ImageIcon, Layers, Sparkles, Edit3, QrCode, FileCode, Settings, X, Code, Key, Lock, Hash, FileUp } from 'lucide-react';
+import { Image as ImageIcon, Layers, Sparkles, Edit3, QrCode, FileCode, Settings, X, Code, Key, Lock, Hash, FileUp, Split } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export type TabType = 'optimizer' | 'generator' | 'enhancer' | 'editor' | 'qr' | 'svg-drawable' | 'base64' | 'json' | 'csv-json' | 'jwt' | 'encryption' | 'sha' | 'validate-translation';
+export type TabType = 'optimizer' | 'generator' | 'enhancer' | 'editor' | 'qr' | 'svg-drawable' | 'base64' | 'json' | 'csv-json' | 'jwt' | 'encryption' | 'sha' | 'validate-translation' | 'source-compare';
 
 interface SidebarProps {
     activeTab: TabType;
@@ -21,6 +21,7 @@ export function Sidebar({ activeTab, onTabChange, onSettingsClick, isOpen, onClo
         { id: 'generator', icon: Layers, label: t('app.generatorTab') },
         { id: 'enhancer', icon: Sparkles, label: t('app.enhancerTab') },
         { id: 'editor', icon: Edit3, label: t('app.editorTab') },
+        { id: 'source-compare', icon: Split, label: t('sourceCompare.title') },
         { id: 'qr', icon: QrCode, label: t('app.qrTab') },
         { id: 'svg-drawable', icon: FileCode, label: t('app.svgTab') },
         { id: 'base64', icon: FileCode, label: t('app.base64Tab') },

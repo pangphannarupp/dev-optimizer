@@ -19,7 +19,8 @@
         "processing": "처리 중...",
         "csvJsonTab": "CSV에서 JSON으로",
         "settings": "설정",
-        "validateTranslation": "번역 검증"
+        "validateTranslation": "번역 검증",
+        "sourceCompare": "소스 비교"
     },
     "settings": {
         "title": "설정",
@@ -38,7 +39,10 @@
         "version": "버전",
         "author": "제작자",
         "copyright": "저작권",
-        "language": "언어"
+        "language": "언어",
+        "releaseNotes": "릴리스 노트",
+        "latest": "최신",
+        "noReleaseNotes": "릴리스 노트 사용 불가"
     },
     "dropzone": {
         "dragDrop": "여기에 이미지를 드래그 앤 드롭",
@@ -175,7 +179,8 @@
     "common": {
         "copy": "복사",
         "copied": "복사됨!",
-        "remove": "제거"
+        "remove": "제거",
+        "ok": "확인"
     },
     "encryption": {
         "title": "Encryption / Decryption Tool",
@@ -248,11 +253,27 @@
         "successMessage": "{{count}}개 행을 성공적으로 처리했습니다. {{languages}}개 언어에 대한 파일을 생성했습니다.",
         "detectedLanguages": "감지된 언어:",
         "downloadAll": "모든 형식 다운로드 (ZIP)",
+        "downloadCsv": "CSV 다운로드",
+        "downloadExcel": "Excel 다운로드",
+        "importMode": "CSV / Excel 가져오기",
+        "exportMode": "CSV / Excel 내보내기",
+        "selectSheet": "시트 선택",
+        "selectSheetDesc": "이 Excel 파일에는 여러 시트가 포함되어 있습니다. 가져올 시트를 선택하세요.",
+        "selectKey": "키 열 선택",
+        "selectKeyDesc": "\"JSON KEY\" 열을 자동으로 찾을 수 없습니다. 번역 키가 포함된 열을 선택하세요.",
+        "processing": "파일 처리 중...",
+        "dragDropExport": "개별 번역 파일 (json, xml, strings)을 여기에 드래그 앤 드롭",
+        "supportsExport": ".json, .xml (Android), .strings (iOS) 지원",
+        "processedFiles": "처리된 파일:",
         "formats": {
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
         }
+    },
+    "whatsNew": {
+        "title": "새로운 기능",
+        "description": "Dev Optimizer의 새 버전을 사용할 수 있습니다!"
     },
     "validation": {
         "title": "번역 검증",
@@ -283,5 +304,39 @@
         "contextMessage": "컨텍스트 / 메시지",
         "noUntranslatedFound": "미번역 문자열을 찾을 수 없습니다.",
         "close": "닫기"
+    },
+    "sourceCompare": {
+        "title": "소스 비교",
+        "description": "파일 내용 또는 Zip 아카이브를 비교합니다。",
+        "dragSourceOne": "소스 A 드롭 (파일 또는 Zip)",
+        "dragSourceTwo": "소스 B 드롭 (파일 또는 Zip)",
+        "compare": "비교",
+        "reset": "초기화",
+        "sourceA": "소스 A",
+        "sourceB": "소스 B",
+        "files": "파일",
+        "modified": "수정됨",
+        "added": "추가됨",
+        "deleted": "삭제됨",
+        "identical": "동일함",
+        "noDifferences": "차이점이 발견되지 않았습니다",
+        "merge": "병합 / 결과 다운로드",
+        "selectForMerge": "병합할 버전 선택",
+        "supports": "Zip 아카이브 및 텍스트 기반 파일 (코드, json, txt...) 지원",
+        "totalFiles": "총 파일 수",
+        "differentFiles": "다른 파일 수",
+        "archiveContentComparison": "아카이브 콘텐츠 비교",
+        "downloadMerge": "병합 및 다운로드",
+        "downloadMergeDesc": "선택된 버전 포함 (A/B)",
+        "downloadDiff": "차이/수정된 항목만",
+        "downloadDiffDesc": "변경된 파일만 (B에서)",
+        "downloadIdentical": "동일한 항목만",
+        "downloadIdenticalDesc": "변경되지 않은 파일만",
+        "filesData": "{{count}} 파일",
+        "modifiedCount": "수정됨",
+        "addedCount": "추가됨",
+        "deletedCount": "삭제됨",
+        "comparisonResult": "비교 결과",
+        "sizeDiff": "크기 차이"
     }
 }

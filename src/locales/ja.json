@@ -19,7 +19,8 @@
         "processing": "処理中...",
         "csvJsonTab": "CSVからJSON",
         "settings": "設定",
-        "validateTranslation": "翻訳の検証"
+        "validateTranslation": "翻訳の検証",
+        "sourceCompare": "ソース比較"
     },
     "settings": {
         "title": "設定",
@@ -38,7 +39,10 @@
         "version": "バージョン",
         "author": "作成者",
         "copyright": "著作権",
-        "language": "言語"
+        "language": "言語",
+        "releaseNotes": "リリースノート",
+        "latest": "最新",
+        "noReleaseNotes": "リリースノートはありません"
     },
     "dropzone": {
         "dragDrop": "ここに画像をドラッグ＆ドロップ",
@@ -175,7 +179,8 @@
     "common": {
         "copy": "コピー",
         "copied": "コピーしました！",
-        "remove": "削除"
+        "remove": "削除",
+        "ok": "OK"
     },
     "encryption": {
         "title": "Encryption / Decryption Tool",
@@ -248,11 +253,27 @@
         "successMessage": "{{count}}行を正常に処理しました。{{languages}}言語のファイルを生成しました。",
         "detectedLanguages": "検出された言語:",
         "downloadAll": "すべての形式をダウンロード（ZIP）",
+        "downloadCsv": "CSVをダウンロード",
+        "downloadExcel": "Excelをダウンロード",
+        "importMode": "CSV / Excel インポート",
+        "exportMode": "CSV / Excel エクスポート",
+        "selectSheet": "シートを選択",
+        "selectSheetDesc": "このExcelファイルには複数のシートが含まれています。インポートするシートを選択してください。",
+        "selectKey": "キー列を選択",
+        "selectKeyDesc": "「JSON KEY」列を自動的に見つけることができませんでした。翻訳キーが含まれている列を選択してください。",
+        "processing": "ファイルを処理中...",
+        "dragDropExport": "個々の翻訳ファイル (json, xml, strings) をここにドラッグ＆ドロップ",
+        "supportsExport": "対応フォーマット: .json, .xml (Android), .strings (iOS)",
+        "processedFiles": "処理済みファイル:",
         "formats": {
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
         }
+    },
+    "whatsNew": {
+        "title": "新着情報",
+        "description": "Dev Optimizerの新バージョンが利用可能です！"
     },
     "validation": {
         "title": "翻訳の検証",
@@ -283,5 +304,39 @@
         "contextMessage": "コンテキスト / メッセージ",
         "noUntranslatedFound": "未翻訳の文字列は見つかりませんでした。",
         "close": "閉じる"
+    },
+    "sourceCompare": {
+        "title": "ソース比較",
+        "description": "ファイルの内容または Zip アーカイブを比較します。",
+        "dragSourceOne": "ソース A をドロップ (ファイルまたは Zip)",
+        "dragSourceTwo": "ソース B をドロップ (ファイルまたは Zip)",
+        "compare": "比較",
+        "reset": "リセット",
+        "sourceA": "ソース A",
+        "sourceB": "ソース B",
+        "files": "ファイル",
+        "modified": "変更あり",
+        "added": "追加済み",
+        "deleted": "削除済み",
+        "identical": "同一",
+        "noDifferences": "差異は見つかりませんでした",
+        "merge": "マージ / 結果をダウンロード",
+        "selectForMerge": "マージするバージョンを選択",
+        "supports": "Zip アーカイブとテキストファイル (コード, json, txt...) に対応",
+        "totalFiles": "総ファイル数",
+        "differentFiles": "異なるファイル",
+        "archiveContentComparison": "アーカイブ内容の比較",
+        "downloadMerge": "マージしてダウンロード",
+        "downloadMergeDesc": "選択したバージョンを含む (A/B)",
+        "downloadDiff": "差分/変更のみ",
+        "downloadDiffDesc": "変更されたファイルのみ (Bから)",
+        "downloadIdentical": "同一のみ",
+        "downloadIdenticalDesc": "変更されていないファイルのみ",
+        "filesData": "{{count}} ファイル",
+        "modifiedCount": "変更あり",
+        "addedCount": "追加済み",
+        "deletedCount": "削除済み",
+        "comparisonResult": "比較結果",
+        "sizeDiff": "サイズ差"
     }
 }

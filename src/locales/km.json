@@ -19,7 +19,8 @@
         "encryptionTab": "ការកូដសង្គង់/ដោះសង្គង់",
         "shaTab": "សំង្ករប SHA",
         "settings": "ការកំណត់",
-        "validateTranslation": "ផ្ទៀងផ្ទាត់ការបកប្រែ"
+        "validateTranslation": "ផ្ទៀងផ្ទាត់ការបកប្រែ",
+        "sourceCompare": "ការប្រៀបធៀបប្រភព"
     },
     "settings": {
         "title": "ការកំណត់",
@@ -38,7 +39,10 @@
         "version": "កំណែ",
         "author": "អ្នកបង្កើត",
         "copyright": "រក្សាសិទ្ធិ",
-        "language": "ភាសា"
+        "language": "ភាសា",
+        "releaseNotes": "កំណត់ចំណាំកំណែ",
+        "latest": "ចុងក្រោយ",
+        "noReleaseNotes": "មិនមានកំណត់ចំណាំកំណែទេ"
     },
     "dropzone": {
         "dragDrop": "អូសនិងទម្លាក់រូបភាពនៅទីនេះ",
@@ -175,7 +179,8 @@
     "common": {
         "copy": "ចម្លង",
         "copied": "បានចម្លង!",
-        "remove": "លុប"
+        "remove": "លុប",
+        "ok": "យល់ព្រម"
     },
     "jsonFormatter": {
         "title": "កំណត់ទ្រង់ JSON",
@@ -279,11 +284,27 @@
         "successMessage": "បានដំណើរការជោគជ័យ {{count}} ជួរ។ បានបង្កើតឯកសារសម្រាប់ភាសា {{languages}}។",
         "detectedLanguages": "ភាសាដែលរកឃើញ:",
         "downloadAll": "ទាញយកទម្រង់ទាំងអស់ (ZIP)",
+        "downloadCsv": "ទាញយក CSV",
+        "downloadExcel": "ទាញយក Excel",
+        "importMode": "នាំចូល CSV / Excel",
+        "exportMode": "នាំចេញទៅ CSV / Excel",
+        "selectSheet": "ជ្រើសរើស Sheet",
+        "selectSheetDesc": "ឯកសារ Excel នេះមាន Sheet ច្រើន។ សូមជ្រើសរើសមួយដែលអ្នកចង់នាំចូល។",
+        "selectKey": "ជ្រើសរើសជួរឈរគ្រាប់ចុច",
+        "selectKeyDesc": "យើងមិនអាចស្វែងរកជួរឈរ \"JSON KEY\" ដោយស្វ័យប្រវត្តិទេ។ សូមជ្រើសរើសជួរឈរដែលមានគ្រាប់ចុចបកប្រែរបស់អ្នក។",
+        "processing": "កំពុងដំណើរការឯកសារ...",
+        "dragDropExport": "អូសនិងទម្លាក់ឯកសារបកប្រែនីមួយៗ (json, xml, strings)",
+        "supportsExport": "គាំទ្រ .json, .xml (Android), .strings (iOS)",
+        "processedFiles": "ឯកសារដែលបានដំណើរការ:",
         "formats": {
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
         }
+    },
+    "whatsNew": {
+        "title": "អ្វីថ្មី",
+        "description": "កំណែថ្មីនៃ Dev Optimizer មានហើយ!"
     },
     "validation": {
         "title": "ផ្ទៀងផ្ទាត់ការបកប្រែ",
@@ -314,5 +335,39 @@
         "contextMessage": "បរិបទ / សារ",
         "noUntranslatedFound": "រកមិនឃើញខ្សែអក្សរដែលមិនទាន់បកប្រែទេ។",
         "close": "បិទ"
+    },
+    "sourceCompare": {
+        "title": "ការប្រៀបធៀបប្រភព",
+        "description": "ប្រៀបធៀបមាតិកាឯកសារ ឬបណ្ណសារ ZIP។",
+        "dragSourceOne": "ទម្លាក់ប្រភព A (ឯកសារ ឬ Zip)",
+        "dragSourceTwo": "ទម្លាក់ប្រភព B (ឯកសារ ឬ Zip)",
+        "compare": "ប្រៀបធៀប",
+        "reset": "កំណត់ឡើងវិញ",
+        "sourceA": "ប្រភព A",
+        "sourceB": "ប្រភព B",
+        "files": "ឯកសារ",
+        "modified": "បានកែប្រែ",
+        "added": "បានបន្ថែម",
+        "deleted": "បានលុប",
+        "identical": "ដូចគ្នា",
+        "noDifferences": "មិនរកឃើញភាពខុសគ្នាទេ",
+        "merge": "បញ្ចូលគ្នា / ទាញយកលទ្ធផល",
+        "selectForMerge": "ជ្រើសរើសជំនាន់ដើម្បីបញ្ចូលគ្នា",
+        "supports": "គាំទ្របណ្ណសារ Zip និងឯកសារអត្ថបទ (កូដ, json, txt...)",
+        "totalFiles": "ឯកសារសរុប",
+        "differentFiles": "ឯកសារខុសគ្នា",
+        "archiveContentComparison": "ការប្រៀបធៀបមាតិកាបណ្ណសារ",
+        "downloadMerge": "បញ្ចូលគ្នា / ទាញយក",
+        "downloadMergeDesc": "រួមបញ្ចូលជំនាន់ដែលបានជ្រើសរើស (A/B)",
+        "downloadDiff": "ភាពខុសគ្នា / កែប្រែតែប៉ុណ្ណោះ",
+        "downloadDiffDesc": "មានតែឯកសារដែលបានផ្លាស់ប្តូរ (ពី B)",
+        "downloadIdentical": "ដូចគ្នាតែប៉ុណ្ណោះ",
+        "downloadIdenticalDesc": "មានតែឯកសារដែលមិនបានផ្លាស់ប្តូរ",
+        "filesData": "{{count}} ឯកសារ",
+        "modifiedCount": "បានកែប្រែ",
+        "addedCount": "បានបន្ថែម",
+        "deletedCount": "បានលុប",
+        "comparisonResult": "លទ្ធផលនៃការប្រៀបធៀប",
+        "sizeDiff": "ភាពខុសគ្នានៃទំហំ"
     }
 }

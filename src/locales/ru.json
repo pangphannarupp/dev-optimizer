@@ -19,7 +19,8 @@
         "processing": "Обработка...",
         "csvJsonTab": "CSV в JSON",
         "settings": "Настройки",
-        "validateTranslation": "Проверить перевод"
+        "validateTranslation": "Проверить перевод",
+        "sourceCompare": "Сравнение источников"
     },
     "settings": {
         "title": "Настройки",
@@ -38,7 +39,10 @@
         "version": "Версия",
         "author": "Автор",
         "copyright": "Авторские права",
-        "language": "Язык"
+        "language": "Язык",
+        "releaseNotes": "Примечания к выпуску",
+        "latest": "Последний",
+        "noReleaseNotes": "Примечания к выпуску отсутствуют"
     },
     "dropzone": {
         "dragDrop": "Перетащите изображения сюда",
@@ -175,7 +179,8 @@
     "common": {
         "copy": "Копировать",
         "copied": "Скопировано!",
-        "remove": "Удалить"
+        "remove": "Удалить",
+        "ok": "OK"
     },
     "encryption": {
         "title": "Инструмент Шифрования/Расшифровки",
@@ -248,11 +253,27 @@
         "successMessage": "Успешно обработано {{count}} строк. Созданы файлы для {{languages}} языков.",
         "detectedLanguages": "Обнаруженные языки:",
         "downloadAll": "Скачать все форматы (ZIP)",
+        "downloadCsv": "Скачать CSV",
+        "downloadExcel": "Скачать Excel",
+        "importMode": "Импорт CSV / Excel",
+        "exportMode": "Экспорт в CSV / Excel",
+        "selectSheet": "Выбрать лист",
+        "selectSheetDesc": "Этот файл Excel содержит несколько листов. Выберите один для импорта.",
+        "selectKey": "Выбрать ключевой столбец",
+        "selectKeyDesc": "Мы не смогли автоматически найти столбец \"JSON KEY\". Пожалуйста, выберите столбец, содержащий ключи перевода.",
+        "processing": "Обработка файлов...",
+        "dragDropExport": "Перетащите сюда отдельные файлы переводов (json, xml, strings)",
+        "supportsExport": "Поддерживает .json, .xml (Android), .strings (iOS)",
+        "processedFiles": "Обработанные файлы:",
         "formats": {
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
         }
+    },
+    "whatsNew": {
+        "title": "Что нового",
+        "description": "Доступна новая версия Dev Optimizer!"
     },
     "validation": {
         "title": "Проверить перевод",
@@ -283,5 +304,39 @@
         "contextMessage": "Контекст / Сообщение",
         "noUntranslatedFound": "Непереведенных строк не найдено.",
         "close": "Закрыть"
+    },
+    "sourceCompare": {
+        "title": "Сравнение источников",
+        "description": "Сравните содержимое файлов или Zip-архивов.",
+        "dragSourceOne": "Перетащите источник A (Файл или Zip)",
+        "dragSourceTwo": "Перетащите источник B (Файл или Zip)",
+        "compare": "Сравнить",
+        "reset": "Сбросить",
+        "sourceA": "Источник A",
+        "sourceB": "Источник B",
+        "files": "Файлы",
+        "modified": "Изменено",
+        "added": "Добавлено",
+        "deleted": "Удалено",
+        "identical": "Идентично",
+        "noDifferences": "Различий не найдено",
+        "merge": "Объединить / Скачать результат",
+        "selectForMerge": "Выберите версию для объединения",
+        "supports": "Поддерживает Zip-архивы и текстовые файлы (код, json, txt...)",
+        "totalFiles": "Всего файлов",
+        "differentFiles": "Различные файлы",
+        "archiveContentComparison": "Сравнение содержимого архива",
+        "downloadMerge": "Объединить и скачать",
+        "downloadMergeDesc": "Включает выбранные версии (A/B)",
+        "downloadDiff": "Только различия/измененные",
+        "downloadDiffDesc": "Только измененные файлы (из B)",
+        "downloadIdentical": "Только идентичные",
+        "downloadIdenticalDesc": "Только неизмененные файлы",
+        "filesData": "{{count}} Файлов",
+        "modifiedCount": "Изменено",
+        "addedCount": "Добавлено",
+        "deletedCount": "Удалено",
+        "comparisonResult": "Результат сравнения",
+        "sizeDiff": "Разница в размере"
     }
 }

@@ -19,7 +19,8 @@
         "processing": "Elaborazione...",
         "csvJsonTab": "CSV a JSON",
         "settings": "Impostazioni",
-        "validateTranslation": "Convalida Traduzione"
+        "validateTranslation": "Convalida Traduzione",
+        "sourceCompare": "Confronto Sorgenti"
     },
     "settings": {
         "title": "Impostazioni",
@@ -38,7 +39,10 @@
         "version": "Versione",
         "author": "Autore",
         "copyright": "Copyright",
-        "language": "Lingua"
+        "language": "Lingua",
+        "releaseNotes": "Note di Rilascio",
+        "latest": "Ultimo",
+        "noReleaseNotes": "Nessuna nota di rilascio disponibile"
     },
     "dropzone": {
         "dragDrop": "Trascina e rilascia le immagini qui",
@@ -175,7 +179,8 @@
     "common": {
         "copy": "Copia",
         "copied": "Copiato!",
-        "remove": "Rimuovi"
+        "remove": "Rimuovi",
+        "ok": "OK"
     },
     "encryption": {
         "title": "Strumento di Crittografia/Decrittografia",
@@ -248,11 +253,27 @@
         "successMessage": "{{count}} righe elaborate con successo. File generati per {{languages}} lingue.",
         "detectedLanguages": "Lingue rilevate:",
         "downloadAll": "Scarica tutti i formati (ZIP)",
+        "downloadCsv": "Scarica CSV",
+        "downloadExcel": "Scarica Excel",
+        "importMode": "Importa CSV / Excel",
+        "exportMode": "Esporta in CSV / Excel",
+        "selectSheet": "Seleziona Foglio",
+        "selectSheetDesc": "Questo file Excel contiene più fogli. Selezionane uno da importare.",
+        "selectKey": "Seleziona Colonna Chiave",
+        "selectKeyDesc": "Non siamo riusciti a trovare automaticamente la colonna \"JSON KEY\". Seleziona la colonna che contiene le chiavi di traduzione.",
+        "processing": "Elaborazione file...",
+        "dragDropExport": "Trascina qui i singoli file di traduzione (json, xml, strings)",
+        "supportsExport": "Supporta .json, .xml (Android), .strings (iOS)",
+        "processedFiles": "File elaborati:",
         "formats": {
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
         }
+    },
+    "whatsNew": {
+        "title": "Novità",
+        "description": "È disponibile una nuova versione di Dev Optimizer!"
     },
     "validation": {
         "title": "Convalida Traduzione",
@@ -283,5 +304,39 @@
         "contextMessage": "Contesto / Messaggio",
         "noUntranslatedFound": "Nessuna stringa non tradotta trovata.",
         "close": "Chiudi"
+    },
+    "sourceCompare": {
+        "title": "Confronto Sorgenti",
+        "description": "Confronta il contenuto dei file o archivi Zip.",
+        "dragSourceOne": "Trascina Sorgente A (File o Zip)",
+        "dragSourceTwo": "Trascina Sorgente B (File o Zip)",
+        "compare": "Confronta",
+        "reset": "Reimposta",
+        "sourceA": "Sorgente A",
+        "sourceB": "Sorgente B",
+        "files": "File",
+        "modified": "Modificato",
+        "added": "Aggiunto",
+        "deleted": "Eliminato",
+        "identical": "Identico",
+        "noDifferences": "Nessuna differenza trovata",
+        "merge": "Unisci / Scarica Risultato",
+        "selectForMerge": "Seleziona versione da unire",
+        "supports": "Supporta archivi Zip e file di testo (codice, json, txt...)",
+        "totalFiles": "File Totali",
+        "differentFiles": "File Diversi",
+        "archiveContentComparison": "Confronto Contenuto Archivio",
+        "downloadMerge": "Unisci e Scarica",
+        "downloadMergeDesc": "Include versioni selezionate (A/B)",
+        "downloadDiff": "Solo Diff/Modificato",
+        "downloadDiffDesc": "Solo file modificati (da B)",
+        "downloadIdentical": "Solo Identico",
+        "downloadIdenticalDesc": "Solo file invariati",
+        "filesData": "{{count}} File",
+        "modifiedCount": "Modificato",
+        "addedCount": "Aggiunto",
+        "deletedCount": "Eliminato",
+        "comparisonResult": "Risultato del confronto",
+        "sizeDiff": "Differenza di dimensioni"
     }
 }

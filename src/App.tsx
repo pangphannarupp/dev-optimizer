@@ -17,6 +17,7 @@ import { JWTDecoder } from './components/JWTDecoder';
 import { EncryptionTool } from './components/EncryptionTool';
 import { SHAGenerator } from './components/SHAGenerator';
 import { ValidateTranslation } from './components/ValidateTranslation';
+import { SourceComparator } from './components/SourceComparator';
 
 import { Sidebar } from './components/Sidebar';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -25,8 +26,10 @@ import { Play, Trash2 } from 'lucide-react';
 import './i18n';
 import { useTranslation } from 'react-i18next';
 
+import { WhatsNewSnackbar } from './components/WhatsNewSnackbar';
+
 function AppContent() {
-  const [activeTab, setActiveTab] = useState<'optimizer' | 'generator' | 'enhancer' | 'editor' | 'qr' | 'svg-drawable' | 'base64' | 'json' | 'csv-json' | 'jwt' | 'encryption' | 'sha' | 'validate-translation'>('optimizer');
+  const [activeTab, setActiveTab] = useState<'optimizer' | 'generator' | 'enhancer' | 'editor' | 'qr' | 'svg-drawable' | 'base64' | 'json' | 'csv-json' | 'jwt' | 'encryption' | 'sha' | 'validate-translation' | 'source-compare'>('optimizer');
   const [images, setImages] = useState<ProcessedImage[]>([]);
   const [defaultFormat, setDefaultFormat] = useState<'image/jpeg' | 'image/png' | 'image/webp'>('image/webp');
   const [defaultQuality, setDefaultQuality] = useState(0.8);
@@ -342,6 +345,17 @@ function AppContent() {
               >
                 <ValidateTranslation />
               </motion.main>
+            ) : activeTab === 'source-compare' ? (
+              <motion.main
+                key="source-compare"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full"
+              >
+                <SourceComparator />
+              </motion.main>
             ) : (
               <motion.main
                 key="base64"
@@ -359,6 +373,7 @@ function AppContent() {
       </div>
 
       <GlobalSettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
+      <WhatsNewSnackbar />
     </div>
   );
 }

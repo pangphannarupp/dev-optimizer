@@ -19,7 +19,8 @@
         "processing": "प्रोसेस हो रहा है...",
         "csvJsonTab": "CSV से JSON",
         "settings": "सेटिंग्स",
-        "validateTranslation": "अनुवाद मान्य करें"
+        "validateTranslation": "अनुवाद मान्य करें",
+        "sourceCompare": "स्रोत तुलना"
     },
     "settings": {
         "title": "सेटिंग्स",
@@ -38,7 +39,10 @@
         "version": "संस्करण",
         "author": "लेखक",
         "copyright": "कॉपीराइट",
-        "language": "भाषा"
+        "language": "भाषा",
+        "releaseNotes": "रिलीज़ नोट्स",
+        "latest": "नवीनतम",
+        "noReleaseNotes": "कोई रिलीज़ नोट्स उपलब्ध नहीं"
     },
     "dropzone": {
         "dragDrop": "यहाँ छवियाँ खींचें और छोड़ें",
@@ -175,7 +179,8 @@
     "common": {
         "copy": "कॉपी करें",
         "copied": "कॉपी हो गया!",
-        "remove": "हटाएं"
+        "remove": "हटाएं",
+        "ok": "ठीक है"
     },
     "encryption": {
         "title": "Encryption / Decryption Tool",
@@ -248,11 +253,27 @@
         "successMessage": "{{count}} पंक्तियों को सफलतापूर्वक संसाधित किया गया। {{languages}} भाषाओं के लिए फ़ाइलें उत्पन्न की गईं।",
         "detectedLanguages": "पहचानी गई भाषाएँ:",
         "downloadAll": "सभी प्रारूप डाउनलोड करें (ZIP)",
+        "downloadCsv": "CSV डाउनलोड करें",
+        "downloadExcel": "Excel डाउनलोड करें",
+        "importMode": "CSV / Excel आयात करें",
+        "exportMode": "CSV / Excel में निर्यात करें",
+        "selectSheet": "शीट्स चुनें",
+        "selectSheetDesc": "इस Excel फ़ाइल में कई शीट्स हैं। कृपया आयात करने के लिए एक चुनें।",
+        "selectKey": "कुंजी कॉलम चुनें",
+        "selectKeyDesc": "हम स्वचालित रूप से 'JSON KEY' कॉलम नहीं ढूँढ सके। कृपया वह कॉलम चुनें जिसमें अनुवाद कुंजियाँ हैं।",
+        "processing": "फ़ाइलों को संसाधित कर रहा है...",
+        "dragDropExport": "यहाँ व्यक्तिगत अनुवाद फ़ाइलें (json, xml, strings) खींचें और छोड़ें",
+        "supportsExport": ".json, .xml (Android), .strings (iOS) समर्थित",
+        "processedFiles": "संसाधित फ़ाइलें:",
         "formats": {
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
         }
+    },
+    "whatsNew": {
+        "title": "नया क्या है",
+        "description": "Dev Optimizer का नया संस्करण उपलब्ध है!"
     },
     "validation": {
         "title": "अनुवाद मान्य करें",
@@ -283,5 +304,39 @@
         "contextMessage": "संदर्भ / संदेश",
         "noUntranslatedFound": "कोई अअनुवादित स्ट्रिंग नहीं मिली।",
         "close": "बंद करें"
+    },
+    "sourceCompare": {
+        "title": "स्रोत तुलना",
+        "description": "फ़ाइल सामग्री या ज़िप संग्रह की तुलना करें।",
+        "dragSourceOne": "स्रोत A छोड़ें (फ़ाइल या ज़िप)",
+        "dragSourceTwo": "स्रोत B छोड़ें (फ़ाइल या ज़िप)",
+        "compare": "तुलना करें",
+        "reset": "रीसेट करें",
+        "sourceA": "स्रोत A",
+        "sourceB": "स्रोत B",
+        "files": "फ़ाइलें",
+        "modified": "संशोधित",
+        "added": "जोड़ा गया",
+        "deleted": "हटाया गया",
+        "identical": "समान",
+        "noDifferences": "कोई अंतर नहीं मिला",
+        "merge": "विलय / परिणाम डाउनलोड करें",
+        "selectForMerge": "विलय के लिए संस्करण चुनें",
+        "supports": "ज़िप संग्रह और टेक्स्ट फ़ाइलों (कोड, json, txt...) का समर्थन करता है",
+        "totalFiles": "कुल फ़ाइलें",
+        "differentFiles": "विभिन्न फ़ाइलें",
+        "archiveContentComparison": "संग्रह सामग्री तुलना",
+        "downloadMerge": "विलय करें और डाउनलोड करें",
+        "downloadMergeDesc": "चयनित संस्करण शामिल हैं (A/B)",
+        "downloadDiff": "केवल अंतर/संशोधित",
+        "downloadDiffDesc": "केवल बदली हुई फ़ाइलें (B से)",
+        "downloadIdentical": "केवल समान",
+        "downloadIdenticalDesc": "केवल अपरिवर्तित फ़ाइलें",
+        "filesData": "{{count}} फ़ाइलें",
+        "modifiedCount": "संशोधित",
+        "addedCount": "जोड़ा गया",
+        "deletedCount": "हटाया गया",
+        "comparisonResult": "तुलना परिणाम",
+        "sizeDiff": "आकार का अंतर"
     }
 }

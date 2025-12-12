@@ -19,7 +19,8 @@
         "processing": "Traitement...",
         "csvJsonTab": "CSV vers JSON",
         "settings": "Paramètres",
-        "validateTranslation": "Valider la traduction"
+        "validateTranslation": "Valider la traduction",
+        "sourceCompare": "Comparaison de sources"
     },
     "settings": {
         "title": "Paramètres",
@@ -38,7 +39,10 @@
         "version": "Version",
         "author": "Auteur",
         "copyright": "Droits d'auteur",
-        "language": "Langue"
+        "language": "Langue",
+        "releaseNotes": "Notes de version",
+        "latest": "Dernier",
+        "noReleaseNotes": "Aucune note de version disponible"
     },
     "dropzone": {
         "dragDrop": "Glissez et déposez des images ici",
@@ -175,7 +179,8 @@
     "common": {
         "copy": "Copier",
         "copied": "Copié !",
-        "remove": "Supprimer"
+        "remove": "Supprimer",
+        "ok": "OK"
     },
     "encryption": {
         "title": "Outil de Chiffrement/Déchiffrement",
@@ -248,11 +253,27 @@
         "successMessage": "{{count}} lignes traitées avec succès. Fichiers générés pour {{languages}} langues.",
         "detectedLanguages": "Langues détectées :",
         "downloadAll": "Télécharger tous les formats (ZIP)",
+        "downloadCsv": "Télécharger CSV",
+        "downloadExcel": "Télécharger Excel",
+        "importMode": "Importer CSV / Excel",
+        "exportMode": "Exporter vers CSV / Excel",
+        "selectSheet": "Sélectionner la feuille",
+        "selectSheetDesc": "Ce fichier Excel contient plusieurs feuilles. Veuillez sélectionner celle que vous souhaitez importer.",
+        "selectKey": "Sélectionner la colonne clé",
+        "selectKeyDesc": "Nous n'avons pas pu trouver automatiquement la colonne \"JSON KEY\". Veuillez sélectionner la colonne qui contient vos clés de traduction.",
+        "processing": "Traitement des fichiers...",
+        "dragDropExport": "Glissez et déposez des fichiers de traduction individuels (json, xml, strings)",
+        "supportsExport": "Prend en charge .json, .xml (Android), .strings (iOS)",
+        "processedFiles": "Fichiers traités :",
         "formats": {
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
         }
+    },
+    "whatsNew": {
+        "title": "Quoi de neuf",
+        "description": "Une nouvelle version de Dev Optimizer est disponible !"
     },
     "validation": {
         "title": "Valider la traduction",
@@ -283,5 +304,39 @@
         "contextMessage": "Contexte / Message",
         "noUntranslatedFound": "Aucune chaîne non traduite trouvée.",
         "close": "Fermer"
+    },
+    "sourceCompare": {
+        "title": "Comparaison de sources",
+        "description": "Comparer le contenu de fichiers ou d'archives Zip.",
+        "dragSourceOne": "Déposer la source A (Fichier ou Zip)",
+        "dragSourceTwo": "Déposer la source B (Fichier ou Zip)",
+        "compare": "Comparer",
+        "reset": "Réinitialiser",
+        "sourceA": "Source A",
+        "sourceB": "Source B",
+        "files": "Fichiers",
+        "modified": "Modifié",
+        "added": "Ajouté",
+        "deleted": "Supprimé",
+        "identical": "Identique",
+        "noDifferences": "Aucune différence trouvée",
+        "merge": "Fusionner / Télécharger le résultat",
+        "selectForMerge": "Sélectionner la version à fusionner",
+        "supports": "Prend en charge les archives Zip et les fichiers texte (code, json, txt...)",
+        "totalFiles": "Total des fichiers",
+        "differentFiles": "Fichiers différents",
+        "archiveContentComparison": "Comparaison de contenu d'archive",
+        "downloadMerge": "Fusionner et télécharger",
+        "downloadMergeDesc": "Inclut les versions sélectionnées (A/B)",
+        "downloadDiff": "Diff/Modifié uniquement",
+        "downloadDiffDesc": "Seulement les fichiers modifiés (de B)",
+        "downloadIdentical": "Identique uniquement",
+        "downloadIdenticalDesc": "Seulement les fichiers inchangés",
+        "filesData": "{{count}} Fichiers",
+        "modifiedCount": "Modifié",
+        "addedCount": "Ajouté",
+        "deletedCount": "Supprimé",
+        "comparisonResult": "Résultat de la comparaison",
+        "sizeDiff": "Différence de taille"
     }
 }

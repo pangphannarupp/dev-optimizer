@@ -13,7 +13,29 @@ const getLineNumber = (content: string, index: number): number => {
     return content.substring(0, index).split('\n').length;
 };
 
-export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'tsx'): ValidationResult => {
+export // Helper to check if string contains potential hardcoded text
+    const isPotentialHardcodedString = (str: string): boolean => {
+        // Filter out short strings, keys (no spaces), imports, urls, data uris
+        if (!str || str.length <= 3 || !str.includes(' ') || str.startsWith('http') || str.startsWith('data:') || str.startsWith('file:')) {
+            return false;
+        }
+
+        // Allow purely alphanumeric underscore/dash/dot strings (often internal IDs)
+        if (/^[a-zA-Z0-9_\-\/\.]+$/.test(str)) return false;
+
+        // Exclude SQL
+        if (/^(SELECT|INSERT INTO|CREATE TABLE|UPDATE|DELETE FROM|DROP TABLE|ALTER TABLE)/i.test(str)) return false;
+
+        // Exclude Logs/Tech prefixes
+        if (/^(notify status|subscribe:|error:|warning:|info:|debug:)/i.test(str)) return false;
+
+        // Exclude date formats
+        if (/^[ymdYMD\/\-:\s]+$/.test(str)) return false;
+
+        return true;
+    };
+
+export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'tsx' | 'android-xml' | 'kotlin' | 'java' | 'swift' | 'ios-xib' | 'objc'): ValidationResult => {
     const details: ValidationError[] = [];
     let isValid = true;
 
@@ -112,42 +134,145 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
 
         while ((stringMatch = stringLiteralRegex.exec(content)) !== null) {
             const str = stringMatch[2];
-            // Filter out short strings, keys (no spaces), imports
-            if (str.length > 5 && str.includes(' ') && !str.includes('import ') && !str.startsWith('http') && !str.startsWith('data:')) {
-                if (/^[a-zA-Z0-9_\-\/\.]+$/.test(str)) continue;
-                if (/^(SELECT|INSERT INTO|CREATE TABLE|UPDATE|DELETE FROM|DROP TABLE|ALTER TABLE)/i.test(str)) continue;
-                if (/^(notify status|subscribe:|error:|warning:|info:)/i.test(str)) continue;
 
-                // Heuristic: Ignore likely Tailwind/CSS classes
-                // If contains multiple common utility words or patterns
-                const tailwindPatterns = [/^(flex|grid|block|hidden|absolute|relative|fixed|w-|h-|p-|m-|text-|bg-|border-|rounded-|gap-|items-|justify-)/];
-                if (str.split(' ').filter(word => tailwindPatterns.some(p => p.test(word))).length >= 2) {
-                    continue;
-                }
+            if (!isPotentialHardcodedString(str)) continue;
 
-                const index = stringMatch.index;
-                // Check immediate context (preceding text)
-                const precedingText = content.substring(Math.max(0, index - 20), index);
-                if (/(className|class)\s*=\s*$/.test(precedingText.trimEnd())) {
-                    continue;
-                }
-
-                const lineStart = content.lastIndexOf('\n', index) + 1;
-                const lineEnd = content.indexOf('\n', index);
-                const lineContent = content.substring(lineStart, lineEnd !== -1 ? lineEnd : content.length);
-
-                if (/console\.(log|debug|info|warn|error)/.test(lineContent)) continue;
-
-                const absoluteIndex = index + 1;
-                details.push({
-                    line: getLineNumber(content, absoluteIndex),
-                    text: str,
-                    message: `Suspicious string literal`
-                });
-                isValid = false;
+            // Heuristic: Ignore likely Tailwind/CSS classes
+            const tailwindPatterns = [/^(flex|grid|block|hidden|absolute|relative|fixed|w-|h-|p-|m-|text-|bg-|border-|rounded-|gap-|items-|justify-)/];
+            if (str.split(' ').filter(word => tailwindPatterns.some(p => p.test(word))).length >= 2) {
+                continue;
             }
+
+            const index = stringMatch.index;
+            // Check immediate context (preceding text)
+            const precedingText = content.substring(Math.max(0, index - 20), index);
+            if (/(className|class)\s*=\s*$/.test(precedingText.trimEnd())) {
+                continue;
+            }
+
+            const lineStart = content.lastIndexOf('\n', index) + 1;
+            const lineEnd = content.indexOf('\n', index);
+            const lineContent = content.substring(lineStart, lineEnd !== -1 ? lineEnd : content.length);
+
+            if (/console\.(log|debug|info|warn|error)/.test(lineContent)) continue;
+
+            const absoluteIndex = index + 1;
+            details.push({
+                line: getLineNumber(content, absoluteIndex),
+                text: str,
+                message: `Suspicious string literal`
+            });
+            isValid = false;
         }
 
+    } else if (type === 'android-xml') {
+        const attributeRegex = /android:(text|hint|contentDescription|title|summary)="([^"]+)"/g;
+        let match;
+        while ((match = attributeRegex.exec(content)) !== null) {
+            const attr = match[1];
+            const val = match[2];
+
+            // Ignore if it's a reference (@string/, ?attr/) or data binding (@{...})
+            if (val.startsWith('@') || val.startsWith('?')) continue;
+
+            // Ignore pure numbers or symbols
+            if (/^[0-9\s!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(val)) continue;
+
+            const absoluteIndex = match.index + match[0].indexOf(val);
+            details.push({
+                line: getLineNumber(content, absoluteIndex),
+                text: val,
+                message: `Hardcoded Android XML attribute [${attr}]`
+            });
+            isValid = false;
+        }
+    } else if (type === 'kotlin' || type === 'java') {
+        // Basic string literal check for Kotlin/Java
+        const stringLiteralRegex = /"([^"\\]*(?:\\.[^"\\]*)*)"/g;
+        let match;
+
+        while ((match = stringLiteralRegex.exec(content)) !== null) {
+            const str = match[1];
+            if (!isPotentialHardcodedString(str)) continue;
+
+            const index = match.index;
+            const lineStart = content.lastIndexOf('\n', index) + 1;
+            const lineEnd = content.indexOf('\n', index);
+            const lineContent = content.substring(lineStart, lineEnd !== -1 ? lineEnd : content.length);
+
+            // Ignore Logs
+            if (/(Log\.[civdw]|Logger\.|System\.out\.|Timber\.)/.test(lineContent)) continue;
+
+            // Ignore Annotations (lines starting with @, or string inside @Annotation(...))
+            if (lineContent.trim().startsWith('@')) continue;
+
+            // Ignore usual non-translatable keys in maps/intents
+            if (/(extra|key|action|name|id|tag|token|pref)/i.test(lineContent) && !lineContent.includes('Title') && !lineContent.includes('Message')) continue;
+
+            details.push({
+                line: getLineNumber(content, index + 1), // +1 to point to content inside quote
+                text: str,
+                message: `Hardcoded string literal`
+            });
+            isValid = false;
+        }
+    } else if (type === 'swift' || type === 'objc') {
+        // Swift/ObjC string literals
+        const stringLiteralRegex = type === 'objc' ? /@"([^"\\]*(?:\\.[^"\\]*)*)"/g : /"([^"\\]*(?:\\.[^"\\]*)*)"/g;
+        let match;
+
+        while ((match = stringLiteralRegex.exec(content)) !== null) {
+            const str = match[1];
+            if (!isPotentialHardcodedString(str)) continue;
+
+            const index = match.index;
+            const lineStart = content.lastIndexOf('\n', index) + 1;
+            const lineEnd = content.indexOf('\n', index);
+            const lineContent = content.substring(lineStart, lineEnd !== -1 ? lineEnd : content.length);
+
+            // Ignore NSLocalizedString (Swift/ObjC)
+            if (/NSLocalizedString/.test(lineContent)) continue;
+            if (type === 'swift' && /Text\(/.test(lineContent) && !/"/.test(str)) {
+                // Creating Text("key") usually works if key is LocalizedStringKey.
+                // But Text("Hello World") is hardcoded. 
+                // We will flag it if it validates isPotentialHardcodedString (space check handles keys vs sentences largely)
+            }
+
+            // Ignore logging
+            if (/(print\(|NSLog|os_log|debugPrint)/.test(lineContent)) continue;
+
+            // Ignore identifiers
+            if (/(identifier|key|name|vc|controller|storyboard|segue)/i.test(lineContent)) continue;
+
+            details.push({
+                line: getLineNumber(content, index + 1 + (type === 'objc' ? 1 : 0)),
+                text: str,
+                message: `Hardcoded string literal`
+            });
+            isValid = false;
+        }
+    } else if (type === 'ios-xib') {
+        // Check XML attributes for XIB/Storyboard
+        const attributeRegex = /\s(text|title|placeholder|headerTitle|footerTitle)="([^"]+)"/g;
+        let match;
+        while ((match = attributeRegex.exec(content)) !== null) {
+            const attr = match[1];
+            const val = match[2];
+
+            // Ignore Object IDs (simple heuristic: 3 chars - 3 chars - 3 chars approximately, or pure internal IDs)
+            // Or if it looks completely like an ID
+            if (/^[A-Za-z0-9]{3}-[A-Za-z0-9]{3}-[A-Za-z0-9]{3}$/.test(val)) continue;
+
+            if (!isPotentialHardcodedString(val)) continue;
+
+            const absoluteIndex = match.index + match[0].indexOf(val);
+            details.push({
+                line: getLineNumber(content, absoluteIndex),
+                text: val,
+                message: `Hardcoded XIB/Storyboard string [${attr}]`
+            });
+            isValid = false;
+        }
     } else {
         const hasTranslationImport = /import.*(i18n|vue-i18n|react-i18next|useTranslation)/.test(content);
         const usesTranslationFunction = /(\$t\(|t\(|i18n\.t\()/.test(content);
@@ -159,48 +284,35 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
 
             while ((stringMatch = stringLiteralRegex.exec(content)) !== null) {
                 const str = stringMatch[2];
-                // Filter out short strings, keys (no spaces), imports
-                if (str.length > 5 && str.includes(' ') && !str.includes('import ') && !str.startsWith('http') && !str.startsWith('data:')) {
-                    // Exclude some common code-like patterns
-                    if (/^[a-zA-Z0-9_\-\/\.]+$/.test(str)) continue;
 
-                    // Exclude SQL
-                    if (/^(SELECT|INSERT INTO|CREATE TABLE|UPDATE|DELETE FROM|DROP TABLE|ALTER TABLE)/i.test(str)) continue;
+                if (!isPotentialHardcodedString(str)) continue;
 
-                    // Exclude Logs (simple heuristic)
-                    if (/^(notify status|subscribe:|error:|warning:|info:)/i.test(str)) continue;
+                // Heuristic: Ignore likely Tailwind/CSS classes
+                const tailwindPatterns = [/^(flex|grid|block|hidden|absolute|relative|fixed|w-|h-|p-|m-|text-|bg-|border-|rounded-|gap-|items-|justify-)/];
+                if (str.split(' ').filter(word => tailwindPatterns.some(p => p.test(word))).length >= 2) {
+                    continue;
+                }
 
-                    // Heuristic: Ignore likely Tailwind/CSS classes
-                    const tailwindPatterns = [/^(flex|grid|block|hidden|absolute|relative|fixed|w-|h-|p-|m-|text-|bg-|border-|rounded-|gap-|items-|justify-)/];
-                    if (str.split(' ').filter(word => tailwindPatterns.some(p => p.test(word))).length >= 2) {
-                        continue;
-                    }
+                const index = stringMatch.index;
+                const precedingText = content.substring(Math.max(0, index - 20), index);
+                if (/(className|class)\s*=\s*$/.test(precedingText.trimEnd())) {
+                    continue;
+                }
 
-                    const index = stringMatch.index;
-                    // Check immediate context (preceding text)
-                    const precedingText = content.substring(Math.max(0, index - 20), index);
-                    // Check if it's a class attribute (Vue often uses class="..." or :class="...")
-                    // Or simple object keys in JS?
-                    if (/(className|class)\s*=\s*$/.test(precedingText.trimEnd())) {
-                        continue;
-                    }
+                const lineStart = content.lastIndexOf('\n', index) + 1;
+                const lineEnd = content.indexOf('\n', index);
+                const lineContent = content.substring(lineStart, lineEnd !== -1 ? lineEnd : content.length);
 
-                    const lineStart = content.lastIndexOf('\n', index) + 1;
-                    const lineEnd = content.indexOf('\n', index);
-                    const lineContent = content.substring(lineStart, lineEnd !== -1 ? lineEnd : content.length);
+                if (/console\.(log|debug|info|warn|error)/.test(lineContent)) continue;
 
-                    if (/console\.(log|debug|info|warn|error)/.test(lineContent)) continue;
-
-                    suspiciousStringsCount++;
-                    if (suspiciousStringsCount <= 10) { // Increased limit slightly since we have more detail now
-                        // Fix index to point to string content, not quote
-                        const absoluteIndex = index + 1;
-                        details.push({
-                            line: getLineNumber(content, absoluteIndex),
-                            text: str,
-                            message: `Suspicious string literal`
-                        });
-                    }
+                suspiciousStringsCount++;
+                if (suspiciousStringsCount <= 10) {
+                    const absoluteIndex = index + 1;
+                    details.push({
+                        line: getLineNumber(content, absoluteIndex),
+                        text: str,
+                        message: `Suspicious string literal`
+                    });
                 }
             }
 

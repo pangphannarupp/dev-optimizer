@@ -19,7 +19,8 @@
         "processing": "جارٍ المعالجة...",
         "csvJsonTab": "CSV إلى JSON",
         "settings": "الإعدادات",
-        "validateTranslation": "التحقق من الترجمة"
+        "validateTranslation": "التحقق من الترجمة",
+        "sourceCompare": "مقارنة المصدر"
     },
     "settings": {
         "title": "الإعدادات",
@@ -38,7 +39,10 @@
         "version": "الإصدار",
         "author": "المؤلف",
         "copyright": "حقوق النشر",
-        "language": "اللغة"
+        "language": "اللغة",
+        "releaseNotes": "ملاحظات الإصدار",
+        "latest": "أحدث",
+        "noReleaseNotes": "لا توجد ملاحظات إصدار متاحة"
     },
     "dropzone": {
         "dragDrop": "اسحب وأفلت الصور هنا",
@@ -175,7 +179,8 @@
     "common": {
         "copy": "نسخ",
         "copied": "تم النسخ!",
-        "remove": "إزالة"
+        "remove": "إزالة",
+        "ok": "حسنا"
     },
     "encryption": {
         "title": "أداة التشفير / فك التشفير",
@@ -248,11 +253,27 @@
         "successMessage": "تمت معالجة {{count}} صفًا بنجاح. تم إنشاء ملفات لـ {{languages}} لغة.",
         "detectedLanguages": "اللغات المكتشفة:",
         "downloadAll": "تنزيل جميع التنسيقات (ZIP)",
+        "downloadCsv": "تنزيل CSV",
+        "downloadExcel": "تنزيل Excel",
+        "importMode": "استيراد CSV / Excel",
+        "exportMode": "تصدير إلى CSV / Excel",
+        "selectSheet": "اختر ورقة",
+        "selectSheetDesc": "يحتوي ملف Excel هذا على أوراق متعددة. يرجى اختيار واحدة للاستيراد.",
+        "selectKey": "اختر عمود المفتاح",
+        "selectKeyDesc": "لم نتمكن من العثور على عمود 'JSON KEY' تلقائيًا. يرجى اختيار العمود الذي يحتوي على مفاتيح الترجمة.",
+        "processing": "جارٍ معالجة الملفات...",
+        "dragDropExport": "اسحب وأفلت ملفات الترجمة الفردية (json, xml, strings) هنا",
+        "supportsExport": "يدعم .json, .xml (Android), .strings (iOS)",
+        "processedFiles": "الملفات المعالجة:",
         "formats": {
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
         }
+    },
+    "whatsNew": {
+        "title": "ما الجديد",
+        "description": "إصدار جديد من Dev Optimizer متوفر!"
     },
     "validation": {
         "title": "التحقق من الترجمة",
@@ -283,5 +304,39 @@
         "contextMessage": "السياق / الرسالة",
         "noUntranslatedFound": "لم يتم العثور على سلاسل غير مترجمة.",
         "close": "إغلاق"
+    },
+    "sourceCompare": {
+        "title": "مقارنة المصدر",
+        "description": "قارن محتوى الملف أو أرشيفات Zip.",
+        "dragSourceOne": "إسقاط المصدر أ (ملف أو Zip)",
+        "dragSourceTwo": "إسقاط المصدر ب (ملف أو Zip)",
+        "compare": "مقارنة",
+        "reset": "إعادة تعيين",
+        "sourceA": "المصدر أ",
+        "sourceB": "المصدر ب",
+        "files": "ملفات",
+        "modified": "معدل",
+        "added": "مضاف",
+        "deleted": "محذوف",
+        "identical": "متطابق",
+        "noDifferences": "لم يتم العثور على اختلافات",
+        "merge": "دمج / تنزيل النتيجة",
+        "selectForMerge": "تحديد الإصدار للدمج",
+        "supports": "يدعم أرشيفات Zip والملفات النصية (كود، json, txt...)",
+        "totalFiles": "إجمالي الملفات",
+        "differentFiles": "ملفات مختلفة",
+        "archiveContentComparison": "مقارنة محتوى الأرشيف",
+        "downloadMerge": "دمج وتنزيل",
+        "downloadMergeDesc": "يتضمن الإصدارات المحددة (أ/ب)",
+        "downloadDiff": "الفرق/المعدل فقط",
+        "downloadDiffDesc": "الملفات المتغيرة فقط (من ب)",
+        "downloadIdentical": "متطابق فقط",
+        "downloadIdenticalDesc": "الملفات غير المتغيرة فقط",
+        "filesData": "{{count}} ملفات",
+        "modifiedCount": "معدل",
+        "addedCount": "مضاف",
+        "deletedCount": "محذوف",
+        "comparisonResult": "نتيجة المقارنة",
+        "sizeDiff": "فرق الحجم"
     }
 }

@@ -10,6 +10,7 @@ interface DropZoneProps {
     validator?: (file: File) => boolean;
     supportedText?: string;
     dragDropText?: string;
+    multiple?: boolean;
 }
 
 export const DropZone: React.FC<DropZoneProps> = ({
@@ -18,7 +19,8 @@ export const DropZone: React.FC<DropZoneProps> = ({
     accept = "image/*,.heic,.heif,.bmp,.avif,.ico,.svg",
     validator,
     supportedText,
-    dragDropText
+    dragDropText,
+    multiple = true
 }) => {
     const [isDragging, setIsDragging] = useState(false);
     const { t } = useTranslation();
@@ -32,7 +34,7 @@ export const DropZone: React.FC<DropZoneProps> = ({
         if (file.type.startsWith('image/')) return true;
         // Fallback to extension check for HEIC/HEIF and others
         const extension = file.name.toLowerCase().split('.').pop();
-        return ['heic', 'heif', 'bmp', 'avif', 'ico', 'svg'].includes(extension || '');
+        return ['heic', 'heif', 'bmp', 'avif', 'ico', 'svg', 'zip', 'json', 'csv', 'txt', 'xml'].includes(extension || '');
     }, []);
 
     const validateFile = validator || defaultValidator;
@@ -74,7 +76,7 @@ export const DropZone: React.FC<DropZoneProps> = ({
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             className={clsx(
-                "border-2 border-dashed rounded-xl p-12 text-center transition-all duration-200 cursor-pointer group",
+                "border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 cursor-pointer group",
                 isDragging
                     ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 scale-[1.02]"
                     : "border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800",
@@ -86,22 +88,25 @@ export const DropZone: React.FC<DropZoneProps> = ({
                 type="file"
                 id="file-input"
                 className="hidden"
-                multiple
+                multiple={multiple}
                 accept={accept}
                 onChange={handleFileInput}
             />
-            <div className="flex flex-col items-center justify-center gap-4 pointer-events-none">
+            <div className="flex flex-col items-center justify-center gap-3 pointer-events-none w-full">
                 <div className={clsx(
                     "p-4 rounded-full transition-colors duration-200",
                     isDragging ? "bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400" : "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 group-hover:text-blue-500 dark:group-hover:text-blue-400"
                 )}>
                     <Upload size={32} />
                 </div>
-                <div>
-                    <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200">{dragDropText || t('dropzone.dragDrop')}</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                <div className="flex flex-col gap-1 max-w-full px-4">
+                    <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap overflow-hidden text-ellipsis">
+                        {dragDropText || t('dropzone.dragDrop')}
+                    </h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 text-center break-words leading-tight">
                         {supportedText || t('dropzone.supports')}
-                    </p></div>
+                    </p>
+                </div>
             </div>
         </div>
     );

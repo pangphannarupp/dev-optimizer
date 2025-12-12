@@ -19,7 +19,8 @@
         "processing": "处理中...",
         "csvJsonTab": "CSV转JSON",
         "settings": "设置",
-        "validateTranslation": "验证翻译"
+        "validateTranslation": "验证翻译",
+        "sourceCompare": "源比较"
     },
     "settings": {
         "title": "设置",
@@ -38,7 +39,10 @@
         "version": "版本",
         "author": "作者",
         "copyright": "版权",
-        "language": "语言"
+        "language": "语言",
+        "releaseNotes": "发布说明",
+        "latest": "最新",
+        "noReleaseNotes": "暂无发布说明"
     },
     "dropzone": {
         "dragDrop": "拖放图片到这里",
@@ -175,7 +179,8 @@
     "common": {
         "copy": "复制",
         "copied": "已复制！",
-        "remove": "移除"
+        "remove": "移除",
+        "ok": "确定"
     },
     "encryption": {
         "title": "加密/解密工具",
@@ -248,11 +253,27 @@
         "successMessage": "成功处理了{{count}}行。为{{languages}}种语言生成了文件。",
         "detectedLanguages": "检测到的语言：",
         "downloadAll": "下载所有格式（ZIP）",
+        "downloadCsv": "下载CSV",
+        "downloadExcel": "下载Excel",
+        "importMode": "导入CSV / Excel",
+        "exportMode": "导出到CSV / Excel",
+        "selectSheet": "选择工作表",
+        "selectSheetDesc": "此Excel文件包含多个工作表。请选择要导入的一个。",
+        "selectKey": "选择键列",
+        "selectKeyDesc": "我们无法自动找到“JSON KEY”列。请选择包含翻译键的列。",
+        "processing": "处理文件...",
+        "dragDropExport": "拖放单个翻译文件 (json, xml, strings)",
+        "supportsExport": "支持 .json, .xml (Android), .strings (iOS)",
+        "processedFiles": "已处理文件：",
         "formats": {
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
         }
+    },
+    "whatsNew": {
+        "title": "新功能",
+        "description": "Dev Optimizer 新版本可用！"
     },
     "validation": {
         "title": "验证翻译",
@@ -283,5 +304,39 @@
         "contextMessage": "上下文 / 消息",
         "noUntranslatedFound": "未找到未翻译的字符串。",
         "close": "关闭"
+    },
+    "sourceCompare": {
+        "title": "源比较",
+        "description": "比较文件内容或 Zip 归档。",
+        "dragSourceOne": "拖放源 A (文件或 Zip)",
+        "dragSourceTwo": "拖放源 B (文件或 Zip)",
+        "compare": "比较",
+        "reset": "重置",
+        "sourceA": "源 A",
+        "sourceB": "源 B",
+        "files": "文件",
+        "modified": "已修改",
+        "added": "已添加",
+        "deleted": "已删除",
+        "identical": "相同",
+        "noDifferences": "未发现差异",
+        "merge": "合并 / 下载结果",
+        "selectForMerge": "选择合并版本",
+        "supports": "支持 Zip 归档和文本文件 (代码, json, txt...)",
+        "totalFiles": "文件总数",
+        "differentFiles": "不同文件",
+        "archiveContentComparison": "归档内容比较",
+        "downloadMerge": "合并并下载",
+        "downloadMergeDesc": "包含所选版本 (A/B)",
+        "downloadDiff": "仅差异/修改",
+        "downloadDiffDesc": "仅更改的文件 (来自 B)",
+        "downloadIdentical": "仅相同",
+        "downloadIdenticalDesc": "仅未更改的文件",
+        "filesData": "{{count}} 文件",
+        "modifiedCount": "已修改",
+        "addedCount": "已添加",
+        "deletedCount": "已删除",
+        "comparisonResult": "比较结果",
+        "sizeDiff": "大差异"
     }
 }

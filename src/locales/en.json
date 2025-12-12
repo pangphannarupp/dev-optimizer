@@ -19,7 +19,8 @@
         "encryptionTab": "Encryption/Decryption",
         "shaTab": "SHA Generator",
         "settings": "Settings",
-        "validateTranslation": "Validate Translation"
+        "validateTranslation": "Validate Translation",
+        "sourceCompare": "Source Comparison"
     },
     "settings": {
         "title": "Settings",
@@ -38,7 +39,10 @@
         "version": "Version",
         "author": "Author",
         "copyright": "Copyright",
-        "language": "Language"
+        "language": "Language",
+        "releaseNotes": "Release Notes",
+        "latest": "Latest",
+        "noReleaseNotes": "No release notes available"
     },
     "dropzone": {
         "dragDrop": "Drag & Drop images here",
@@ -175,7 +179,8 @@
     "common": {
         "copy": "Copy",
         "copied": "Copied!",
-        "remove": "Remove"
+        "remove": "Remove",
+        "ok": "OK"
     },
     "jsonFormatter": {
         "title": "JSON Formatter",
@@ -279,6 +284,18 @@
         "successMessage": "Successfully processed {{count}} rows. Generated files for {{languages}} languages.",
         "detectedLanguages": "Detected Languages:",
         "downloadAll": "Download All Formats (ZIP)",
+        "downloadCsv": "Download CSV",
+        "downloadExcel": "Download Excel",
+        "importMode": "Import CSV / Excel",
+        "exportMode": "Export to CSV / Excel",
+        "selectSheet": "Select Sheet",
+        "selectSheetDesc": "This Excel file contains multiple sheets. Please select the one you want to import.",
+        "selectKey": "Select Key Column",
+        "selectKeyDesc": "We couldn't automatically find the \"JSON KEY\" column. Please select the column that contains your translation keys.",
+        "processing": "Processing files...",
+        "dragDropExport": "Drag & drop individual translation files (json, xml, strings)",
+        "supportsExport": "Supports .json, .xml (Android), .strings (iOS)",
+        "processedFiles": "Processed Files:",
         "formats": {
             "json": "JSON",
             "android": "Android",
@@ -314,5 +331,43 @@
         "contextMessage": "Context / Message",
         "noUntranslatedFound": "No untranslated strings found.",
         "close": "Close"
+    },
+    "whatsNew": {
+        "title": "What's New",
+        "description": "A new version of Dev Optimizer is available!"
+    },
+    "sourceCompare": {
+        "title": "Source Comparison",
+        "description": "Compare file content or zip archives.",
+        "dragSourceOne": "Drop Source A (File or Zip)",
+        "dragSourceTwo": "Drop Source B (File or Zip)",
+        "compare": "Compare",
+        "reset": "Reset",
+        "sourceA": "Source A",
+        "sourceB": "Source B",
+        "files": "Files",
+        "modified": "Modified",
+        "added": "Added",
+        "deleted": "Deleted",
+        "identical": "Identical",
+        "noDifferences": "No differences found",
+        "merge": "Merge / Download Result",
+        "selectForMerge": "Select version for merge",
+        "supports": "Supports Zip archives and text-based files (code, json, txt...)",
+        "totalFiles": "Total Files",
+        "differentFiles": "Different Files",
+        "archiveContentComparison": "Archive Content Comparison",
+        "downloadMerge": "Merge & Download",
+        "downloadMergeDesc": "Includes selected versions (A/B)",
+        "downloadDiff": "Diff/Modified Only",
+        "downloadDiffDesc": "Only changed files (from B)",
+        "downloadIdentical": "Identical Only",
+        "downloadIdenticalDesc": "Only unchanged files",
+        "filesData": "{{count}} Files",
+        "modifiedCount": "Modified",
+        "addedCount": "Added",
+        "deletedCount": "Deleted",
+        "comparisonResult": "Comparison Result",
+        "sizeDiff": "Size Diff"
     }
 }
