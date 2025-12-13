@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Pretendard', 'Battambang', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['Google Sans', 'Battambang', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         khmer: ['Battambang', 'sans-serif'],
       },
     },

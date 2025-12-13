@@ -18,6 +18,8 @@ import { EncryptionTool } from './components/EncryptionTool';
 import { SHAGenerator } from './components/SHAGenerator';
 import { ValidateTranslation } from './components/ValidateTranslation';
 import { SourceComparator } from './components/SourceComparator';
+import { AppStoreValidator } from './components/AppStoreValidator';
+
 
 import { Sidebar } from './components/Sidebar';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -356,6 +358,17 @@ function AppContent() {
               >
                 <SourceComparator />
               </motion.main>
+            ) : activeTab === 'store-validator' ? (
+              <motion.main
+                key="store-validator"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <AppStoreValidator />
+              </motion.main>
             ) : (
               <motion.main
                 key="base64"
@@ -374,7 +387,7 @@ function AppContent() {
 
       <GlobalSettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
       <WhatsNewSnackbar />
-    </div>
+    </div >
   );
 }
 

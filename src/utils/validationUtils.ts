@@ -16,9 +16,15 @@ const getLineNumber = (content: string, index: number): number => {
 export // Helper to check if string contains potential hardcoded text
     const isPotentialHardcodedString = (str: string): boolean => {
         // Filter out short strings, keys (no spaces), imports, urls, data uris
-        if (!str || str.length <= 3 || !str.includes(' ') || str.startsWith('http') || str.startsWith('data:') || str.startsWith('file:')) {
+        if (!str || str.length <= 3 || !str.includes(' ') || str.startsWith('http') || str.startsWith('data:') || str.startsWith('file:') || str === 'use strict' || str === "'use strict'") {
             return false;
         }
+
+        // Ignore strings with underscores (usually technical keys or class names like 'line_top')
+        if (str.includes('_')) return false;
+
+        // Ignore separator strings (====, ----, ****) often used in logs
+        if (/([=\-*]){3,}/.test(str)) return false;
 
         // Allow purely alphanumeric underscore/dash/dot strings (often internal IDs)
         if (/^[a-zA-Z0-9_\-\/\.]+$/.test(str)) return false;
@@ -30,7 +36,7 @@ export // Helper to check if string contains potential hardcoded text
         if (/^(notify status|subscribe:|error:|warning:|info:|debug:)/i.test(str)) return false;
 
         // Exclude date formats
-        if (/^[ymdYMD\/\-:\s]+$/.test(str)) return false;
+        if (/^[ymdYMDHhmsS\/\-:\sT\.]+$/.test(str)) return false;
 
         return true;
     };
@@ -60,6 +66,7 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
                     text &&
                     !text.startsWith('{{') &&
                     !text.startsWith('<!--') &&
+                    !/^&[a-zA-Z0-9#]+;$/.test(text) &&
                     !/^[0-9\s!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(text)
                 ) {
                     const localIndex = match.index + match[0].indexOf(match[1]); // Index of the captured text
@@ -146,7 +153,7 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
             const index = stringMatch.index;
             // Check immediate context (preceding text)
             const precedingText = content.substring(Math.max(0, index - 20), index);
-            if (/(className|class)\s*=\s*$/.test(precedingText.trimEnd())) {
+            if (/(className|class)\s*[:=]\s*$/.test(precedingText.trimEnd())) {
                 continue;
             }
 
@@ -154,7 +161,7 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
             const lineEnd = content.indexOf('\n', index);
             const lineContent = content.substring(lineStart, lineEnd !== -1 ? lineEnd : content.length);
 
-            if (/console\.(log|debug|info|warn|error)/.test(lineContent)) continue;
+            if (/(console|BizMOBLogger)\.(log|debug|info|warn|error)|(\.log\()/.test(lineContent)) continue;
 
             const absoluteIndex = index + 1;
             details.push({
@@ -201,7 +208,7 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
             const lineContent = content.substring(lineStart, lineEnd !== -1 ? lineEnd : content.length);
 
             // Ignore Logs
-            if (/(Log\.[civdw]|Logger\.|System\.out\.|Timber\.)/.test(lineContent)) continue;
+            if (/(Log\.[civdw]|Logger\.|System\.out\.|Timber\.|BizMOBLogger\.)|(\.log\()/.test(lineContent)) continue;
 
             // Ignore Annotations (lines starting with @, or string inside @Annotation(...))
             if (lineContent.trim().startsWith('@')) continue;
@@ -295,7 +302,7 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
 
                 const index = stringMatch.index;
                 const precedingText = content.substring(Math.max(0, index - 20), index);
-                if (/(className|class)\s*=\s*$/.test(precedingText.trimEnd())) {
+                if (/(className|class)\s*[:=]\s*$/.test(precedingText.trimEnd())) {
                     continue;
                 }
 
@@ -303,7 +310,7 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
                 const lineEnd = content.indexOf('\n', index);
                 const lineContent = content.substring(lineStart, lineEnd !== -1 ? lineEnd : content.length);
 
-                if (/console\.(log|debug|info|warn|error)/.test(lineContent)) continue;
+                if (/(console|BizMOBLogger)\.(log|debug|info|warn|error)/.test(lineContent)) continue;
 
                 suspiciousStringsCount++;
                 if (suspiciousStringsCount <= 10) {

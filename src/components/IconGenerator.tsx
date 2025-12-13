@@ -75,6 +75,7 @@ const MACOS_ICONS: IconSize[] = [
     { name: 'icon_128x128.png', size: 128, path: 'macos' },
     { name: 'icon_256x256.png', size: 256, path: 'macos' },
     { name: 'icon_512x512.png', size: 512, path: 'macos' },
+    { name: 'icon_512x512@2x.png', size: 1024, path: 'macos' },
 ];
 
 const WINDOWS_ICONS: IconSize[] = [
@@ -302,6 +303,7 @@ export const IconGenerator: React.FC = () => {
                     { size: 128, url: resizeImageToDataURL(img, 128), label: '128px' },
                     { size: 256, url: resizeImageToDataURL(img, 256), label: '256px' },
                     { size: 512, url: resizeImageToDataURL(img, 512), label: '512px' },
+                    { size: 1024, url: resizeImageToDataURL(img, 1024), label: '1024px (@2x)' },
                 ],
                 windows: [
                     { size: 16, url: resizeImageToDataURL(img, 16), label: '16px' },
@@ -395,6 +397,13 @@ export const IconGenerator: React.FC = () => {
                 const blob = await resizeImage(img, icon.size);
                 zip.file(`${icon.path}/${icon.name}`, blob);
             }
+
+            // EXTRA: Save Store Icons to root for easy access
+            const storeIcon1024 = await resizeImage(img, 1024);
+            zip.file('AppStore_Icon_1024.png', storeIcon1024);
+
+            const playStoreIcon512 = await resizeImage(img, 512);
+            zip.file('PlayStore_Icon_512.png', playStoreIcon512);
 
             const content = await zip.generateAsync({ type: 'blob' });
             saveAs(content, 'AppIcons.zip');

@@ -2,9 +2,10 @@
 import { saveAs } from 'file-saver';
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import JSZip from 'jszip';
-import { Upload, FileText, CheckCircle, AlertTriangle, AlertCircle, RefreshCw, Layers, Eye, EyeOff, Download, X, Code, List } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertTriangle, AlertCircle, RefreshCw, Layers, Eye, EyeOff, Download, X, Code, List, FileSpreadsheet } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { clsx } from 'clsx';
+import * as XLSX from 'xlsx';
 import { validateContent, ValidationError } from '../utils/validationUtils';
 
 interface FileValidationResult {
@@ -162,7 +163,7 @@ export function ValidateTranslation() {
         }
     };
 
-    const handleExportExcel = useCallback(() => {
+    const handleExportCsv = useCallback(() => {
         // Generate CSV content
         const headers = ['File Path', 'Type', 'Status', 'Ignored', 'Line', 'Text', 'Message'];
 
@@ -208,6 +209,63 @@ export function ValidateTranslation() {
         saveAs(blob, 'validation_report.csv');
     }, [displayedResults, ignoredPaths]);
 
+    const handleExportExcel = useCallback(() => {
+        const headers = ['File Path', 'File Name', 'Type', 'Status', 'Ignored', 'Line', 'Text', 'Message'];
+        const rows: any[][] = [headers];
+
+        displayedResults
+            .filter(r => !ignoredPaths.has(r.path))
+            .forEach(r => {
+                const isIgnored = ignoredPaths.has(r.path);
+                const status = r.isValid ? 'Translated' : 'Untranslated';
+                const ignoredStr = isIgnored ? 'Yes' : 'No';
+                const fileName = r.path.split('/').pop() || r.path;
+
+                if (r.details && r.details.length > 0) {
+                    r.details.forEach(detail => {
+                        rows.push([
+                            r.path,
+                            fileName,
+                            r.type,
+                            status,
+                            ignoredStr,
+                            detail.line,
+                            detail.text,
+                            detail.message
+                        ]);
+                    });
+                } else {
+                    rows.push([
+                        r.path,
+                        fileName,
+                        r.type,
+                        status,
+                        ignoredStr,
+                        '',
+                        '',
+                        ''
+                    ]);
+                }
+            });
+
+        const ws = XLSX.utils.aoa_to_sheet(rows);
+
+        // Auto-width for columns
+        const wscols = headers.map((_, i) => {
+            // Calculate max width for this column based on data
+            const maxLen = rows.reduce((max, row) => {
+                const cell = row[i] ? String(row[i]) : "";
+                return Math.max(max, cell.length);
+            }, 10); // Minimum width 10
+            return { wch: Math.min(maxLen, 50) }; // Cap at 50 chars
+        });
+        ws['!cols'] = wscols;
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Validation Report");
+        XLSX.writeFile(wb, "validation_report.xlsx");
+    }, [displayedResults, ignoredPaths]);
+
     // Handle initial open of modal
     const openModal = (file: FileValidationResult) => {
         setSelectedResult(file);
@@ -231,19 +289,19 @@ export function ValidateTranslation() {
     };
 
     return (
-        <div className="h-full flex flex-col p-6 max-w-6xl mx-auto w-full relative">
-            <h1 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white flex items-center gap-2">
-                <Layers className="text-blue-500" />
+        <div className="h-full flex flex-col p-8 max-w-[1400px] mx-auto w-full relative font-khmer">
+            <h1 className="text-3xl font-bold mb-8 text-slate-800 dark:text-white flex items-center gap-3">
+                <Layers className="text-blue-600" size={32} />
                 {t('app.validateTranslation', 'Validate Translation')}
             </h1>
 
             {results.length === 0 && (
                 <div
                     className={clsx(
-                        "relative border-2 border-dashed rounded-xl p-8 transition-colors text-center cursor-pointer mb-8",
+                        "relative border-2 border-dashed rounded-xl p-12 transition-all text-center cursor-pointer mb-8 bg-white dark:bg-gray-800",
                         isDragging
                             ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                            : "border-gray-300 dark:border-gray-700 hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                            : "border-gray-200 dark:border-gray-700 hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700/50"
                     )}
                     onDragEnter={handleDrag}
                     onDragOver={handleDrag}
@@ -259,15 +317,15 @@ export function ValidateTranslation() {
                         onChange={handleFileSelect}
                     />
 
-                    <div className="flex flex-col items-center gap-3">
-                        <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400">
-                            {isAnalyzing ? <RefreshCw className="animate-spin" size={32} /> : <Upload size={32} />}
+                    <div className="flex flex-col items-center gap-4">
+                        <div className="w-20 h-20 bg-blue-50 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400">
+                            {isAnalyzing ? <RefreshCw className="animate-spin" size={40} /> : <Upload size={40} />}
                         </div>
                         <div>
-                            <p className="text-lg font-medium text-gray-700 dark:text-gray-200">
+                            <p className="text-xl font-semibold text-slate-700 dark:text-gray-200">
                                 {isAnalyzing ? t('validation.analyzing') : t('validation.dragDrop')}
                             </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            <p className="text-base text-slate-500 dark:text-gray-400 mt-2">
                                 {t('validation.browse')}
                             </p>
                         </div>
@@ -276,25 +334,30 @@ export function ValidateTranslation() {
             )}
 
             {results.length > 0 && (
-                <div className="flex-1 flex flex-col gap-4 overflow-hidden">
-                    <div className="flex items-center justify-between mb-2">
+                <div className="flex-1 flex flex-col gap-6 overflow-hidden">
+                    {/* Stats & Actions Header */}
+                    <div className="flex flex-wrap items-center justify-between gap-4">
                         <div className="flex gap-4">
-                            <div className="flex items-center gap-3 bg-white dark:bg-gray-800 px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700">
-                                <FileText className="text-blue-500" size={18} />
-                                <span className="text-sm font-medium">{t('validation.total')}: {stats.total}</span>
+                            <div className="flex flex-col min-w-[120px] bg-white dark:bg-gray-800 px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden group">
+                                <FileText className="text-blue-100 dark:text-blue-900/20 absolute -right-3 -bottom-3 w-16 h-16 group-hover:scale-110 transition-transform" />
+                                <span className="text-sm font-medium text-slate-500 dark:text-slate-400 relative z-10">{t('validation.total')}</span>
+                                <span className="text-2xl font-bold text-slate-800 dark:text-white relative z-10">{stats.total}</span>
                             </div>
-                            <div className="flex items-center gap-3 bg-white dark:bg-gray-800 px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700">
-                                <CheckCircle className="text-green-500" size={18} />
-                                <span className="text-sm font-medium">{t('validation.valid')}: {stats.valid}</span>
+                            <div className="flex flex-col min-w-[120px] bg-white dark:bg-gray-800 px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden group">
+                                <CheckCircle className="text-green-100 dark:text-green-900/20 absolute -right-3 -bottom-3 w-16 h-16 group-hover:scale-110 transition-transform" />
+                                <span className="text-sm font-medium text-slate-500 dark:text-slate-400 relative z-10">{t('validation.valid')}</span>
+                                <span className="text-2xl font-bold text-slate-800 dark:text-white relative z-10">{stats.valid}</span>
                             </div>
-                            <div className="flex items-center gap-3 bg-white dark:bg-gray-800 px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700">
-                                <AlertTriangle className="text-red-500" size={18} />
-                                <span className="text-sm font-medium">{t('validation.invalid')}: {stats.invalid}</span>
+                            <div className="flex flex-col min-w-[120px] bg-white dark:bg-gray-800 px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden group">
+                                <AlertTriangle className="text-red-100 dark:text-red-900/20 absolute -right-3 -bottom-3 w-16 h-16 group-hover:scale-110 transition-transform" />
+                                <span className="text-sm font-medium text-slate-500 dark:text-slate-400 relative z-10">{t('validation.invalid')}</span>
+                                <span className="text-2xl font-bold text-slate-800 dark:text-white relative z-10">{stats.invalid}</span>
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-3">
-                            <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 cursor-pointer select-none">
+
+                        <div className="flex items-center gap-3 bg-white dark:bg-gray-800 p-2 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            <label className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-gray-300 cursor-pointer select-none hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors">
                                 <input
                                     type="checkbox"
                                     checked={showInvalidOnly}
@@ -303,7 +366,10 @@ export function ValidateTranslation() {
                                 />
                                 {t('validation.showInvalidOnly')}
                             </label>
-                            <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 cursor-pointer select-none">
+
+                            <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1"></div>
+
+                            <label className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-gray-300 cursor-pointer select-none hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors">
                                 <input
                                     type="checkbox"
                                     checked={hideIgnored}
@@ -313,10 +379,21 @@ export function ValidateTranslation() {
                                 {t('validation.hideIgnored')}
                             </label>
 
+                            <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1"></div>
+
                             <button
                                 onClick={handleExportExcel}
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-lg transition-colors"
-                                title={t('validation.exportCsv')}
+                                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 rounded-lg transition-all active:scale-95"
+                            >
+                                <FileSpreadsheet size={16} />
+                                {t('validation.exportExcel')}
+                            </button>
+
+
+
+                            <button
+                                onClick={handleExportCsv}
+                                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-lg transition-all active:scale-95"
                             >
                                 <Download size={16} />
                                 {t('validation.exportCsv')}
@@ -325,15 +402,15 @@ export function ValidateTranslation() {
                             <button
                                 onClick={handleReAnalyze}
                                 disabled={isAnalyzing}
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-colors disabled:opacity-50"
-                                title={t('validation.reAnalyze')}
+                                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-all active:scale-95 disabled:opacity-50"
                             >
                                 <RefreshCw size={16} className={clsx(isAnalyzing && "animate-spin")} />
                                 {t('validation.reAnalyze')}
                             </button>
+
                             <button
                                 onClick={handleUploadNew}
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 rounded-lg transition-all active:scale-95"
                             >
                                 <Upload size={16} />
                                 {t('validation.uploadNew')}
@@ -341,82 +418,103 @@ export function ValidateTranslation() {
                         </div>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                        <table className="w-full text-left text-sm">
-                            <thead className="bg-gray-50 dark:bg-gray-900/50 sticky top-0 z-10 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex-1 overflow-y-auto bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <table className="w-full text-left table-fixed">
+                            <thead className="bg-gray-50/50 dark:bg-gray-900/50 sticky top-0 z-10 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
                                 <tr>
-                                    <th className="p-4 font-medium text-gray-600 dark:text-gray-300 w-10"></th>
-                                    <th className="p-4 font-medium text-gray-600 dark:text-gray-300">{t('validation.filePath')}</th>
-                                    <th className="p-4 font-medium text-gray-600 dark:text-gray-300">{t('validation.type')}</th>
-                                    <th className="p-4 font-medium text-gray-600 dark:text-gray-300">{t('validation.status')}</th>
-                                    <th className="p-4 font-medium text-gray-600 dark:text-gray-300 w-1/2">{t('validation.issuesOverview')}</th>
+                                    <th className="p-5 w-16 text-center"></th>
+                                    <th className="p-5 font-semibold text-slate-500 dark:text-slate-400 text-sm w-56">{t('validation.fileName')}</th>
+                                    <th className="p-5 font-semibold text-slate-500 dark:text-slate-400 text-sm w-24 text-center">{t('validation.type')}</th>
+                                    <th className="p-5 font-semibold text-slate-500 dark:text-slate-400 text-sm w-40 text-right">{t('validation.status')}</th>
+                                    <th className="p-5 font-semibold text-slate-500 dark:text-slate-400 text-sm text-right">{t('validation.issuesOverview')}</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-100 dark:divide-gray-700/50">
+                            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
                                 {displayedResults.map((file, i) => {
                                     const isIgnored = ignoredPaths.has(file.path);
                                     const issueCount = file.details?.length || 0;
+                                    const fileName = file.path.split('/').pop() || file.path;
 
                                     return (
                                         <tr
                                             key={i}
                                             onClick={() => openModal(file)}
                                             className={clsx(
-                                                "hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer",
+                                                "group hover:bg-blue-50/50 dark:hover:bg-gray-800/50 transition-colors cursor-pointer",
                                                 isIgnored && "opacity-50 grayscale"
                                             )}
                                         >
-                                            <td className="p-4 text-center">
+                                            <td className="p-5 text-center">
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); toggleIgnore(file.path); }}
-                                                    className="p-1 text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded transition-colors"
+                                                    className={clsx(
+                                                        "p-2 rounded-full transition-all duration-200",
+                                                        isIgnored
+                                                            ? "text-slate-400 hover:text-blue-500 hover:bg-blue-50"
+                                                            : "text-slate-300 group-hover:text-slate-500 dark:text-gray-600 dark:group-hover:text-gray-400"
+                                                    )}
                                                     title={isIgnored ? "Unignore" : "Ignore file"}
                                                 >
-                                                    {isIgnored ? <EyeOff size={16} /> : <Eye size={16} />}
+                                                    {isIgnored ? <EyeOff size={18} /> : <Eye size={18} />}
                                                 </button>
                                             </td>
-                                            <td className="p-4 font-mono text-xs text-gray-600 dark:text-gray-400 whitespace-nowrap">
-                                                {file.path}
-                                                {isIgnored && <span className="ml-2 text-[10px] uppercase bg-gray-200 dark:bg-gray-700 px-1 rounded">Ignored</span>}
+                                            <td className="p-5">
+                                                <div className="font-mono text-sm text-slate-700 dark:text-gray-300 truncate" title={file.path}>
+                                                    {fileName}
+                                                </div>
+                                                {isIgnored && <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 dark:bg-gray-700 dark:text-gray-400 px-2 py-0.5 rounded-full">Ignored</span>}
                                             </td>
-                                            <td className="p-4 text-gray-500 dark:text-gray-500 uppercase text-xs font-bold">
-                                                {file.type}
+                                            <td className="p-5 text-center">
+                                                <span className="inline-block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                                    {file.type}
+                                                </span>
                                             </td>
-                                            <td className="p-4">
+                                            <td className="p-5 text-right">
                                                 {file.isValid ? (
-                                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                                                        <CheckCircle size={12} />
-                                                        {t('validation.translated')}
-                                                    </span>
+                                                    <div className="inline-flex flex-col items-end">
+                                                        <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-bold bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-400 border border-green-100 dark:border-green-900/30">
+                                                            <CheckCircle size={14} className="stroke-[2.5]" />
+                                                            {t('validation.translated')}
+                                                        </span>
+                                                    </div>
                                                 ) : isIgnored ? (
-                                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-400">
-                                                        <EyeOff size={12} />
-                                                        {t('validation.ignored')}
-                                                    </span>
+                                                    <div className="inline-flex flex-col items-end">
+                                                        <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-bold bg-slate-100 text-slate-500 dark:bg-gray-800 dark:text-gray-400 border border-slate-200 dark:border-gray-700">
+                                                            <EyeOff size={14} className="stroke-[2.5]" />
+                                                            {t('validation.ignored')}
+                                                        </span>
+                                                    </div>
                                                 ) : (
-                                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">
-                                                        <AlertCircle size={12} />
-                                                        {t('validation.untranslated')} ({issueCount})
-                                                    </span>
+                                                    <div className="inline-flex flex-col items-end">
+                                                        <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-bold bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400 border border-red-100 dark:border-red-900/30">
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div>
+                                                            {t('validation.untranslated')}
+                                                            <span className="ml-1 bg-white dark:bg-red-900/40 px-1.5 rounded-md text-xs py-0.5 shadow-sm text-red-700 dark:text-red-300">
+                                                                {issueCount}
+                                                            </span>
+                                                        </span>
+                                                    </div>
                                                 )}
                                             </td>
-                                            <td className="p-4 text-gray-500 dark:text-gray-400">
+                                            <td className="p-5">
                                                 {file.details && file.details.length > 0 ? (
-                                                    <div className="flex flex-col gap-1">
+                                                    <div className="flex flex-col gap-2 items-end">
                                                         {file.details.slice(0, 3).map((d, k) => (
-                                                            <div key={k} className="text-xs truncate flex items-center gap-2">
-                                                                <span className="inline-block bg-gray-200 dark:bg-gray-700 px-1 rounded text-[10px] font-mono min-w-[30px] text-center">L{d.line}</span>
-                                                                <span className="truncate" title={d.text}>{d.text}</span>
+                                                            <div key={k} className="flex items-center gap-3 text-sm max-w-full">
+                                                                <span className="truncate text-slate-600 dark:text-gray-400 max-w-[200px]" title={d.text}>{d.text}</span>
+                                                                <span className="shrink-0 flex items-center justify-center bg-slate-100 dark:bg-gray-700 text-slate-500 dark:text-gray-400 px-1.5 py-0.5 rounded text-[10px] font-mono font-bold min-w-[24px]">
+                                                                    L{d.line}
+                                                                </span>
                                                             </div>
                                                         ))}
                                                         {file.details.length > 3 && (
-                                                            <span className="text-xs text-gray-400 italic">
-                                                                +{file.details.length - 3} more
+                                                            <span className="text-xs font-medium text-slate-400 dark:text-gray-500 italic mt-1">
+                                                                +{file.details.length - 3} more issues
                                                             </span>
                                                         )}
                                                     </div>
                                                 ) : (
-                                                    <span className="text-xs text-gray-300 dark:text-gray-600 italic">{t('validation.noIssues')}</span>
+                                                    <div className="text-right text-sm text-slate-300 dark:text-gray-600 italic">{t('validation.noIssues')}</div>
                                                 )}
                                             </td>
                                         </tr>
@@ -430,26 +528,29 @@ export function ValidateTranslation() {
 
             {/* Detail Modal */}
             {selectedResult && (
-                <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm rounded-xl">
-                    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col border border-gray-200 dark:border-gray-700">
-                        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-                            <h3 className="font-semibold text-lg text-gray-800 dark:text-white truncate pr-4 flex items-center gap-2">
-                                {selectedResult.path}
-                                <span className="text-xs font-normal text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full uppercase">
-                                    {selectedResult.type}
+                <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/20 backdrop-blur-sm rounded-xl">
+                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col border border-gray-200 dark:border-gray-700 overflow-hidden ring-1 ring-black/5">
+                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800">
+                            <div className="flex flex-col overflow-hidden">
+                                <h3 className="font-bold text-lg text-slate-800 dark:text-white truncate flex items-center gap-2">
+                                    <FileText size={20} className="text-blue-500" />
+                                    {selectedResult.path}
+                                </h3>
+                                <span className="text-xs text-slate-400 dark:text-gray-500 font-mono mt-0.5 ml-7">
+                                    {selectedResult.type.toUpperCase()}
                                 </span>
-                            </h3>
+                            </div>
 
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-3 ml-4">
                                 {/* Toggle View Mode */}
-                                <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                                <div className="flex items-center bg-slate-100 dark:bg-gray-700 p-1 rounded-lg">
                                     <button
                                         onClick={() => setViewMode('list')}
                                         className={clsx(
-                                            "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all",
+                                            "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-semibold transition-all",
                                             viewMode === 'list'
-                                                ? "bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-300 shadow-sm"
-                                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                                                ? "bg-white dark:bg-gray-600 text-slate-800 dark:text-white shadow-sm"
+                                                : "text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-gray-200"
                                         )}
                                     >
                                         <List size={16} />
@@ -458,10 +559,10 @@ export function ValidateTranslation() {
                                     <button
                                         onClick={() => setViewMode('code')}
                                         className={clsx(
-                                            "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-all",
+                                            "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-semibold transition-all",
                                             viewMode === 'code'
-                                                ? "bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-300 shadow-sm"
-                                                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                                                ? "bg-white dark:bg-gray-600 text-slate-800 dark:text-white shadow-sm"
+                                                : "text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-gray-200"
                                         )}
                                     >
                                         <Code size={16} />
@@ -469,83 +570,106 @@ export function ValidateTranslation() {
                                     </button>
                                 </div>
 
+                                <div className="w-px h-8 bg-slate-200 dark:bg-gray-700 mx-1"></div>
+
                                 <button
                                     onClick={(e) => { e.stopPropagation(); setSelectedResult(null); }}
-                                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                                    className="p-2 text-slate-400 hover:text-slate-600 dark:text-gray-500 dark:hover:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-full transition-colors"
                                 >
-                                    <X size={20} />
+                                    <X size={24} />
                                 </button>
                             </div>
                         </div>
 
-                        <div className="p-0 overflow-hidden flex-1 flex flex-col">
+                        <div className="p-0 overflow-hidden flex-1 flex flex-col bg-slate-50 dark:bg-gray-900">
                             {viewMode === 'list' ? (
                                 <>
-                                    <div className="p-6 bg-gray-50 dark:bg-gray-900/30 flex-shrink-0">
-                                        <div className="flex gap-4">
-                                            <div className="flex-1 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                                                <div className="text-xs text-gray-500 uppercase font-bold mb-1">{t('validation.status')}</div>
-                                                <div>
-                                                    {selectedResult.isValid ? (
-                                                        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-600 dark:text-green-400">
-                                                            <CheckCircle size={14} /> {t('validation.translated')}
-                                                        </span>
-                                                    ) : ignoredPaths.has(selectedResult.path) ? (
-                                                        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                                            <EyeOff size={14} /> {t('validation.ignored')}
-                                                        </span>
-                                                    ) : (
-                                                        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-red-600 dark:text-red-400">
-                                                            <AlertCircle size={14} /> {t('validation.untranslated')}
-                                                        </span>
-                                                    )}
-                                                </div>
+                                    <div className="p-6 flex-shrink-0 grid grid-cols-2 gap-4">
+                                        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-between">
+                                            <div>
+                                                <div className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">{t('validation.status')}</div>
+                                                {selectedResult.isValid ? (
+                                                    <span className="inline-flex items-center gap-1.5 text-base font-bold text-green-600 dark:text-green-400">
+                                                        <CheckCircle size={18} /> {t('validation.translated')}
+                                                    </span>
+                                                ) : ignoredPaths.has(selectedResult.path) ? (
+                                                    <span className="inline-flex items-center gap-1.5 text-base font-bold text-slate-500 dark:text-gray-400">
+                                                        <EyeOff size={18} /> {t('validation.ignored')}
+                                                    </span>
+                                                ) : (
+                                                    <span className="inline-flex items-center gap-1.5 text-base font-bold text-red-600 dark:text-red-400">
+                                                        <AlertCircle size={18} /> {t('validation.untranslated')}
+                                                    </span>
+                                                )}
                                             </div>
-                                            <div className="flex-1 bg-white dark:bg-gray-800 p-3 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                                                <div className="text-xs text-gray-500 uppercase font-bold mb-1">{t('validation.totalIssues')}</div>
-                                                <div className="text-sm font-bold">{selectedResult.details?.length || 0}</div>
+                                            <div className={clsx(
+                                                "p-3 rounded-full bg-opacity-10",
+                                                selectedResult.isValid ? "bg-green-500 text-green-500" : "bg-red-500 text-red-500"
+                                            )}>
+                                                {selectedResult.isValid ? <CheckCircle size={24} /> : <AlertTriangle size={24} />}
+                                            </div>
+                                        </div>
+                                        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-between">
+                                            <div>
+                                                <div className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">{t('validation.totalIssues')}</div>
+                                                <div className="text-2xl font-black text-slate-800 dark:text-white">{selectedResult.details?.length || 0}</div>
+                                            </div>
+                                            <div className="p-3 rounded-full bg-blue-50 text-blue-500 dark:bg-blue-900/20 dark:text-blue-400">
+                                                <List size={24} />
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="flex-1 overflow-y-auto p-0">
+                                    <div className="flex-1 overflow-y-auto p-0 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
                                         {selectedResult.details && selectedResult.details.length > 0 ? (
                                             <table className="w-full text-left text-sm">
-                                                <thead className="bg-gray-100 dark:bg-gray-800 sticky top-0 border-b border-gray-200 dark:border-gray-700 font-medium text-gray-600 dark:text-gray-300">
+                                                <thead className="bg-gray-50 dark:bg-gray-800/80 sticky top-0 border-b border-gray-100 dark:border-gray-700 font-semibold text-slate-500 dark:text-gray-400">
                                                     <tr>
-                                                        <th className="p-3 w-16 text-center">{t('validation.line')}</th>
-                                                        <th className="p-3">{t('validation.untranslatedText')}</th>
-                                                        <th className="p-3 w-1/3">{t('validation.contextMessage')}</th>
+                                                        <th className="p-4 w-20 text-center">{t('validation.line')}</th>
+                                                        <th className="p-4 w-1/3">{t('validation.untranslatedText')}</th>
+                                                        <th className="p-4">{t('validation.contextMessage')}</th>
+                                                        <th className="p-4 w-16"></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                                                <tbody className="divide-y divide-gray-100 dark:divide-gray-700/50">
                                                     {selectedResult.details.map((detail, idx) => (
                                                         <tr
                                                             key={idx}
-                                                            className="hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer"
+                                                            className="hover:bg-blue-50/50 dark:hover:bg-gray-700/30 cursor-pointer group transition-colors"
                                                             onClick={() => handleJumpToCode(detail.line)}
                                                         >
-                                                            <td className="p-3 text-center font-mono text-gray-500 group-hover:text-blue-500">{detail.line}</td>
-                                                            <td className="p-3 font-mono text-sm break-all text-red-600 dark:text-red-400">
-                                                                {detail.text}
+                                                            <td className="p-4 text-center">
+                                                                <span className="inline-block px-2 py-1 rounded bg-slate-100 dark:bg-gray-700 text-slate-500 dark:text-gray-400 font-mono text-xs font-bold">
+                                                                    {detail.line}
+                                                                </span>
                                                             </td>
-                                                            <td className="p-3 text-gray-500 dark:text-gray-400 text-xs">
+                                                            <td className="p-4">
+                                                                <div className="font-mono text-sm break-all text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/10 p-2 rounded border border-red-100 dark:border-red-900/20">
+                                                                    {detail.text}
+                                                                </div>
+                                                            </td>
+                                                            <td className="p-4 text-slate-600 dark:text-gray-300 text-sm">
                                                                 {detail.message}
+                                                            </td>
+                                                            <td className="p-4 text-center text-slate-300 group-hover:text-blue-500">
+                                                                <Code size={16} />
                                                             </td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
                                             </table>
                                         ) : (
-                                            <div className="text-center py-12 text-gray-400 italic">
-                                                {t('validation.noUntranslatedFound')}
+                                            <div className="flex flex-col items-center justify-center h-full text-center p-12 text-slate-400">
+                                                <CheckCircle size={48} className="mb-4 text-green-100 dark:text-green-900/30" />
+                                                <p className="text-lg font-medium text-slate-600 dark:text-gray-300">{t('validation.noUntranslatedFound')}</p>
+                                                <p className="text-sm text-slate-400">{t('validation.noIssues')}</p>
                                             </div>
                                         )}
                                     </div>
                                 </>
                             ) : (
                                 // Code View
-                                <div className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900 text-sm font-mono p-4" ref={codeViewRef}>
+                                <div className="flex-1 overflow-auto bg-[#1e1e1e] text-blue-100 text-sm font-mono p-6 leading-relaxed" ref={codeViewRef}>
                                     {selectedResult.content ? (
                                         <div className="relative">
                                             {selectedResult.content.split('\n').map((line, idx) => {
@@ -554,30 +678,43 @@ export function ValidateTranslation() {
                                                 const hasIssues = issuesOnLine && issuesOnLine.length > 0;
                                                 const isHighlighted = highlightedLine === lineNumber;
 
+                                                // Very basic syntax highlighting for text/tags
+                                                const highlightedLineContent = (text: string) => {
+                                                    // Simple heuristic to colorize tags and values
+                                                    const parts = text.split(/(<[^>]+>)/g);
+                                                    return parts.map((part, i) => {
+                                                        if (part.startsWith('<') && part.endsWith('>')) {
+                                                            return <span key={i} className="text-blue-400">{part}</span>
+                                                        } else {
+                                                            return <span key={i} className="text-gray-300">{part}</span>
+                                                        }
+                                                    });
+                                                };
+
                                                 return (
                                                     <div
                                                         key={idx}
                                                         data-line={lineNumber}
                                                         className={clsx(
-                                                            "flex hover:bg-gray-100 dark:hover:bg-gray-800/50",
-                                                            isHighlighted && "bg-yellow-100 dark:bg-yellow-900/30 animate-pulse"
+                                                            "flex -mx-6 px-6 border-l-4",
+                                                            isHighlighted
+                                                                ? "bg-yellow-900/30 border-yellow-500"
+                                                                : hasIssues
+                                                                    ? "bg-red-900/10 border-red-500/50"
+                                                                    : "border-transparent hover:bg-white/5"
                                                         )}
                                                     >
-                                                        <div className="w-10 text-right pr-3 text-gray-400 select-none flex-shrink-0">
+                                                        <div className="w-12 text-right pr-4 text-gray-500 select-none flex-shrink-0 text-xs py-0.5">
                                                             {lineNumber}
                                                         </div>
-                                                        <div className="flex-1 whitespace-pre-wrap break-all text-gray-800 dark:text-gray-300">
+                                                        <div className="flex-1 whitespace-pre-wrap break-all py-0.5">
                                                             {hasIssues ? (() => {
-                                                                // Escape regex special characters
                                                                 const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-                                                                // Get unique texts to match, sorted by length descending to match longest first
                                                                 const uniqueTexts = Array.from(new Set(issuesOnLine.map(d => d.text)))
                                                                     .sort((a, b) => b.length - a.length);
 
-                                                                if (uniqueTexts.length === 0) return line;
+                                                                if (uniqueTexts.length === 0) return highlightedLineContent(line);
 
-                                                                // Create regex with capturing group to include delimiters in result
                                                                 const pattern = new RegExp(`(${uniqueTexts.map(escapeRegExp).join('|')})`, 'g');
                                                                 const parts = line.split(pattern);
 
@@ -587,17 +724,20 @@ export function ValidateTranslation() {
                                                                             const isMatch = uniqueTexts.includes(part);
                                                                             if (isMatch) {
                                                                                 return (
-                                                                                    <span key={i} className="bg-red-200 dark:bg-red-900/50 text-red-800 dark:text-red-200 px-0.5 rounded outline outline-1 outline-red-400">
+                                                                                    <span key={i} className="bg-red-500/30 text-red-200 rounded px-0.5 box-decoration-clone outline outline-1 outline-red-500/60 relative group cursor-help">
                                                                                         {part}
+                                                                                        <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 p-2 bg-black text-white text-xs rounded shadow-lg whitespace-nowrap z-50">
+                                                                                            Untranslated text
+                                                                                        </span>
                                                                                     </span>
                                                                                 );
                                                                             }
-                                                                            return <span key={i}>{part}</span>;
+                                                                            return highlightedLineContent(part);
                                                                         })}
                                                                     </>
                                                                 );
                                                             })() : (
-                                                                line
+                                                                highlightedLineContent(line)
                                                             )}
                                                         </div>
                                                     </div>
@@ -605,20 +745,12 @@ export function ValidateTranslation() {
                                             })}
                                         </div>
                                     ) : (
-                                        <div className="text-center py-12 text-gray-400 italic">
+                                        <div className="text-center py-20 text-gray-500 italic">
                                             No content available for preview.
                                         </div>
                                     )}
                                 </div>
                             )}
-                        </div>
-                        <div className="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-end bg-gray-50 dark:bg-gray-900/10 rounded-b-xl">
-                            <button
-                                onClick={() => setSelectedResult(null)}
-                                className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm rounded-lg transition-colors text-sm font-medium text-gray-700 dark:text-gray-200"
-                            >
-                                {t('validation.close')}
-                            </button>
                         </div>
                     </div>
                 </div>

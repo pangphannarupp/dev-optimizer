@@ -20,7 +20,8 @@
         "csvJsonTab": "CSV에서 JSON으로",
         "settings": "설정",
         "validateTranslation": "번역 검증",
-        "sourceCompare": "소스 비교"
+        "sourceCompare": "소스 비교",
+        "storeValidatorTab": "Store Validator"
     },
     "settings": {
         "title": "설정",
@@ -338,5 +339,26 @@
         "deletedCount": "삭제됨",
         "comparisonResult": "비교 결과",
         "sizeDiff": "크기 차이"
+    },
+    "storeValidator": {
+        "title": "App Store Validator",
+        "dropToValidate": "Drop images here to validate dimensions and size",
+        "invalidFileType": "Invalid file type. Allowed: {{allowed}}",
+        "widthError": "Width must be {{width}}px (found {{found}}px)",
+        "heightError": "Height must be {{height}}px (found {{found}}px)",
+        "minWidthError": "Width must be at least {{minWidth}}px (found {{found}}px)",
+        "minHeightError": "Height must be at least {{minHeight}}px (found {{found}}px)",
+        "fileTooLarge": "File too large. Max: {{max}}MB (found {{found}}MB)",
+        "failedToLoad": "Failed to load image",
+        "appIcon": "App Icon",
+        "featureGraphic": "Feature Graphic",
+        "phoneScreenshots": "Phone Screenshots",
+        "tablet7": "7\" Tablet",
+        "tablet10": "10\" Tablet",
+        "iphone65": "iPhone 6.5\"",
+        "iphone55": "iPhone 5.5\"",
+        "ipadPro": "iPad Pro",
+        "usingSpecs": "Using specs for <0>{{name}}</0>. Drag images to check dimensions and file size limits.",
+        "redIndicators": "Red indicators will show exactly why an asset is rejected (e.g., wrong resolution or file too large)."
     }
 }

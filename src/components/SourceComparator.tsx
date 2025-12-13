@@ -390,7 +390,7 @@ export const SourceComparator: React.FC = () => {
                     {sourceA && (
                         <div className="text-xs text-green-600 flex items-center gap-1">
                             {sourceA.type === 'zip' ? <FolderArchive size={12} /> : <FileIcon size={12} />}
-                            {sourceA.file.name} ({(sourceA.file.size / 1024).toFixed(1)} KB)
+                            {sourceA.file.name} ({formatBytes(sourceA.file.size)})
                         </div>
                     )}
                 </div>
@@ -407,7 +407,7 @@ export const SourceComparator: React.FC = () => {
                     {sourceB && (
                         <div className="text-xs text-blue-600 flex items-center gap-1">
                             {sourceB.type === 'zip' ? <FolderArchive size={12} /> : <FileIcon size={12} />}
-                            {sourceB.file.name} ({(sourceB.file.size / 1024).toFixed(1)} KB)
+                            {sourceB.file.name} ({formatBytes(sourceB.file.size)})
                         </div>
                     )}
                 </div>
@@ -474,8 +474,8 @@ export const SourceComparator: React.FC = () => {
                             {t('sourceCompare.sizeDiff')}: <span className={clsx(
                                 (sourceB!.file.size - sourceA!.file.size) > 0 ? "text-red-500" : "text-green-500"
                             )}>
-                                {(sourceB!.file.size - sourceA!.file.size) > 0 ? "+" : ""}
-                                {((sourceB!.file.size - sourceA!.file.size) / 1024).toFixed(2)} KB
+                                {(sourceB!.file.size - sourceA!.file.size) > 0 ? "+" : "-"}
+                                {formatBytes(Math.abs(sourceB!.file.size - sourceA!.file.size))}
                             </span>
                         </div>
                     </div>
