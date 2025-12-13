@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { DropZone } from './DropZone';
-import { STORE_RULES, PlatformRules, ImageRule } from '../data/storeRules';
-import { Check, X, Smartphone, Tablet, AlertCircle, Info } from 'lucide-react';
+import { STORE_RULES, ImageRule } from '../data/storeRules';
+import { Check, X, Info } from 'lucide-react';
 import { clsx } from 'clsx';
 
 type ValidationResult = {
@@ -47,6 +47,55 @@ export const AppStoreValidator: React.FC = () => {
                     }));
                 }
 
+                // Max Dimension check
+                if (rule.maxDimension) {
+                    const maxDim = Math.max(img.width, img.height);
+                    if (maxDim > rule.maxDimension) {
+                        errors.push(t('storeValidator.maxDimensionError', {
+                            max: rule.maxDimension,
+                            found: maxDim
+                        }));
+                    }
+                }
+
+                // Max Aspect Ratio check (e.g. 2:1)
+                if (rule.maxAspectRatio) {
+                    const ratio = Math.max(img.width, img.height) / Math.max(Math.min(img.width, img.height), 1);
+                    if (ratio > rule.maxAspectRatio) {
+                        errors.push(t('storeValidator.aspectRatioError'));
+                    }
+                }
+
+                // Square check
+                if (rule.noSquare && img.width === img.height) {
+                    errors.push(t('storeValidator.squareError'));
+                }
+
+                // Transparency check
+                if (rule.noTransparency) {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    if (ctx) {
+                        ctx.drawImage(img, 0, 0);
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        const data = imageData.data;
+                        let hasTransparency = false;
+
+                        for (let i = 3; i < data.length; i += 4) {
+                            if (data[i] < 255) {
+                                hasTransparency = true;
+                                break;
+                            }
+                        }
+
+                        if (hasTransparency) {
+                            errors.push(t('storeValidator.transparencyError'));
+                        }
+                    }
+                }
+
                 resolve({
                     valid: errors.length === 0,
                     errors,
@@ -81,6 +130,7 @@ export const AppStoreValidator: React.FC = () => {
                         <h4 className="font-medium text-gray-900 dark:text-gray-100">{label || rule.name}</h4>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
                             {rule.width ? `${rule.width}x${rule.height}` : `Min ${rule.minWidth}x${rule.minHeight}`}
+                            {rule.maxDimension && ` • Max ${rule.maxDimension}px`}
                             {rule.allowedTypes.length > 0 && ` • ${rule.allowedTypes.join('/').toUpperCase()}`}
                         </p>
                     </div>

@@ -6,13 +6,15 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { FileDiff, FolderArchive, RefreshCw, Layers, Check, X, File as FileIcon, Download, ArrowRight, ChevronDown } from 'lucide-react';
 import { clsx } from 'clsx';
+import { DonutChart } from './DonutChart';
+import { createArchive, IArchive, ArchiveEntry } from '../utils/ArchiveHandler';
 
-type FileType = 'file' | 'zip' | 'unknown';
+type FileType = 'file' | 'zip' | 'rar' | 'unknown';
 type SourceData = {
     file: File;
     type: FileType;
     content?: string; // For text files
-    zipContent?: Awaited<ReturnType<typeof JSZip.loadAsync>>; // For zips
+    archive?: IArchive; // For zips/rars
 };
 
 type ZipEntryDiff = {
@@ -20,8 +22,8 @@ type ZipEntryDiff = {
     status: 'added' | 'deleted' | 'modified' | 'identical';
     sizeA?: number;
     sizeB?: number;
-    entryA?: JSZip.JSZipObject;
-    entryB?: JSZip.JSZipObject;
+    entryA?: ArchiveEntry;
+    entryB?: ArchiveEntry;
 };
 
 export const SourceComparator: React.FC = () => {
@@ -36,7 +38,11 @@ export const SourceComparator: React.FC = () => {
     const [mergeSelections, setMergeSelections] = useState<Record<string, 'A' | 'B'>>({});
 
     const detectType = (file: File): FileType => {
-        if (file.type === 'application/zip' || file.name.endsWith('.zip')) return 'zip';
+        const name = file.name.toLowerCase();
+        if (name.endsWith('.zip')) return 'zip';
+        if (name.endsWith('.rar')) return 'rar';
+        if (file.type === 'application/zip') return 'zip';
+        if (file.type === 'application/x-rar-compressed') return 'rar';
         return 'file';
     };
 
@@ -47,9 +53,14 @@ export const SourceComparator: React.FC = () => {
         if (type === 'file') {
             const text = await file.text();
             data.content = text;
-        } else if (type === 'zip') {
-            const zip = new JSZip();
-            data.zipContent = await zip.loadAsync(file);
+        } else if (type === 'zip' || type === 'rar') {
+            try {
+                data.archive = await createArchive(file);
+            } catch (error) {
+                console.error("Failed to load archive", error);
+                alert("Failed to load archive: " + (error as Error).message);
+                return;
+            }
         }
 
         if (isA) setSourceA(data);
@@ -71,21 +82,21 @@ export const SourceComparator: React.FC = () => {
             if (sourceA.type === 'file' && sourceB.type === 'file') {
                 const diff = Diff.diffLines(sourceA.content || '', sourceB.content || '');
                 setDiffResult(diff);
-            } else if (sourceA.type === 'zip' && sourceB.type === 'zip') {
-                await compareZips();
+            } else if ((sourceA.type === 'zip' || sourceA.type === 'rar') && (sourceB.type === 'zip' || sourceB.type === 'rar')) {
+                await compareArchives();
             } else {
-                alert('Please compare two files or two zips.');
+                alert('Please compare two files or two archives.');
             }
         } finally {
             setIsComparing(false);
         }
     };
 
-    const compareZips = async () => {
-        if (!sourceA?.zipContent || !sourceB?.zipContent) return;
+    const compareArchives = async () => {
+        if (!sourceA?.archive || !sourceB?.archive) return;
 
-        const filesA = sourceA.zipContent.files;
-        const filesB = sourceB.zipContent.files;
+        const filesA = sourceA.archive.files;
+        const filesB = sourceB.archive.files;
         const allPaths = new Set([...Object.keys(filesA), ...Object.keys(filesB)]);
         const diffs: ZipEntryDiff[] = [];
 
@@ -94,25 +105,25 @@ export const SourceComparator: React.FC = () => {
             const entryB = filesB[path];
 
             if (entryA && !entryB) {
-                diffs.push({ path, status: 'deleted', sizeA: (entryA as any)._data.uncompressedSize, entryA });
+                diffs.push({ path, status: 'deleted', sizeA: entryA.size, entryA });
             } else if (!entryA && entryB) {
-                diffs.push({ path, status: 'added', sizeB: (entryB as any)._data.uncompressedSize, entryB });
+                diffs.push({ path, status: 'added', sizeB: entryB.size, entryB });
             } else {
-                const isDir = entryA.dir;
+                const isDir = entryA.isDir;
                 if (isDir) {
                     diffs.push({ path, status: 'identical', entryA, entryB });
                     continue;
                 }
 
-                const contentA = await entryA.async('string');
-                const contentB = await entryB.async('string');
+                const contentA = await entryA.readString();
+                const contentB = await entryB.readString();
 
                 if (contentA !== contentB) {
                     diffs.push({
                         path,
                         status: 'modified',
-                        sizeA: (entryA as any)._data.uncompressedSize,
-                        sizeB: (entryB as any)._data.uncompressedSize,
+                        sizeA: entryA.size,
+                        sizeB: entryB.size,
                         entryA,
                         entryB
                     });
@@ -120,8 +131,8 @@ export const SourceComparator: React.FC = () => {
                     diffs.push({
                         path,
                         status: 'identical',
-                        sizeA: (entryA as any)._data.uncompressedSize,
-                        sizeB: (entryB as any)._data.uncompressedSize,
+                        sizeA: entryA.size,
+                        sizeB: entryB.size,
                         entryA,
                         entryB
                     });
@@ -198,41 +209,36 @@ export const SourceComparator: React.FC = () => {
     }, [zipDiffs, mergeSelections]);
 
     const handleMergeDownload = async (mode: 'merge' | 'modified' | 'identical' = 'merge') => {
-        if (!sourceA?.zipContent || !sourceB?.zipContent || !zipDiffs) return;
+        if (!sourceA?.archive || !sourceB?.archive || !zipDiffs) return;
         const newZip = new JSZip();
 
         for (const diff of zipDiffs) {
             // Logic based on mode
             if (mode === 'identical') {
                 if (diff.status === 'identical') {
-                    const content = await diff.entryA!.async('blob');
+                    const content = await diff.entryA!.readBlob();
                     newZip.file(diff.path, content);
                 }
             } else if (mode === 'modified') {
-                // Modified only (from B usually, or A if just diffing?)
-                // Let's assume "Diff/Modified Only" means the files that are DIFFERENT.
-                // Users usually want the "New" version (B).
-                // Should we include "Added" files too? "Diff" usually implies differences.
-                // Let's include Modified (B) and Added (B).
                 if (diff.status === 'modified') {
-                    const content = await diff.entryB!.async('blob');
+                    const content = await diff.entryB!.readBlob();
                     newZip.file(diff.path, content);
                 } else if (diff.status === 'added') {
-                    const content = await diff.entryB!.async('blob');
+                    const content = await diff.entryB!.readBlob();
                     newZip.file(diff.path, content);
                 }
             } else {
                 // Merge Mode (default)
                 if (diff.status === 'identical') {
-                    const content = await diff.entryA!.async('blob');
+                    const content = await diff.entryA!.readBlob();
                     newZip.file(diff.path, content);
                 } else if (diff.status === 'added') {
-                    const content = await diff.entryB!.async('blob');
+                    const content = await diff.entryB!.readBlob();
                     newZip.file(diff.path, content);
                 } else if (diff.status === 'modified') {
                     const choice = mergeSelections[diff.path] || 'B';
                     const entry = choice === 'A' ? diff.entryA! : diff.entryB!;
-                    const content = await entry.async('blob');
+                    const content = await entry.readBlob();
                     newZip.file(diff.path, content);
                 }
             }
@@ -254,8 +260,8 @@ export const SourceComparator: React.FC = () => {
     const handleZipFileClick = async (diff: ZipEntryDiff) => {
         if (diff.status === 'modified' && diff.entryA && diff.entryB) {
             setSelectedZipFile(diff.path);
-            const contentA = await diff.entryA.async('string');
-            const contentB = await diff.entryB.async('string');
+            const contentA = await diff.entryA.readString();
+            const contentB = await diff.entryB.readString();
             setZipFileContentDiff(Diff.diffLines(contentA, contentB));
         }
     };
@@ -291,84 +297,98 @@ export const SourceComparator: React.FC = () => {
         </div>
     );
 
+
+
     const renderZipDiffs = () => {
         if (!zipDiffs) return null;
 
-        return (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[600px]">
-                {/* File List */}
-                <div className="col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
-                    <div className="p-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 font-medium text-sm flex flex-col gap-2">
-                        <div className="flex justify-between items-center">
-                            <span>{t('sourceCompare.files')}</span>
-                            <div className="flex gap-2 text-xs">
-                                <span className="text-gray-500 dark:text-gray-400">{t('sourceCompare.totalFiles')}: {zipDiffs.length}</span>
-                                <span className="text-orange-600 dark:text-orange-400 font-medium">{t('sourceCompare.differentFiles')}: {zipDiffs.filter(d => d.status !== 'identical').length}</span>
-                            </div>
-                        </div>
-                        <div className="flex gap-2 text-xs justify-end border-t border-gray-200 dark:border-gray-700 pt-2">
-                            <span className="text-yellow-600 dark:text-yellow-400">{zipDiffs.filter(d => d.status === 'modified').length} {t('sourceCompare.modifiedCount')}</span>
-                            <span className="text-green-600 dark:text-green-400">{zipDiffs.filter(d => d.status === 'added').length} {t('sourceCompare.addedCount')}</span>
-                            <span className="text-red-600 dark:text-red-400">{zipDiffs.filter(d => d.status === 'deleted').length} {t('sourceCompare.deletedCount')}</span>
-                        </div>
-                    </div>
-                    <div className="flex-1 overflow-y-auto p-2">
-                        {zipDiffs.map((d) => (
-                            <div
-                                key={d.path}
-                                onClick={() => handleZipFileClick(d)}
-                                className={clsx(
-                                    "flex items-center gap-2 p-2 rounded cursor-pointer text-sm transition-colors",
-                                    selectedZipFile === d.path ? "bg-blue-50 dark:bg-blue-900/30 ring-1 ring-blue-500" : "hover:bg-gray-50 dark:hover:bg-gray-700",
-                                    d.status === 'modified' ? "text-yellow-600 dark:text-yellow-400" :
-                                        d.status === 'added' ? "text-green-600 dark:text-green-400" :
-                                            d.status === 'deleted' ? "text-red-600 dark:text-red-400" :
-                                                "text-gray-400 dark:text-gray-500"
-                                )}
-                            >
-                                {d.status === 'modified' ? <RefreshCw size={14} /> :
-                                    d.status === 'added' ? <Layers size={14} /> :
-                                        d.status === 'deleted' ? <X size={14} /> :
-                                            <Check size={14} />}
-                                <span className="truncate flex-1">{d.path}</span>
-                                {d.status === 'modified' && (
-                                    <button
-                                        onClick={(e) => toggleSelection(d.path, e)}
-                                        className={clsx(
-                                            "px-2 py-0.5 rounded text-[10px] font-bold uppercase transition-colors",
-                                            (mergeSelections[d.path] || 'B') === 'A'
-                                                ? "bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300"
-                                                : "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
-                                        )}
-                                        title="Click to toggle version (A/B)"
-                                    >
-                                        {(mergeSelections[d.path] || 'B') === 'A' ? 'A' : 'B'}
-                                    </button>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                </div>
+        const stats = {
+            modified: zipDiffs.filter(d => d.status === 'modified').length,
+            added: zipDiffs.filter(d => d.status === 'added').length,
+            deleted: zipDiffs.filter(d => d.status === 'deleted').length,
+            identical: zipDiffs.filter(d => d.status === 'identical').length
+        };
+        const total = zipDiffs.length;
 
-                {/* Diff Viewer */}
-                <div className="col-span-1 md:col-span-2 flex flex-col h-full gap-4">
-                    {selectedZipFile && zipFileContentDiff ? (
-                        <>
-                            <div className="p-2 font-medium text-sm text-gray-600 dark:text-gray-400 flex justify-between items-center bg-gray-50 dark:bg-gray-800 rounded">
-                                <span>{selectedZipFile}</span>
-                                <div className="flex items-center gap-2 text-xs">
-                                    <span className="text-green-600">A: {(zipDiffs.find(d => d.path === selectedZipFile)?.sizeA || 0).toLocaleString()} B</span>
-                                    <ArrowRight size={12} className="text-gray-400" />
-                                    <span className="text-blue-600">B: {(zipDiffs.find(d => d.path === selectedZipFile)?.sizeB || 0).toLocaleString()} B</span>
-                                </div>
-                            </div>
-                            {renderDiffView(zipFileContentDiff)}
-                        </>
-                    ) : (
-                        <div className="flex-1 flex items-center justify-center text-gray-400 p-4 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg">
-                            Select a modified file to view changes
+        return (
+            <div className="flex flex-col gap-6 h-full">
+                {/* Stats Chart */}
+                <DonutChart
+                    items={[
+                        { id: 'modified', value: stats.modified, color: 'text-yellow-500', bg: 'bg-yellow-500', icon: RefreshCw, label: t('sourceCompare.modifiedCount') },
+                        { id: 'added', value: stats.added, color: 'text-green-500', bg: 'bg-green-500', icon: Layers, label: t('sourceCompare.addedCount') },
+                        { id: 'deleted', value: stats.deleted, color: 'text-red-500', bg: 'bg-red-500', icon: X, label: t('sourceCompare.deletedCount') },
+                        { id: 'identical', value: stats.identical, color: 'text-gray-300 dark:text-gray-600', bg: 'bg-gray-300 dark:bg-gray-600', icon: Check, label: t('sourceCompare.identicalCount') },
+                    ]}
+                    total={total}
+                    centerSubLabel={t('sourceCompare.files')}
+                />
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 min-h-0">
+                    {/* File List */}
+                    <div className="col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
+                        <div className="p-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 font-medium text-sm flex justify-between items-center">
+                            <span>{t('sourceCompare.files')}</span>
+                            <span className="text-gray-500 dark:text-gray-400 text-xs">{t('sourceCompare.totalFiles')}: {total}</span>
                         </div>
-                    )}
+                        <div className="flex-1 overflow-y-auto p-2">
+                            {zipDiffs.map((d) => (
+                                <div
+                                    key={d.path}
+                                    onClick={() => handleZipFileClick(d)}
+                                    className={clsx(
+                                        "flex items-center gap-2 p-2 rounded cursor-pointer text-sm transition-colors",
+                                        selectedZipFile === d.path ? "bg-blue-50 dark:bg-blue-900/30 ring-1 ring-blue-500" : "hover:bg-gray-50 dark:hover:bg-gray-700",
+                                        d.status === 'modified' ? "text-yellow-600 dark:text-yellow-400" :
+                                            d.status === 'added' ? "text-green-600 dark:text-green-400" :
+                                                d.status === 'deleted' ? "text-red-600 dark:text-red-400" :
+                                                    "text-gray-400 dark:text-gray-500"
+                                    )}
+                                >
+                                    {d.status === 'modified' ? <RefreshCw size={14} /> :
+                                        d.status === 'added' ? <Layers size={14} /> :
+                                            d.status === 'deleted' ? <X size={14} /> :
+                                                <Check size={14} />}
+                                    <span className="truncate flex-1">{d.path}</span>
+                                    {d.status === 'modified' && (
+                                        <button
+                                            onClick={(e) => toggleSelection(d.path, e)}
+                                            className={clsx(
+                                                "px-2 py-0.5 rounded text-[10px] font-bold uppercase transition-colors",
+                                                (mergeSelections[d.path] || 'B') === 'A'
+                                                    ? "bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300"
+                                                    : "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
+                                            )}
+                                            title="Click to toggle version (A/B)"
+                                        >
+                                            {(mergeSelections[d.path] || 'B') === 'A' ? 'A' : 'B'}
+                                        </button>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Diff Viewer */}
+                    <div className="col-span-1 md:col-span-2 flex flex-col h-full gap-4">
+                        {selectedZipFile && zipFileContentDiff ? (
+                            <>
+                                <div className="p-2 font-medium text-sm text-gray-600 dark:text-gray-400 flex justify-between items-center bg-gray-50 dark:bg-gray-800 rounded">
+                                    <span>{selectedZipFile}</span>
+                                    <div className="flex items-center gap-2 text-xs">
+                                        <span className="text-green-600">A: {(zipDiffs.find(d => d.path === selectedZipFile)?.sizeA || 0).toLocaleString()} B</span>
+                                        <ArrowRight size={12} className="text-gray-400" />
+                                        <span className="text-blue-600">B: {(zipDiffs.find(d => d.path === selectedZipFile)?.sizeB || 0).toLocaleString()} B</span>
+                                    </div>
+                                </div>
+                                {renderDiffView(zipFileContentDiff)}
+                            </>
+                        ) : (
+                            <div className="flex-1 flex items-center justify-center text-gray-400 p-4 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg">
+                                Select a modified file to view changes
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         );

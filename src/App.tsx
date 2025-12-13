@@ -19,6 +19,9 @@ import { SHAGenerator } from './components/SHAGenerator';
 import { ValidateTranslation } from './components/ValidateTranslation';
 import { SourceComparator } from './components/SourceComparator';
 import { AppStoreValidator } from './components/AppStoreValidator';
+import { LottiePlayer } from './components/LottiePlayer';
+import { JsMinifier } from './components/JsMinifier';
+import { DeeplinkGenerator } from './components/DeeplinkGenerator';
 
 
 import { Sidebar } from './components/Sidebar';
@@ -31,7 +34,7 @@ import { useTranslation } from 'react-i18next';
 import { WhatsNewSnackbar } from './components/WhatsNewSnackbar';
 
 function AppContent() {
-  const [activeTab, setActiveTab] = useState<'optimizer' | 'generator' | 'enhancer' | 'editor' | 'qr' | 'svg-drawable' | 'base64' | 'json' | 'csv-json' | 'jwt' | 'encryption' | 'sha' | 'validate-translation' | 'source-compare'>('optimizer');
+  const [activeTab, setActiveTab] = useState<'optimizer' | 'generator' | 'enhancer' | 'editor' | 'qr' | 'svg-drawable' | 'base64' | 'json' | 'csv-json' | 'jwt' | 'encryption' | 'sha' | 'validate-translation' | 'source-compare' | 'store-validator' | 'lottie-player' | 'js-minifier' | 'deeplink-generator'>('optimizer');
   const [images, setImages] = useState<ProcessedImage[]>([]);
   const [defaultFormat, setDefaultFormat] = useState<'image/jpeg' | 'image/png' | 'image/webp'>('image/webp');
   const [defaultQuality, setDefaultQuality] = useState(0.8);
@@ -145,7 +148,7 @@ function AppContent() {
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Mobile Header */}
         <div className="md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-gray-800 dark:text-white">Dev Optimizer</h1>
+          <h1 className="text-lg font-bold text-gray-800 dark:text-white">{t('app.title')}</h1>
           <button
             onClick={() => setIsSidebarOpen(true)}
             className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
@@ -368,6 +371,39 @@ function AppContent() {
                 className="h-full overflow-y-auto"
               >
                 <AppStoreValidator />
+              </motion.main>
+            ) : activeTab === 'lottie-player' ? (
+              <motion.main
+                key="lottie-player"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <LottiePlayer />
+              </motion.main>
+            ) : activeTab === 'js-minifier' ? (
+              <motion.main
+                key="js-minifier"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <JsMinifier />
+              </motion.main>
+            ) : activeTab === 'deeplink-generator' ? (
+              <motion.main
+                key="deeplink-generator"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <DeeplinkGenerator />
               </motion.main>
             ) : (
               <motion.main

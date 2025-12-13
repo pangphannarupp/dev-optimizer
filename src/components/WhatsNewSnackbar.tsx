@@ -25,7 +25,7 @@ export function WhatsNewSnackbar({ onClose }: WhatsNewSnackbarProps) {
             const formattedChanges = note.changes.map(c => `- ${c}`).join('\n');
             // Assuming translation key support for dynamic description might be complex, 
             // so we stick to the extracted string for now, or users can add translation keys later.
-            setCurrentNote(`A new version of Dev Optimizer is available!\n${formattedChanges}`);
+            setCurrentNote(`${t('whatsNew.description')}\n${formattedChanges}`);
         }
 
         const storedVersion = localStorage.getItem('appVersion');

@@ -1,6 +1,23 @@
 {
+    "deeplink": {
+        "title": "Deeplink Generator",
+        "description": "Construct and test deep links to open in your mobile app",
+        "scheme": "Scheme",
+        "host": "Host",
+        "pathPrefix": "Path Prefix",
+        "queryParams": "Query Parameters",
+        "addParam": "Add Parameter",
+        "noParams": "No parameters added",
+        "generatedUrl": "Generated URL",
+        "openApp": "Open App",
+        "schemePlaceholder": "e.g. myapp",
+        "hostPlaceholder": "e.g. example.com",
+        "pathPlaceholder": "e.g. /products/123",
+        "paramKey": "Key",
+        "paramValue": "Value"
+    },
     "app": {
-        "title": "Image Optimizer",
+        "title": "Dev Optimizer",
         "subtitle": "Optimize your images and generate app icons",
         "optimizerTab": "Image Optimizer",
         "generatorTab": "App Icon Generator",
@@ -59,14 +76,9 @@
         "process": "Process",
         "error": "Error",
         "pending": "Pending",
-        "done": "Done"
-    },
-    "iconGenerator": {
-        "title": "App Icon Generator",
-        "description": "Upload a single image to generate all app icon sizes",
-        "upload": "Upload Image",
-        "generate": "Generate Icons",
-        "download": "Download ZIP"
+        "done": "Done",
+        "saved": "Saved",
+        "savedPercentage": "Saved {{percentage}}%"
     },
     "imageEnhancer": {
         "title": "Image Enhancer",
@@ -84,7 +96,203 @@
         "uploadNew": "Upload New",
         "process": "Process",
         "processing": "Processing",
-        "download": "Download"
+        "download": "Download",
+        "alert": {
+            "sharpenError": "Failed to sharpen image. Please try again.",
+            "bgRemovalError": "Failed to remove background. Please try again."
+        }
+    },
+    "iconGenerator": {
+        "title": "App Icon Generator",
+        "description": "Upload a single image to generate all app icon sizes",
+        "upload": "Upload Image",
+        "generate": "Generate Icons",
+        "download": "Download ZIP",
+        "preview": "Icon Preview",
+        "alert": {
+            "generateError": "Failed to generate icons. Please try again."
+        },
+        "platform": {
+            "android": "Android",
+            "androidRound": "Android Round",
+            "androidSplash": "Android Splash",
+            "iosIPhone": "iOS - iPhone",
+            "iosIPad": "iOS - iPad",
+            "iosAppStore": "iOS - App Store",
+            "macos": "macOS",
+            "windows": "Windows",
+            "linux": "Linux"
+        }
+    },
+    "lottie": {
+        "title": "Lottie Player",
+        "supportInfo": "Supports .json, .lottie, and .svg (single or multiple for sequence)",
+        "direction": "Toggle Direction",
+        "stop": "Stop",
+        "pause": "Pause",
+        "play": "Play",
+        "controls": "Controls",
+        "layers": "Layers",
+        "colors": "Colors",
+        "text": "Text",
+        "settings": "Settings",
+        "playback": "Playback",
+        "speed": "Speed",
+        "loop": "Loop Animation",
+        "appearance": "Appearance",
+        "backgroundColor": "Background Color",
+        "invalidFile": "Please upload a valid JSON, .lottie, or .svg file",
+        "parseError": "Failed to parse file",
+        "palette": "Detected Colors",
+        "colorTip": "Click on any color circle to pick a new color and replace all occurrences.",
+        "noColors": "No colors detected",
+        "textLayers": "Text Layers",
+        "noText": "No text layers found",
+        "properties": "Animation Properties",
+        "width": "Width (px)",
+        "height": "Height (px)",
+        "fps": "Frame Rate (FPS)",
+        "propsWarning": "Changing dimensions or frame rate may affect animation playback speed and layout.",
+        "uploadToEdit": "Upload a file to edit",
+        "noLayers": "No layers found",
+        "layer": "Layer",
+        "textLayer": "Text Layer",
+        "svgSequence": "{{count}} SVG Sequence"
+    },
+    "qrGenerator": {
+        "title": "QR Generator",
+        "barcode": "Barcode Generator",
+        "scanner": "QR/Barcode Scanner",
+        "modes": {
+            "qr": "QR Code",
+            "barcode": "Barcode",
+            "scan": "Scanner"
+        },
+        "qrType": "QR Type",
+        "types": {
+            "text": "Text",
+            "url": "URL",
+            "email": "Email",
+            "phone": "Phone",
+            "sms": "SMS",
+            "wifi": "Wi-Fi",
+            "vcard": "vCard",
+            "location": "Location",
+            "event": "Event"
+        },
+        "fields": {
+            "text": "Text Content",
+            "url": "Website URL",
+            "email": "Email Address",
+            "subject": "Subject (Optional)",
+            "body": "Message Body (Optional)",
+            "phone": "Phone Number",
+            "message": "Message",
+            "ssid": "Network Name (SSID)",
+            "password": "Password",
+            "encryption": "Encryption Type",
+            "name": "Full Name",
+            "organization": "Organization",
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "eventTitle": "Event Title",
+            "location": "Event Location",
+            "startTime": "Start Time",
+            "endTime": "End Time"
+        },
+        "placeholders": {
+            "text": "Enter text here",
+            "subject": "Email subject",
+            "body": "Email message",
+            "message": "SMS message text"
+        },
+        "customization": "Customization",
+        "styles": "Styles",
+        "dots": "Dots Style",
+        "cornersSquare": "Corners Square Style",
+        "cornersDot": "Corners Dot Style",
+        "foregroundColor": "Foreground Color",
+        "backgroundColor": "Background Color",
+        "uploadLogo": "Upload Logo",
+        "barcodeValue": "Barcode Value",
+        "format": "Format",
+        "width": "Width",
+        "height": "Height",
+        "margin": "Margin",
+        "displayValue": "Display Value",
+        "uploadImage": "Upload Image",
+        "placeholder": {
+            "enterValue": "Enter value"
+        },
+        "copyText": "Copy Text",
+        "scanning": "Scanning...",
+        "uploadToScan": "Upload an image to scan",
+        "result": "Result:",
+        "dragLogo": "Drag logo or click",
+        "dragScan": "Drag QR/Barcode image here",
+        "style": {
+            "square": "Square",
+            "dots": "Dots",
+            "rounded": "Rounded",
+            "extraRounded": "Extra Rounded",
+            "classy": "Classy",
+            "classyRounded": "Classy Rounded",
+            "dot": "Dot"
+        },
+        "encryption": {
+            "wpa": "WPA/WPA2",
+            "wep": "WEP",
+            "none": "None",
+            "type": "Encryption Type"
+        },
+        "errorCorrection": "Error Correction Level",
+        "noPassword": "No Password",
+        "scanError": "Failed to read QR/Barcode. Please try a clearer image."
+    },
+    "validation": {
+        "title": "Validate Translation",
+        "analyzing": "Analyzing...",
+        "dragDrop": "Drag & Drop ZIP file",
+        "browse": "or browse to upload",
+        "total": "Total Files",
+        "valid": "Valid",
+        "invalid": "Invalid",
+        "showInvalidOnly": "Show Invalid Only",
+        "hideIgnored": "Hide Ignored",
+        "exportExcel": "Export Excel",
+        "exportCsv": "Export CSV",
+        "reAnalyze": "Re-analyze",
+        "uploadNew": "Upload New",
+        "filePath": "File Path",
+        "fileName": "File Name",
+        "type": "Type",
+        "status": "Status",
+        "issuesOverview": "Issues",
+        "translated": "Translated",
+        "ignored": "Ignored",
+        "untranslated": "Untranslated",
+        "noIssues": "No issues found",
+        "line": "Line",
+        "untranslatedText": "Untranslated Content",
+        "contextMessage": "Context / Reason",
+        "noUntranslatedFound": "No untranslated content found",
+        "view": {
+            "list": "List",
+            "code": "Code"
+        },
+        "statusLabel": {
+            "ignored": "Ignored"
+        },
+        "noContent": "No content available for preview.",
+        "tooltip": {
+            "untranslated": "Untranslated text"
+        },
+        "details": "Details",
+        "totalIssues": "Total Issues",
+        "untranslatedStrings": "Untranslated Strings",
+        "close": "Close",
+        "fontDetector": "Font Detector",
+        "filePath": "File Path"
     },
     "imageEditor": {
         "title": "Image Editor",
@@ -109,54 +317,13 @@
         "brightness": "Brightness",
         "contrast": "Contrast",
         "saturation": "Saturation",
-        "download": "Download"
-    },
-    "qrGenerator": {
-        "title": "QR Code Generator",
-        "qrType": "QR Type",
-        "types": {
-            "text": "Text",
-            "url": "Website URL",
-            "email": "Email",
-            "phone": "Phone Number",
-            "sms": "SMS Message",
-            "wifi": "WiFi Network",
-            "vcard": "Contact (vCard)",
-            "location": "Location",
-            "event": "Calendar Event"
-        },
-        "fields": {
-            "text": "Text Content",
-            "url": "Website URL",
-            "email": "Email Address",
-            "subject": "Subject (Optional)",
-            "body": "Message Body (Optional)",
-            "phone": "Phone Number",
-            "message": "Message",
-            "ssid": "Network Name (SSID)",
-            "password": "Password",
-            "encryption": "Encryption Type",
-            "name": "Full Name",
-            "organization": "Organization",
-            "latitude": "Latitude",
-            "longitude": "Longitude",
-            "eventTitle": "Event Title",
-            "location": "Event Location",
-            "startTime": "Start Time",
-            "endTime": "End Time"
-        },
-        "placeholders": {
-            "text": "Enter your text here...",
-            "subject": "Email subject",
-            "body": "Email message",
-            "message": "SMS message text"
-        },
-        "customization": "Customization",
-        "size": "Size",
-        "foregroundColor": "QR Color",
-        "backgroundColor": "Background Color",
-        "errorCorrection": "Error Correction Level",
-        "noPassword": "No Password"
+        "download": "Download",
+        "clickToEdit": "Click to edit",
+        "alert": {
+            "waitParams": "Please wait for the editor to initialize and try again.",
+            "loadError": "Failed to load image. Please try again.",
+            "readError": "Failed to read file. Please try again."
+        }
     },
     "svgToDrawable": {
         "title": "SVG to Android Drawable",
@@ -181,7 +348,11 @@
         "copy": "Copy",
         "copied": "Copied!",
         "remove": "Remove",
-        "ok": "OK"
+        "ok": "OK",
+        "search": "Search...",
+        "favorites": "Favorites",
+        "allTools": "All Tools",
+        "noResults": "No results found"
     },
     "jsonFormatter": {
         "title": "JSON Formatter",
@@ -303,39 +474,6 @@
             "ios": "iOS"
         }
     },
-    "validation": {
-        "title": "Validate Translation",
-        "dragDrop": "Drop your project ZIP file here",
-        "browse": "or click to browse",
-        "analyzing": "Analyzing project...",
-        "total": "Total",
-        "valid": "Valid",
-        "invalid": "Invalid",
-        "showInvalidOnly": "Show Invalid Only",
-        "hideIgnored": "Hide Ignored",
-        "exportCsv": "Export CSV",
-        "exportExcel": "Export Excel",
-        "reAnalyze": "Re-analyze",
-        "uploadNew": "Upload New",
-        "filePath": "File Path",
-        "fileName": "File Name",
-        "type": "Type",
-        "status": "Status",
-        "issuesOverview": "Issues Overview",
-        "translated": "Translated",
-        "untranslated": "Untranslated",
-        "ignored": "Ignored",
-        "noIssues": "No issues detected",
-        "details": "Details",
-        "totalIssues": "Total Issues",
-        "untranslatedStrings": "Untranslated Strings",
-        "line": "Line",
-        "untranslatedText": "Untranslated Text",
-        "contextMessage": "Context / Message",
-        "noUntranslatedFound": "No untranslated strings found.",
-        "close": "Close",
-        "fontDetector": "Font Detector"
-    },
     "whatsNew": {
         "title": "What's New",
         "description": "A new version of Dev Optimizer is available!"
@@ -351,9 +489,13 @@
         "sourceB": "Source B",
         "files": "Files",
         "modified": "Modified",
+        "modifiedCount": "Modified Files",
         "added": "Added",
+        "addedCount": "Added Files",
         "deleted": "Deleted",
+        "deletedCount": "Deleted Files",
         "identical": "Identical",
+        "identicalCount": "Identical Files",
         "noDifferences": "No differences found",
         "merge": "Merge / Download Result",
         "selectForMerge": "Select version for merge",
@@ -367,10 +509,6 @@
         "downloadDiffDesc": "Only changed files (from B)",
         "downloadIdentical": "Identical Only",
         "downloadIdenticalDesc": "Only unchanged files",
-        "filesData": "{{count}} Files",
-        "modifiedCount": "Modified",
-        "addedCount": "Added",
-        "deletedCount": "Deleted",
         "comparisonResult": "Comparison Result",
         "sizeDiff": "Size Diff"
     },
@@ -384,6 +522,10 @@
         "minHeightError": "Height must be at least {{minHeight}}px (found {{found}}px)",
         "fileTooLarge": "File too large. Max: {{max}}MB (found {{found}}MB)",
         "failedToLoad": "Failed to load image",
+        "transparencyError": "Transparency is not allowed for this image type",
+        "maxDimensionError": "Dimension exceeds {{max}}px (found {{found}}px)",
+        "aspectRatioError": "Aspect ratio too extreme (max 2:1)",
+        "squareError": "Square images (1:1) are not allowed",
         "appIcon": "App Icon",
         "featureGraphic": "Feature Graphic",
         "phoneScreenshots": "Phone Screenshots",
@@ -394,5 +536,18 @@
         "ipadPro": "iPad Pro",
         "usingSpecs": "Using specs for <0>{{name}}</0>. Drag images to check dimensions and file size limits.",
         "redIndicators": "Red indicators will show exactly why an asset is rejected (e.g., wrong resolution or file too large)."
+    },
+    "jsMinifier": {
+        "title": "Javascript Minifier",
+        "inputUrl": "Input URL / Code",
+        "minifiedOutput": "Minified Output",
+        "minify": "Minify Javascript",
+        "mangle": "Mangle variables",
+        "compress": "Compress",
+        "keepFnames": "Keep function names",
+        "copyCode": "Copy Code",
+        "download": "Download .js",
+        "clear": "Clear",
+        "error": "An error occurred"
     }
 }

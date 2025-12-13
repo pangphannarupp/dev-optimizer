@@ -50,7 +50,7 @@ export const ImageEnhancer: React.FC = () => {
             setEnhancedPreview(dataUrl);
         } catch (error) {
             console.error('Sharpening error:', error);
-            alert('Failed to sharpen image. Please try again.');
+            alert(t('imageEnhancer.alert.sharpenError'));
         } finally {
             setIsProcessing(false);
         }
@@ -66,7 +66,7 @@ export const ImageEnhancer: React.FC = () => {
             setEnhancedPreview(dataUrl);
         } catch (error) {
             console.error('Background removal error:', error);
-            alert('Failed to remove background. Please try again.');
+            alert(t('imageEnhancer.alert.bgRemovalError'));
         } finally {
             setIsProcessing(false);
         }
@@ -112,8 +112,8 @@ export const ImageEnhancer: React.FC = () => {
                                     setEnhancedPreview(null);
                                 }}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${mode === 'sharpen'
-                                        ? 'bg-purple-600 text-white'
-                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                    ? 'bg-purple-600 text-white'
+                                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                                     }`}
                             >
                                 <Sparkles size={18} />
@@ -125,8 +125,8 @@ export const ImageEnhancer: React.FC = () => {
                                     setEnhancedPreview(null);
                                 }}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${mode === 'remove-bg'
-                                        ? 'bg-purple-600 text-white'
-                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                                    ? 'bg-purple-600 text-white'
+                                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                                     }`}
                             >
                                 <Eraser size={18} />
@@ -169,8 +169,8 @@ export const ImageEnhancer: React.FC = () => {
                                                 setEnhancedPreview(null);
                                             }}
                                             className={`px-3 py-1 rounded text-sm ${bgColor === color
-                                                    ? 'bg-purple-600 text-white'
-                                                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+                                                ? 'bg-purple-600 text-white'
+                                                : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                                                 }`}
                                         >
                                             {t(`imageEnhancer.bg_${color}`)}

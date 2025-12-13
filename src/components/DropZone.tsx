@@ -11,6 +11,7 @@ interface DropZoneProps {
     supportedText?: string;
     dragDropText?: string;
     multiple?: boolean;
+    id?: string;
 }
 
 export const DropZone: React.FC<DropZoneProps> = ({
@@ -20,7 +21,8 @@ export const DropZone: React.FC<DropZoneProps> = ({
     validator,
     supportedText,
     dragDropText,
-    multiple = true
+    multiple = true,
+    id = 'file-input'
 }) => {
     const [isDragging, setIsDragging] = useState(false);
     const { t } = useTranslation();
@@ -34,7 +36,7 @@ export const DropZone: React.FC<DropZoneProps> = ({
         if (file.type.startsWith('image/')) return true;
         // Fallback to extension check for HEIC/HEIF and others
         const extension = file.name.toLowerCase().split('.').pop();
-        return ['heic', 'heif', 'bmp', 'avif', 'ico', 'svg', 'zip', 'json', 'csv', 'txt', 'xml'].includes(extension || '');
+        return ['heic', 'heif', 'bmp', 'avif', 'ico', 'svg', 'zip', 'json', 'csv', 'txt', 'xml', 'lottie'].includes(extension || '');
     }, []);
 
     const validateFile = validator || defaultValidator;
@@ -82,11 +84,11 @@ export const DropZone: React.FC<DropZoneProps> = ({
                     : "border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800",
                 className
             )}
-            onClick={() => document.getElementById('file-input')?.click()}
+            onClick={() => document.getElementById(id)?.click()}
         >
             <input
                 type="file"
-                id="file-input"
+                id={id}
                 className="hidden"
                 multiple={multiple}
                 accept={accept}

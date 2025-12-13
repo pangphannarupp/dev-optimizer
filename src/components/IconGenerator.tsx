@@ -409,7 +409,7 @@ export const IconGenerator: React.FC = () => {
             saveAs(content, 'AppIcons.zip');
         } catch (error) {
             console.error('Error generating icons:', error);
-            alert('Failed to generate icons. Please try again.');
+            alert(t('iconGenerator.alert.generateError'));
         } finally {
             setIsGenerating(false);
         }
@@ -486,34 +486,34 @@ export const IconGenerator: React.FC = () => {
 
                         {iconPreviews && (
                             <div className="space-y-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-                                <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Icon Preview</h3>
+                                <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{t('iconGenerator.preview')}</h3>
 
                                 {/* Android */}
-                                {renderPlatformIcons('Android', iconPreviews.android)}
+                                {renderPlatformIcons(t('iconGenerator.platform.android'), iconPreviews.android)}
 
                                 {/* Android Round */}
-                                {renderPlatformIcons('Android Round', iconPreviews.androidRound)}
+                                {renderPlatformIcons(t('iconGenerator.platform.androidRound'), iconPreviews.androidRound)}
 
                                 {/* Android Splash */}
-                                {renderPlatformIcons('Android Splash', iconPreviews.androidSplash)}
+                                {renderPlatformIcons(t('iconGenerator.platform.androidSplash'), iconPreviews.androidSplash)}
 
                                 {/* iOS iPhone */}
-                                {renderPlatformIcons('iOS - iPhone', iconPreviews.iosIPhone)}
+                                {renderPlatformIcons(t('iconGenerator.platform.iosIPhone'), iconPreviews.iosIPhone)}
 
                                 {/* iOS iPad */}
-                                {renderPlatformIcons('iOS - iPad', iconPreviews.iosIPad)}
+                                {renderPlatformIcons(t('iconGenerator.platform.iosIPad'), iconPreviews.iosIPad)}
 
                                 {/* iOS App Store */}
-                                {renderPlatformIcons('iOS - App Store', iconPreviews.iosAppStore)}
+                                {renderPlatformIcons(t('iconGenerator.platform.iosAppStore'), iconPreviews.iosAppStore)}
 
                                 {/* macOS */}
-                                {renderPlatformIcons('macOS', iconPreviews.macos)}
+                                {renderPlatformIcons(t('iconGenerator.platform.macos'), iconPreviews.macos)}
 
                                 {/* Windows */}
-                                {renderPlatformIcons('Windows', iconPreviews.windows)}
+                                {renderPlatformIcons(t('iconGenerator.platform.windows'), iconPreviews.windows)}
 
                                 {/* Linux */}
-                                {renderPlatformIcons('Linux', iconPreviews.linux)}
+                                {renderPlatformIcons(t('iconGenerator.platform.linux'), iconPreviews.linux)}
                             </div>
                         )}
                     </div>

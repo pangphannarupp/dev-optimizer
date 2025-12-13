@@ -59,14 +59,35 @@
         "process": "प्रोसेस करें",
         "error": "त्रुटि",
         "pending": "लंबित",
-        "done": "पूर्ण"
+        "done": "पूर्ण",
+        "saved": "Saved",
+        "savedPercentage": "Saved {{percentage}}%",
+        "search": "Search...",
+        "favorites": "Favorites",
+        "allTools": "All Tools",
+        "noResults": "No results found"
     },
     "iconGenerator": {
         "title": "ऐप आइकन जनरेटर",
         "description": "एक उच्च-रिज़ॉल्यूशन वर्गाकार छवि अपलोड करें (1024x1024 अनुशंसित)। हम iOS (ऐप स्टोर) और Android (प्ले स्टोर) के लिए सभी आवश्यक आकार उत्पन्न करेंगे।",
         "upload": "छवि अपलोड करें",
         "generate": "आइकन जनरेट करें",
-        "download": "ZIP डाउनलोड करें"
+        "download": "ZIP डाउनलोड करें",
+        "preview": "Icon Preview",
+        "alert": {
+            "generateError": "Failed to generate icons. Please try again."
+        },
+        "platform": {
+            "android": "Android",
+            "androidRound": "Android Round",
+            "androidSplash": "Android Splash",
+            "iosIPhone": "iOS - iPhone",
+            "iosIPad": "iOS - iPad",
+            "iosAppStore": "iOS - App Store",
+            "macos": "macOS",
+            "windows": "Windows",
+            "linux": "Linux"
+        }
     },
     "imageEnhancer": {
         "title": "इमेज एन्हांसर",
@@ -84,7 +105,11 @@
         "uploadNew": "नया अपलोड करें",
         "process": "प्रोसेस करें",
         "processing": "प्रोसेस हो रहा है",
-        "download": "डाउनलोड"
+        "download": "डाउनलोड",
+        "alert": {
+            "sharpenError": "Failed to sharpen image. Please try again.",
+            "bgRemovalError": "Failed to remove background. Please try again."
+        }
     },
     "imageEditor": {
         "title": "इमेज एडिटर",
@@ -109,7 +134,13 @@
         "brightness": "चमक",
         "contrast": "कंट्रास्ट",
         "saturation": "संतृप्ति",
-        "download": "डाउनलोड"
+        "download": "डाउनलोड",
+        "clickToEdit": "Click to edit",
+        "alert": {
+            "waitParams": "Please wait for the editor to initialize and try again.",
+            "loadError": "Failed to load image. Please try again.",
+            "readError": "Failed to read file. Please try again."
+        }
     },
     "qrGenerator": {
         "title": "QR कोड जनरेटर",
@@ -156,7 +187,51 @@
         "foregroundColor": "QR रंग",
         "backgroundColor": "पृष्ठभूमि रंग",
         "errorCorrection": "त्रुटि सुधार स्तर",
-        "noPassword": "कोई पासवर्ड नहीं"
+        "noPassword": "कोई पासवर्ड नहीं",
+        "barcode": "Barcode Generator",
+        "scanner": "QR/Barcode Scanner",
+        "modes": {
+            "qr": "QR Code",
+            "barcode": "Barcode",
+            "scan": "Scanner"
+        },
+        "styles": "Styles",
+        "dots": "Dots Style",
+        "cornersSquare": "Corners Square Style",
+        "cornersDot": "Corners Dot Style",
+        "uploadLogo": "Upload Logo",
+        "barcodeValue": "Barcode Value",
+        "format": "Format",
+        "width": "Width",
+        "height": "Height",
+        "margin": "Margin",
+        "displayValue": "Display Value",
+        "uploadImage": "Upload Image",
+        "placeholder": {
+            "enterValue": "Enter value"
+        },
+        "copyText": "Copy Text",
+        "scanning": "Scanning...",
+        "uploadToScan": "Upload an image to scan",
+        "result": "Result:",
+        "dragLogo": "Drag logo or click",
+        "dragScan": "Drag QR/Barcode image here",
+        "style": {
+            "square": "Square",
+            "dots": "Dots",
+            "rounded": "Rounded",
+            "extraRounded": "Extra Rounded",
+            "classy": "Classy",
+            "classyRounded": "Classy Rounded",
+            "dot": "Dot"
+        },
+        "encryption": {
+            "wpa": "WPA/WPA2",
+            "wep": "WEP",
+            "none": "None",
+            "type": "Encryption Type"
+        },
+        "scanError": "Failed to read QR/Barcode. Please try a clearer image."
     },
     "svgToDrawable": {
         "title": "SVG से Android Drawable",
@@ -181,7 +256,11 @@
         "copy": "कॉपी करें",
         "copied": "कॉपी हो गया!",
         "remove": "हटाएं",
-        "ok": "ठीक है"
+        "ok": "ठीक है",
+        "search": "Search...",
+        "favorites": "Favorites",
+        "allTools": "All Tools",
+        "noResults": "No results found"
     },
     "encryption": {
         "title": "Encryption / Decryption Tool",
@@ -304,7 +383,21 @@
         "untranslatedText": "अअनुवादित पाठ",
         "contextMessage": "संदर्भ / संदेश",
         "noUntranslatedFound": "कोई अअनुवादित स्ट्रिंग नहीं मिली।",
-        "close": "बंद करें"
+        "close": "बंद करें",
+        "exportExcel": "Export Excel",
+        "fileName": "File Name",
+        "view": {
+            "list": "List",
+            "code": "Code"
+        },
+        "statusLabel": {
+            "ignored": "Ignored"
+        },
+        "noContent": "No content available for preview.",
+        "tooltip": {
+            "untranslated": "Untranslated text"
+        },
+        "fontDetector": "Font Detector"
     },
     "sourceCompare": {
         "title": "स्रोत तुलना",
@@ -338,27 +431,124 @@
         "addedCount": "जोड़ा गया",
         "deletedCount": "हटाया गया",
         "comparisonResult": "तुलना परिणाम",
-        "sizeDiff": "आकार का अंतर"
+        "sizeDiff": "आकार का अंतर",
+        "identicalCount": "Identical Files"
     },
     "storeValidator": {
-        "title": "App Store Validator",
-        "dropToValidate": "Drop images here to validate dimensions and size",
-        "invalidFileType": "Invalid file type. Allowed: {{allowed}}",
-        "widthError": "Width must be {{width}}px (found {{found}}px)",
-        "heightError": "Height must be {{height}}px (found {{found}}px)",
-        "minWidthError": "Width must be at least {{minWidth}}px (found {{found}}px)",
-        "minHeightError": "Height must be at least {{minHeight}}px (found {{found}}px)",
-        "fileTooLarge": "File too large. Max: {{max}}MB (found {{found}}MB)",
-        "failedToLoad": "Failed to load image",
-        "appIcon": "App Icon",
-        "featureGraphic": "Feature Graphic",
-        "phoneScreenshots": "Phone Screenshots",
-        "tablet7": "7\" Tablet",
-        "tablet10": "10\" Tablet",
+        "title": "ऐप स्टोर सत्यापनकर्ता",
+        "dropToValidate": "आयाम और आकार सत्यापित करने के लिए छवियों को यहाँ छोड़ें",
+        "invalidFileType": "अमान्य फ़ाइल प्रकार। अनुमत: {{allowed}}",
+        "widthError": "चौड़ाई {{width}}px होनी चाहिए (मिला {{found}}px)",
+        "heightError": "ऊँचाई {{height}}px होनी चाहिए (मिला {{found}}px)",
+        "minWidthError": "चौड़ाई कम से कम {{minWidth}}px होनी चाहिए (मिला {{found}}px)",
+        "minHeightError": "ऊँचाई कम से कम {{minHeight}}px होनी चाहिए (मिला {{found}}px)",
+        "fileTooLarge": "फ़ाइल बहुत बड़ी है। अधिकतम: {{max}}MB (मिला {{found}}MB)",
+        "failedToLoad": "छवि लोड करने में विफल",
+        "appIcon": "ऐप आइकन",
+        "featureGraphic": "फ़ीचर ग्राफ़िक",
+        "phoneScreenshots": "फ़ोन स्क्रीनशॉट",
+        "tablet7": "7\" टैबलेट",
+        "tablet10": "10\" टैबलेट",
         "iphone65": "iPhone 6.5\"",
         "iphone55": "iPhone 5.5\"",
         "ipadPro": "iPad Pro",
-        "usingSpecs": "Using specs for <0>{{name}}</0>. Drag images to check dimensions and file size limits.",
-        "redIndicators": "Red indicators will show exactly why an asset is rejected (e.g., wrong resolution or file too large)."
+        "usingSpecs": "<0>{{name}}</0> के लिए विनिर्देशों का उपयोग कर रहा है। आयाम और फ़ाइल आकार सीमा की जाँच करने के लिए छवियों को खींचें।",
+        "redIndicators": "लाल संकेतक दिखाएंगे कि किसी संपत्ति को क्यों अस्वीकार कर दिया गया है (उदाहरण के लिए, गलत रिज़ॉल्यूशन या फ़ाइल बहुत बड़ी है)।"
+    },
+    "lottie": {
+        "title": "Lottie प्लेयर",
+        "controls": "नियंत्रण",
+        "layers": "परत",
+        "colors": "रंग",
+        "text": "पाठ",
+        "settings": "सेटिंग्स",
+        "playback": "प्लेबैक",
+        "speed": "गति",
+        "loop": "लूप",
+        "appearance": "दिखावट",
+        "backgroundColor": "पृष्ठभूमि रंग",
+        "supportInfo": ".json, .lottie और .svg का समर्थन करता है (अनुक्रम के लिए एकल या एकाधिक)",
+        "direction": "दिशा बदलें",
+        "stop": "रोको",
+        "play": "चलाएं",
+        "pause": "विराम",
+        "noLayers": "कोई परत नहीं मिली",
+        "noColors": "कोई रंग नहीं मिला",
+        "palette": "पता चला रंग",
+        "colorTip": "नया रंग चुनने और सभी घटनाओं को बदलने के लिए किसी भी रंग के सर्कल पर क्लिक करें।",
+        "textLayers": "पाठ परतें",
+        "noText": "कोई पाठ परत नहीं मिली",
+        "properties": "एनिमेशन गुण",
+        "width": "चौड़ाई (px)",
+        "height": "ऊंचाई (px)",
+        "fps": "फ्रेम दर (FPS)",
+        "propsWarning": "आयाम या फ्रेम दर बदलने से प्लेबैक गति और लेआउट प्रभावित हो सकता है।",
+        "invalidFile": "कृपया एक वैध JSON, .lottie, या .svg फ़ाइल अपलोड करें",
+        "parseError": "फ़ाइल पार्स करने में विफल",
+        "uploadToEdit": "Upload a file to edit",
+        "layer": "Layer",
+        "textLayer": "Text Layer",
+        "svgSequence": "{{count}} SVG Sequence"
+    },
+    "jsonFormatter": {
+        "title": "JSON Formatter",
+        "description": "Format, beautify, or minify JSON data",
+        "input": "JSON Input",
+        "output": "Formatted Output",
+        "inputPlaceholder": "Paste your JSON here...",
+        "outputPlaceholder": "Formatted JSON will appear here...",
+        "beautify": "Beautify",
+        "minify": "Minify",
+        "format": "Format"
+    },
+    "jwtDecoder": {
+        "title": "JWT Decoder",
+        "description": "Decode and inspect JWT tokens",
+        "tokenInput": "JWT Token",
+        "tokenPlaceholder": "Paste your JWT token here...",
+        "header": "Header",
+        "payload": "Payload",
+        "signature": "Signature (verify)"
+    },
+    "sha": {
+        "title": "SHA Hash Generator",
+        "description": "Generate MD5, SHA-1, SHA-256, SHA-384, and SHA-512 hashes",
+        "input": "Text Input",
+        "inputPlaceholder": "Enter text to hash...",
+        "results": "Hash Results",
+        "length": "Length",
+        "characters": "characters",
+        "note": "Note:",
+        "noteText": "All hashes are automatically generated as you type. These are cryptographic hash functions used for data integrity verification."
+    },
+    "deeplink": {
+        "title": "डीपलिंक जेनरेटर",
+        "description": "अपने मोबाइल ऐप में खोलने के लिए डीप लिंक बनाएं और परीक्षण करें",
+        "scheme": "Scheme",
+        "host": "Host",
+        "pathPrefix": "Path Prefix",
+        "queryParams": "Query Parameters",
+        "addParam": "पैरामीटर जोड़ें",
+        "noParams": "कोई पैरामीटर नहीं जोड़ा गया",
+        "generatedUrl": "Generated URL",
+        "openApp": "ऐप खोलें",
+        "schemePlaceholder": "e.g. myapp",
+        "hostPlaceholder": "e.g. example.com",
+        "pathPlaceholder": "e.g. /products/123",
+        "paramKey": "Key",
+        "paramValue": "Value"
+    },
+    "jsMinifier": {
+        "title": "JS मिनिफायर",
+        "inputUrl": "इनपुट URL / कोड",
+        "minifiedOutput": "मिनिफाइड आउटपुट",
+        "minify": "जावास्क्रिप्ट को मिनिफाई करें",
+        "mangle": "वेरिएबल्स को मैंगल करें",
+        "compress": "कंप्रेस",
+        "keepFnames": "फंक्शन के नाम रखें",
+        "copyCode": "कोड कॉपी करें",
+        "download": ".js डाउनलोड करें",
+        "clear": "साफ़ करें",
+        "error": "एक त्रुटि हुई"
     }
 }

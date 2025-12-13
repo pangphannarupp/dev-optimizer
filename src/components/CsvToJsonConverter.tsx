@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { FileJson, Download, AlertCircle, CheckCircle, Smartphone, Apple, ArrowRightLeft, Upload, FileSpreadsheet, Loader2, X, Table } from 'lucide-react';
+import { FileJson, Download, AlertCircle, CheckCircle, Smartphone, Apple, ArrowRightLeft, Upload, FileSpreadsheet, Loader2, X, Table, Network } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { DropZone } from './DropZone';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
+import { MindmapViewer } from './MindmapViewer';
 
 interface TranslationData {
     [language: string]: any;
@@ -42,6 +43,9 @@ export function CsvToJsonConverter() {
     const [showSheetSelector, setShowSheetSelector] = useState(false);
     const [availableSheets, setAvailableSheets] = useState<string[]>([]);
     const [tempWorkbook, setTempWorkbook] = useState<XLSX.WorkBook | null>(null);
+
+    // Mindmap State
+    const [viewMode, setViewMode] = useState<'text' | 'mindmap'>('text');
 
     // Export Mode State
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -515,8 +519,8 @@ export function CsvToJsonConverter() {
                     <button
                         onClick={() => handleModeChange('import')}
                         className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${mode === 'import'
-                                ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
-                                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                            ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
+                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                             }`}
                     >
                         <Upload size={16} />
@@ -525,8 +529,8 @@ export function CsvToJsonConverter() {
                     <button
                         onClick={() => handleModeChange('export')}
                         className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${mode === 'export'
-                                ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
-                                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                            ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
+                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50'
                             }`}
                     >
                         <ArrowRightLeft size={16} />
@@ -688,7 +692,7 @@ export function CsvToJsonConverter() {
                     <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 p-2 bg-gray-50 dark:bg-gray-900/50">
                         <div className="flex gap-1">
                             <button
-                                onClick={() => setActiveFormat('json')}
+                                onClick={() => { setActiveFormat('json'); setViewMode('text'); }}
                                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeFormat === 'json'
                                     ? 'bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 shadow-sm'
                                     : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-gray-800/50'
@@ -698,7 +702,7 @@ export function CsvToJsonConverter() {
                                 {t('csvToJson.formats.json')}
                             </button>
                             <button
-                                onClick={() => setActiveFormat('android')}
+                                onClick={() => { setActiveFormat('android'); setViewMode('text'); }}
                                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeFormat === 'android'
                                     ? 'bg-white dark:bg-gray-800 text-green-600 dark:text-green-400 shadow-sm'
                                     : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-gray-800/50'
@@ -708,7 +712,7 @@ export function CsvToJsonConverter() {
                                 {t('csvToJson.formats.android')}
                             </button>
                             <button
-                                onClick={() => setActiveFormat('ios')}
+                                onClick={() => { setActiveFormat('ios'); setViewMode('text'); }}
                                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${activeFormat === 'ios'
                                     ? 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm'
                                     : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-gray-800/50'
@@ -718,6 +722,31 @@ export function CsvToJsonConverter() {
                                 {t('csvToJson.formats.ios')}
                             </button>
                         </div>
+
+                        {/* Mindmap Toggle - Only for JSON */}
+                        {activeFormat === 'json' && (
+                            <div className="flex bg-gray-200 dark:bg-gray-700 p-0.5 rounded-lg">
+                                <button
+                                    onClick={() => setViewMode('text')}
+                                    className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${viewMode === 'text'
+                                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 shadow-sm'
+                                        : 'text-gray-500 dark:text-gray-400'
+                                        }`}
+                                >
+                                    Text
+                                </button>
+                                <button
+                                    onClick={() => setViewMode('mindmap')}
+                                    className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-all ${viewMode === 'mindmap'
+                                        ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
+                                        : 'text-gray-500 dark:text-gray-400'
+                                        }`}
+                                >
+                                    <Network size={14} />
+                                    Mindmap
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex overflow-x-auto border-b border-gray-200 dark:border-gray-700">
@@ -735,8 +764,8 @@ export function CsvToJsonConverter() {
                         ))}
                     </div>
 
-                    <div className="p-4">
-                        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-gray-200 dark:border-gray-700">
+                    <div className="p-4 h-[600px] flex flex-col">
+                        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
                             {activeFormat === 'json' && <FileJson className="text-blue-500" size={20} />}
                             {activeFormat === 'android' && <Smartphone className="text-green-500" size={20} />}
                             {activeFormat === 'ios' && <Apple className="text-gray-900 dark:text-white" size={20} />}
@@ -745,9 +774,16 @@ export function CsvToJsonConverter() {
                                 {activeFormat === 'json' ? '.json' : activeFormat === 'android' ? '.xml' : '.strings'}
                             </h3>
                         </div>
-                        <pre className="text-xs text-gray-600 dark:text-gray-300 overflow-auto max-h-[500px] p-4 bg-gray-50 dark:bg-gray-900 rounded-lg font-mono">
-                            {getPreviewContent()}
-                        </pre>
+
+                        <div className="flex-1 overflow-hidden relative rounded-lg border border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+                            {viewMode === 'text' ? (
+                                <pre className="absolute inset-0 overflow-auto p-4 text-xs text-gray-600 dark:text-gray-300 font-mono">
+                                    {getPreviewContent()}
+                                </pre>
+                            ) : (
+                                <MindmapViewer data={generatedFiles.json[activePreviewTab]} />
+                            )}
+                        </div>
                     </div>
                 </div>
             )}

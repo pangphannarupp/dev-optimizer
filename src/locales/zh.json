@@ -59,14 +59,35 @@
         "process": "处理",
         "error": "错误",
         "pending": "等待中",
-        "done": "完成"
+        "done": "完成",
+        "saved": "Saved",
+        "savedPercentage": "Saved {{percentage}}%",
+        "search": "Search...",
+        "favorites": "Favorites",
+        "allTools": "All Tools",
+        "noResults": "No results found"
     },
     "iconGenerator": {
         "title": "应用图标生成器",
         "description": "上传一张图片以生成所有尺寸的应用图标",
         "upload": "上传图片",
         "generate": "生成图标",
-        "download": "下载 ZIP"
+        "download": "下载 ZIP",
+        "preview": "Icon Preview",
+        "alert": {
+            "generateError": "Failed to generate icons. Please try again."
+        },
+        "platform": {
+            "android": "Android",
+            "androidRound": "Android Round",
+            "androidSplash": "Android Splash",
+            "iosIPhone": "iOS - iPhone",
+            "iosIPad": "iOS - iPad",
+            "iosAppStore": "iOS - App Store",
+            "macos": "macOS",
+            "windows": "Windows",
+            "linux": "Linux"
+        }
     },
     "imageEnhancer": {
         "title": "图片增强器",
@@ -84,7 +105,11 @@
         "uploadNew": "上传新图片",
         "process": "处理",
         "processing": "处理中",
-        "download": "下载"
+        "download": "下载",
+        "alert": {
+            "sharpenError": "Failed to sharpen image. Please try again.",
+            "bgRemovalError": "Failed to remove background. Please try again."
+        }
     },
     "imageEditor": {
         "title": "图片编辑器",
@@ -109,7 +134,13 @@
         "brightness": "亮度",
         "contrast": "对比度",
         "saturation": "饱和度",
-        "download": "下载"
+        "download": "下载",
+        "clickToEdit": "Click to edit",
+        "alert": {
+            "waitParams": "Please wait for the editor to initialize and try again.",
+            "loadError": "Failed to load image. Please try again.",
+            "readError": "Failed to read file. Please try again."
+        }
     },
     "qrGenerator": {
         "title": "二维码生成器",
@@ -156,7 +187,51 @@
         "foregroundColor": "二维码颜色",
         "backgroundColor": "背景颜色",
         "errorCorrection": "错误纠正级别",
-        "noPassword": "无密码"
+        "noPassword": "无密码",
+        "barcode": "Barcode Generator",
+        "scanner": "QR/Barcode Scanner",
+        "modes": {
+            "qr": "QR Code",
+            "barcode": "Barcode",
+            "scan": "Scanner"
+        },
+        "styles": "Styles",
+        "dots": "Dots Style",
+        "cornersSquare": "Corners Square Style",
+        "cornersDot": "Corners Dot Style",
+        "uploadLogo": "Upload Logo",
+        "barcodeValue": "Barcode Value",
+        "format": "Format",
+        "width": "Width",
+        "height": "Height",
+        "margin": "Margin",
+        "displayValue": "Display Value",
+        "uploadImage": "Upload Image",
+        "placeholder": {
+            "enterValue": "Enter value"
+        },
+        "copyText": "Copy Text",
+        "scanning": "Scanning...",
+        "uploadToScan": "Upload an image to scan",
+        "result": "Result:",
+        "dragLogo": "Drag logo or click",
+        "dragScan": "Drag QR/Barcode image here",
+        "style": {
+            "square": "Square",
+            "dots": "Dots",
+            "rounded": "Rounded",
+            "extraRounded": "Extra Rounded",
+            "classy": "Classy",
+            "classyRounded": "Classy Rounded",
+            "dot": "Dot"
+        },
+        "encryption": {
+            "wpa": "WPA/WPA2",
+            "wep": "WEP",
+            "none": "None",
+            "type": "Encryption Type"
+        },
+        "scanError": "Failed to read QR/Barcode. Please try a clearer image."
     },
     "svgToDrawable": {
         "title": "SVG转Android Drawable",
@@ -181,7 +256,11 @@
         "copy": "复制",
         "copied": "已复制！",
         "remove": "移除",
-        "ok": "确定"
+        "ok": "确定",
+        "search": "Search...",
+        "favorites": "Favorites",
+        "allTools": "All Tools",
+        "noResults": "No results found"
     },
     "encryption": {
         "title": "加密/解密工具",
@@ -304,7 +383,21 @@
         "untranslatedText": "未翻译文本",
         "contextMessage": "上下文 / 消息",
         "noUntranslatedFound": "未找到未翻译的字符串。",
-        "close": "关闭"
+        "close": "关闭",
+        "exportExcel": "Export Excel",
+        "fileName": "File Name",
+        "view": {
+            "list": "List",
+            "code": "Code"
+        },
+        "statusLabel": {
+            "ignored": "Ignored"
+        },
+        "noContent": "No content available for preview.",
+        "tooltip": {
+            "untranslated": "Untranslated text"
+        },
+        "fontDetector": "Font Detector"
     },
     "sourceCompare": {
         "title": "源比较",
@@ -338,7 +431,104 @@
         "addedCount": "已添加",
         "deletedCount": "已删除",
         "comparisonResult": "比较结果",
-        "sizeDiff": "大差异"
+        "sizeDiff": "大差异",
+        "identicalCount": "Identical Files"
+    },
+    "lottie": {
+        "title": "Lottie 播放器",
+        "controls": "控制",
+        "layers": "图层",
+        "colors": "颜色",
+        "text": "文本",
+        "settings": "设置",
+        "playback": "播放",
+        "speed": "速度",
+        "loop": "循环播放",
+        "appearance": "外观",
+        "backgroundColor": "背景颜色",
+        "supportInfo": "支持 .json, .lottie 和 .svg (单个或多个序列)",
+        "direction": "切换方向",
+        "stop": "停止",
+        "play": "播放",
+        "pause": "暂停",
+        "noLayers": "未找到图层",
+        "noColors": "未检测到颜色",
+        "palette": "检测到的颜色",
+        "colorTip": "点击任何颜色圆圈以选取新颜色并替换所有出现的颜色。",
+        "textLayers": "文本图层",
+        "noText": "未找到文本图层",
+        "properties": "动画属性",
+        "width": "宽度 (px)",
+        "height": "高度 (px)",
+        "fps": "帧率 (FPS)",
+        "propsWarning": "更改尺寸或帧率可能会影响动画播放速度和布局。",
+        "invalidFile": "请上传有效的 JSON, .lottie 或 .svg 文件",
+        "parseError": "解析文件失败",
+        "uploadToEdit": "Upload a file to edit",
+        "layer": "Layer",
+        "textLayer": "Text Layer",
+        "svgSequence": "{{count}} SVG Sequence"
+    },
+    "jsonFormatter": {
+        "title": "JSON Formatter",
+        "description": "Format, beautify, or minify JSON data",
+        "input": "JSON Input",
+        "output": "Formatted Output",
+        "inputPlaceholder": "Paste your JSON here...",
+        "outputPlaceholder": "Formatted JSON will appear here...",
+        "beautify": "Beautify",
+        "minify": "Minify",
+        "format": "Format"
+    },
+    "jwtDecoder": {
+        "title": "JWT Decoder",
+        "description": "Decode and inspect JWT tokens",
+        "tokenInput": "JWT Token",
+        "tokenPlaceholder": "Paste your JWT token here...",
+        "header": "Header",
+        "payload": "Payload",
+        "signature": "Signature (verify)"
+    },
+    "sha": {
+        "title": "SHA Hash Generator",
+        "description": "Generate MD5, SHA-1, SHA-256, SHA-384, and SHA-512 hashes",
+        "input": "Text Input",
+        "inputPlaceholder": "Enter text to hash...",
+        "results": "Hash Results",
+        "length": "Length",
+        "characters": "characters",
+        "note": "Note:",
+        "noteText": "All hashes are automatically generated as you type. These are cryptographic hash functions used for data integrity verification."
+    },
+    "deeplink": {
+        "title": "深度链接生成器",
+        "description": "构建并测试要在移动应用中打开的深度链接",
+        "scheme": "Scheme",
+        "host": "Host",
+        "pathPrefix": "路径前缀",
+        "queryParams": "查询参数",
+        "addParam": "添加参数",
+        "noParams": "未添加参数",
+        "generatedUrl": "生成的 URL",
+        "openApp": "打开应用",
+        "schemePlaceholder": "例如 myapp",
+        "hostPlaceholder": "例如 example.com",
+        "pathPlaceholder": "例如 /products/123",
+        "paramKey": "键",
+        "paramValue": "值"
+    },
+    "jsMinifier": {
+        "title": "JS 压缩器",
+        "inputUrl": "输入 URL / 代码",
+        "minifiedOutput": "压缩输出",
+        "minify": "压缩 Javascript",
+        "mangle": "混淆变量",
+        "compress": "压缩",
+        "keepFnames": "保留函数名",
+        "copyCode": "复制代码",
+        "download": "下载 .js",
+        "clear": "清除",
+        "error": "发生错误"
     },
     "storeValidator": {
         "title": "App Store Validator",

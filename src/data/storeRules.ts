@@ -10,6 +10,10 @@ export interface ImageRule {
     name: string;
     aspectRatio?: number; // width/height
     aspectRatioTolerance?: number;
+    noTransparency?: boolean;
+    maxDimension?: number;
+    maxAspectRatio?: number; // long/short side
+    noSquare?: boolean;
 }
 
 export interface PlatformRules {
@@ -50,24 +54,29 @@ export const STORE_RULES: Record<string, PlatformRules> = {
                 name: 'Phone Screenshots',
                 minWidth: 320,
                 minHeight: 320,
-                // Max dimension 3840
+                maxDimension: 3840,
+                maxAspectRatio: 2.1, // slightly over 2:1 to be safe
                 allowedTypes: ['png', 'jpg', 'jpeg'],
                 required: true,
-                // Aspect ratio logic is complex for Play Store (2:1 to 1:2), handled in code
+                noSquare: true
             },
             tablet7: {
                 name: '7-inch Tablet Screenshots',
                 minWidth: 320,
                 minHeight: 320,
+                maxDimension: 3840,
                 allowedTypes: ['png', 'jpg', 'jpeg'],
-                required: false
+                required: false,
+                noSquare: true
             },
             tablet10: {
                 name: '10-inch Tablet Screenshots',
                 minWidth: 320,
                 minHeight: 320,
+                maxDimension: 3840,
                 allowedTypes: ['png', 'jpg', 'jpeg'],
-                required: false
+                required: false,
+                noSquare: true
             }
         }
     },
@@ -78,7 +87,8 @@ export const STORE_RULES: Record<string, PlatformRules> = {
             width: 1024,
             height: 1024,
             allowedTypes: ['png', 'jpg', 'jpeg'], // No alpha for icon usually, but validator can check size
-            required: true
+            required: true,
+            noTransparency: true
         },
         screenshots: {
             iphone65: {
@@ -126,6 +136,8 @@ export const STORE_RULES: Record<string, PlatformRules> = {
             phone: {
                 name: 'Phone Screenshots',
                 minWidth: 320, // Huawei logic similar to Play Store usually
+                minHeight: 320,
+                maxDimension: 3840,
                 allowedTypes: ['png', 'jpg', 'jpeg'],
                 required: true
             }

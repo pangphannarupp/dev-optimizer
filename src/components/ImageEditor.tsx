@@ -42,18 +42,12 @@ export const ImageEditor: React.FC = () => {
             });
             setCanvas(fabricCanvas);
 
-            fabricCanvas.on('object:added', saveState);
-            fabricCanvas.on('object:modified', saveState);
-            fabricCanvas.on('object:removed', saveState);
-
-            // Cleanup function
             return () => {
-                console.log('Disposing canvas...');
                 fabricCanvas.dispose();
                 setCanvas(null);
             };
         }
-    }, []);
+    }, [canvas]);
 
     const saveState = useCallback(() => {
         if (!canvas) return;
@@ -63,6 +57,22 @@ export const ImageEditor: React.FC = () => {
         setHistory(newHistory);
         setHistoryStep(newHistory.length - 1);
     }, [canvas, history, historyStep]);
+
+    useEffect(() => {
+        if (!canvas) return;
+
+        canvas.on('object:added', saveState);
+        canvas.on('object:modified', saveState);
+        canvas.on('object:removed', saveState);
+
+        return () => {
+            canvas.off('object:added', saveState);
+            canvas.off('object:modified', saveState);
+            canvas.off('object:removed', saveState);
+        };
+    }, [canvas, saveState]);
+
+
 
     const undo = useCallback(() => {
         if (historyStep > 0 && canvas) {
@@ -85,26 +95,20 @@ export const ImageEditor: React.FC = () => {
     }, [canvas, history, historyStep]);
 
     const handleFileDropped = useCallback((files: File[]) => {
-        console.log('handleFileDropped called with', files.length, 'files');
-        console.log('Canvas state:', canvas ? 'initialized' : 'null');
-
         if (files.length > 0) {
             if (!canvas) {
                 console.error('Canvas not initialized yet!');
-                alert('Please wait for the editor to initialize and try again.');
+                alert(t('imageEditor.alert.waitParams'));
                 return;
             }
 
             const file = files[0];
-            console.log('Processing file:', file.name, file.type);
             setSourceImage(file);
             const reader = new FileReader();
             reader.onload = async (e) => {
                 try {
                     const imgUrl = e.target?.result as string;
-                    console.log('Loading image...');
                     const img = await fabric.FabricImage.fromURL(imgUrl);
-                    console.log('Image loaded:', img.width, img.height);
 
                     // Calculate scale to cover the entire canvas
                     const canvasWidth = canvas.width || 800;
@@ -125,16 +129,18 @@ export const ImageEditor: React.FC = () => {
                     canvas.backgroundImage = img;
                     backgroundImageRef.current = img;
                     canvas.renderAll();
-                    console.log('Canvas updated with centered image');
+                    canvas.backgroundImage = img;
+                    backgroundImageRef.current = img;
+                    canvas.renderAll();
                     saveState();
                 } catch (error) {
                     console.error('Error loading image:', error);
-                    alert('Failed to load image. Please try again.');
+                    alert(t('imageEditor.alert.loadError'));
                 }
             };
             reader.onerror = (error) => {
                 console.error('FileReader error:', error);
-                alert('Failed to read file. Please try again.');
+                alert(t('imageEditor.alert.readError'));
             };
             reader.readAsDataURL(file);
         }
@@ -142,7 +148,7 @@ export const ImageEditor: React.FC = () => {
 
     const addText = useCallback(() => {
         if (!canvas) return;
-        const text = new fabric.IText('Click to edit', {
+        const text = new fabric.IText(t('imageEditor.clickToEdit'), {
             left: 100,
             top: 100,
             fontSize: fontSize,

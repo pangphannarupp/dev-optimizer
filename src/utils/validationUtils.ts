@@ -41,7 +41,7 @@ export // Helper to check if string contains potential hardcoded text
         return true;
     };
 
-export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'tsx' | 'android-xml' | 'kotlin' | 'java' | 'swift' | 'ios-xib' | 'objc'): ValidationResult => {
+export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'tsx' | 'android-xml' | 'kotlin' | 'java' | 'swift' | 'ios-xib' | 'objc' | 'html'): ValidationResult => {
     const details: ValidationError[] = [];
     let isValid = true;
 
@@ -96,8 +96,57 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
                 }
             }
         }
-    } else if (type === 'tsx') {
-        // For TSX, we check for JSX text content AND standard string literals
+    } else if (type === 'html') {
+        // Mask script and style content to avoid false positives
+        let meaningfulContent = content.replace(/(<script[^>]*>)([\s\S]*?)(<\/script>)/gi, (_, open, body, close) => {
+            return open + ' '.repeat(body.length) + close;
+        });
+        meaningfulContent = meaningfulContent.replace(/(<style[^>]*>)([\s\S]*?)(<\/style>)/gi, (_, open, body, close) => {
+            return open + ' '.repeat(body.length) + close;
+        });
+        meaningfulContent = meaningfulContent.replace(/(<title[^>]*>)([\s\S]*?)(<\/title>)/gi, (_, open, body, close) => {
+            return open + ' '.repeat(body.length) + close;
+        });
+
+        const textContentRegex = />([^<]+)</g;
+        let match;
+        while ((match = textContentRegex.exec(meaningfulContent)) !== null) {
+            const text = match[1].trim();
+            // Ignore template syntax often found in HTML files (EJS, Handlebars cards {{ }})
+            if (
+                text &&
+                !text.startsWith('{{') &&
+                !text.startsWith('<%') &&
+                !text.startsWith('<!--') &&
+                !/^&[a-zA-Z0-9#]+;$/.test(text) &&
+                !/^[0-9\s!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/.test(text)
+            ) {
+                const absoluteIndex = match.index + match[0].indexOf(match[1]);
+                details.push({
+                    line: getLineNumber(content, absoluteIndex),
+                    text: text,
+                    message: `Possible untranslated HTML text`
+                });
+                isValid = false;
+            }
+        }
+
+        const attributeRegex = /\s(label|placeholder|title|alt|aria-label)="([^"]+)"/g;
+        while ((match = attributeRegex.exec(meaningfulContent)) !== null) {
+            const attr = match[1];
+            const val = match[2];
+            if (val.includes(' ') && !val.startsWith('{{') && !val.startsWith('http') && !val.startsWith('#')) {
+                const absoluteIndex = match.index + match[0].indexOf(val);
+                details.push({
+                    line: getLineNumber(content, absoluteIndex),
+                    text: val,
+                    message: `Potential untranslated HTML attribute [${attr}]`
+                });
+                isValid = false;
+            }
+        }
+    } else if (type === 'tsx' || type === 'ts' || type === 'js') {
+        // For TSX/TS/JS, we check for JSX text content AND standard string literals
 
         // 1. Check for JSX text content between tags: >Text<
         const jsxTextRegex = />([^<{]+)</g;
@@ -152,8 +201,13 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
 
             const index = stringMatch.index;
             // Check immediate context (preceding text)
-            const precedingText = content.substring(Math.max(0, index - 20), index);
+            const precedingText = content.substring(Math.max(0, index - 50), index);
             if (/(className|class)\s*[:=]\s*$/.test(precedingText.trimEnd())) {
+                continue;
+            }
+
+            // Ignore Exceptions/Errors (e.g. throw new Error("..."), new TypeError("..."))
+            if (/(throw\s+new\s+[a-zA-Z0-9_$]+|new\s+[a-zA-Z0-9_$]*(Error|Exception)|throw)\s*\(?\s*$/.test(precedingText.trimEnd())) {
                 continue;
             }
 

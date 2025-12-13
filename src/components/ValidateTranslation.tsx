@@ -7,13 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { clsx } from 'clsx';
 import * as XLSX from 'xlsx';
 import { validateContent, ValidationError } from '../utils/validationUtils';
+import { DonutChart } from './DonutChart';
 
 interface FileValidationResult {
     path: string;
     isValid: boolean;
     error?: string;
     details?: ValidationError[];
-    type: 'vue' | 'ts' | 'js' | 'tsx' | 'android-xml' | 'kotlin' | 'java' | 'swift' | 'ios-xib' | 'objc' | 'other';
+    type: 'vue' | 'ts' | 'js' | 'tsx' | 'android-xml' | 'kotlin' | 'java' | 'swift' | 'ios-xib' | 'objc' | 'html' | 'other';
     content?: string;
 }
 
@@ -114,6 +115,7 @@ export function ValidateTranslation() {
                 else if (lowerPath.endsWith('.swift')) type = 'swift';
                 else if (lowerPath.endsWith('.xib') || lowerPath.endsWith('.storyboard')) type = 'ios-xib';
                 else if (lowerPath.endsWith('.m') || lowerPath.endsWith('.h')) type = 'objc';
+                else if (lowerPath.endsWith('.html') || lowerPath.endsWith('.htm')) type = 'html';
 
                 if (type === 'other') continue;
 
@@ -165,7 +167,15 @@ export function ValidateTranslation() {
 
     const handleExportCsv = useCallback(() => {
         // Generate CSV content
-        const headers = ['File Path', 'Type', 'Status', 'Ignored', 'Line', 'Text', 'Message'];
+        const headers = [
+            t('validation.fileName'),
+            t('validation.type'),
+            t('validation.status'),
+            t('validation.ignored'),
+            t('validation.line'),
+            t('validation.untranslatedText'),
+            t('validation.contextMessage')
+        ];
 
         // Filter out ignored files regardless of UI state
         // Flatten the data so each error is a row
@@ -175,8 +185,8 @@ export function ValidateTranslation() {
             .filter(r => !ignoredPaths.has(r.path))
             .forEach(r => {
                 const isIgnored = ignoredPaths.has(r.path); // Should always be false now, but harmless
-                const status = r.isValid ? 'Translated' : 'Untranslated';
-                const ignoredStr = isIgnored ? 'Yes' : 'No';
+                const status = r.isValid ? t('validation.translated') : t('validation.untranslated');
+                const ignoredStr = isIgnored ? t('validation.statusLabel.ignored') : t('common.no');
 
                 if (r.details && r.details.length > 0) {
                     r.details.forEach(detail => {
@@ -210,15 +220,24 @@ export function ValidateTranslation() {
     }, [displayedResults, ignoredPaths]);
 
     const handleExportExcel = useCallback(() => {
-        const headers = ['File Path', 'File Name', 'Type', 'Status', 'Ignored', 'Line', 'Text', 'Message'];
+        const headers = [
+            t('validation.filePath'),
+            t('validation.fileName'),
+            t('validation.type'),
+            t('validation.status'),
+            t('validation.ignored'),
+            t('validation.line'),
+            t('validation.untranslatedText'),
+            t('validation.contextMessage')
+        ];
         const rows: any[][] = [headers];
 
         displayedResults
             .filter(r => !ignoredPaths.has(r.path))
             .forEach(r => {
                 const isIgnored = ignoredPaths.has(r.path);
-                const status = r.isValid ? 'Translated' : 'Untranslated';
-                const ignoredStr = isIgnored ? 'Yes' : 'No';
+                const status = r.isValid ? t('validation.translated') : t('validation.untranslated');
+                const ignoredStr = isIgnored ? t('validation.statusLabel.ignored') : t('common.no');
                 const fileName = r.path.split('/').pop() || r.path;
 
                 if (r.details && r.details.length > 0) {
@@ -337,23 +356,14 @@ export function ValidateTranslation() {
                 <div className="flex-1 flex flex-col gap-6 overflow-hidden">
                     {/* Stats & Actions Header */}
                     <div className="flex flex-wrap items-center justify-between gap-4">
-                        <div className="flex gap-4">
-                            <div className="flex flex-col min-w-[120px] bg-white dark:bg-gray-800 px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden group">
-                                <FileText className="text-blue-100 dark:text-blue-900/20 absolute -right-3 -bottom-3 w-16 h-16 group-hover:scale-110 transition-transform" />
-                                <span className="text-sm font-medium text-slate-500 dark:text-slate-400 relative z-10">{t('validation.total')}</span>
-                                <span className="text-2xl font-bold text-slate-800 dark:text-white relative z-10">{stats.total}</span>
-                            </div>
-                            <div className="flex flex-col min-w-[120px] bg-white dark:bg-gray-800 px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden group">
-                                <CheckCircle className="text-green-100 dark:text-green-900/20 absolute -right-3 -bottom-3 w-16 h-16 group-hover:scale-110 transition-transform" />
-                                <span className="text-sm font-medium text-slate-500 dark:text-slate-400 relative z-10">{t('validation.valid')}</span>
-                                <span className="text-2xl font-bold text-slate-800 dark:text-white relative z-10">{stats.valid}</span>
-                            </div>
-                            <div className="flex flex-col min-w-[120px] bg-white dark:bg-gray-800 px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden group">
-                                <AlertTriangle className="text-red-100 dark:text-red-900/20 absolute -right-3 -bottom-3 w-16 h-16 group-hover:scale-110 transition-transform" />
-                                <span className="text-sm font-medium text-slate-500 dark:text-slate-400 relative z-10">{t('validation.invalid')}</span>
-                                <span className="text-2xl font-bold text-slate-800 dark:text-white relative z-10">{stats.invalid}</span>
-                            </div>
-                        </div>
+                        <DonutChart
+                            items={[
+                                { id: 'valid', value: stats.valid, color: 'text-green-500', bg: 'bg-green-500', icon: CheckCircle, label: t('validation.valid') },
+                                { id: 'invalid', value: stats.invalid, color: 'text-red-500', bg: 'bg-red-500', icon: AlertTriangle, label: t('validation.invalid') },
+                            ]}
+                            total={stats.total}
+                            centerSubLabel={t('validation.total')}
+                        />
 
 
                         <div className="flex items-center gap-3 bg-white dark:bg-gray-800 p-2 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
@@ -462,7 +472,8 @@ export function ValidateTranslation() {
                                                 <div className="font-mono text-sm text-slate-700 dark:text-gray-300 truncate" title={file.path}>
                                                     {fileName}
                                                 </div>
-                                                {isIgnored && <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 dark:bg-gray-700 dark:text-gray-400 px-2 py-0.5 rounded-full">Ignored</span>}
+
+                                                {isIgnored && <span className="inline-block mt-1 text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 dark:bg-gray-700 dark:text-gray-400 px-2 py-0.5 rounded-full">{t('validation.statusLabel.ignored')}</span>}
                                             </td>
                                             <td className="p-5 text-center">
                                                 <span className="inline-block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
@@ -524,237 +535,240 @@ export function ValidateTranslation() {
                         </table>
                     </div>
                 </div>
-            )}
+            )
+            }
 
             {/* Detail Modal */}
-            {selectedResult && (
-                <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/20 backdrop-blur-sm rounded-xl">
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col border border-gray-200 dark:border-gray-700 overflow-hidden ring-1 ring-black/5">
-                        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800">
-                            <div className="flex flex-col overflow-hidden">
-                                <h3 className="font-bold text-lg text-slate-800 dark:text-white truncate flex items-center gap-2">
-                                    <FileText size={20} className="text-blue-500" />
-                                    {selectedResult.path}
-                                </h3>
-                                <span className="text-xs text-slate-400 dark:text-gray-500 font-mono mt-0.5 ml-7">
-                                    {selectedResult.type.toUpperCase()}
-                                </span>
-                            </div>
-
-                            <div className="flex items-center gap-3 ml-4">
-                                {/* Toggle View Mode */}
-                                <div className="flex items-center bg-slate-100 dark:bg-gray-700 p-1 rounded-lg">
-                                    <button
-                                        onClick={() => setViewMode('list')}
-                                        className={clsx(
-                                            "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-semibold transition-all",
-                                            viewMode === 'list'
-                                                ? "bg-white dark:bg-gray-600 text-slate-800 dark:text-white shadow-sm"
-                                                : "text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-gray-200"
-                                        )}
-                                    >
-                                        <List size={16} />
-                                        List
-                                    </button>
-                                    <button
-                                        onClick={() => setViewMode('code')}
-                                        className={clsx(
-                                            "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-semibold transition-all",
-                                            viewMode === 'code'
-                                                ? "bg-white dark:bg-gray-600 text-slate-800 dark:text-white shadow-sm"
-                                                : "text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-gray-200"
-                                        )}
-                                    >
-                                        <Code size={16} />
-                                        Code
-                                    </button>
+            {
+                selectedResult && (
+                    <div className="absolute inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/20 backdrop-blur-sm rounded-xl">
+                        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[90vh] flex flex-col border border-gray-200 dark:border-gray-700 overflow-hidden ring-1 ring-black/5">
+                            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800">
+                                <div className="flex flex-col overflow-hidden">
+                                    <h3 className="font-bold text-lg text-slate-800 dark:text-white truncate flex items-center gap-2">
+                                        <FileText size={20} className="text-blue-500" />
+                                        {selectedResult.path}
+                                    </h3>
+                                    <span className="text-xs text-slate-400 dark:text-gray-500 font-mono mt-0.5 ml-7">
+                                        {selectedResult.type.toUpperCase()}
+                                    </span>
                                 </div>
 
-                                <div className="w-px h-8 bg-slate-200 dark:bg-gray-700 mx-1"></div>
-
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); setSelectedResult(null); }}
-                                    className="p-2 text-slate-400 hover:text-slate-600 dark:text-gray-500 dark:hover:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-full transition-colors"
-                                >
-                                    <X size={24} />
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="p-0 overflow-hidden flex-1 flex flex-col bg-slate-50 dark:bg-gray-900">
-                            {viewMode === 'list' ? (
-                                <>
-                                    <div className="p-6 flex-shrink-0 grid grid-cols-2 gap-4">
-                                        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-between">
-                                            <div>
-                                                <div className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">{t('validation.status')}</div>
-                                                {selectedResult.isValid ? (
-                                                    <span className="inline-flex items-center gap-1.5 text-base font-bold text-green-600 dark:text-green-400">
-                                                        <CheckCircle size={18} /> {t('validation.translated')}
-                                                    </span>
-                                                ) : ignoredPaths.has(selectedResult.path) ? (
-                                                    <span className="inline-flex items-center gap-1.5 text-base font-bold text-slate-500 dark:text-gray-400">
-                                                        <EyeOff size={18} /> {t('validation.ignored')}
-                                                    </span>
-                                                ) : (
-                                                    <span className="inline-flex items-center gap-1.5 text-base font-bold text-red-600 dark:text-red-400">
-                                                        <AlertCircle size={18} /> {t('validation.untranslated')}
-                                                    </span>
-                                                )}
-                                            </div>
-                                            <div className={clsx(
-                                                "p-3 rounded-full bg-opacity-10",
-                                                selectedResult.isValid ? "bg-green-500 text-green-500" : "bg-red-500 text-red-500"
-                                            )}>
-                                                {selectedResult.isValid ? <CheckCircle size={24} /> : <AlertTriangle size={24} />}
-                                            </div>
-                                        </div>
-                                        <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-between">
-                                            <div>
-                                                <div className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">{t('validation.totalIssues')}</div>
-                                                <div className="text-2xl font-black text-slate-800 dark:text-white">{selectedResult.details?.length || 0}</div>
-                                            </div>
-                                            <div className="p-3 rounded-full bg-blue-50 text-blue-500 dark:bg-blue-900/20 dark:text-blue-400">
-                                                <List size={24} />
-                                            </div>
-                                        </div>
+                                <div className="flex items-center gap-3 ml-4">
+                                    {/* Toggle View Mode */}
+                                    <div className="flex items-center bg-slate-100 dark:bg-gray-700 p-1 rounded-lg">
+                                        <button
+                                            onClick={() => setViewMode('list')}
+                                            className={clsx(
+                                                "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-semibold transition-all",
+                                                viewMode === 'list'
+                                                    ? "bg-white dark:bg-gray-600 text-slate-800 dark:text-white shadow-sm"
+                                                    : "text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-gray-200"
+                                            )}
+                                        >
+                                            <List size={16} />
+                                            {t('validation.view.list')}
+                                        </button>
+                                        <button
+                                            onClick={() => setViewMode('code')}
+                                            className={clsx(
+                                                "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-semibold transition-all",
+                                                viewMode === 'code'
+                                                    ? "bg-white dark:bg-gray-600 text-slate-800 dark:text-white shadow-sm"
+                                                    : "text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-gray-200"
+                                            )}
+                                        >
+                                            <Code size={16} />
+                                            {t('validation.view.code')}
+                                        </button>
                                     </div>
 
-                                    <div className="flex-1 overflow-y-auto p-0 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-                                        {selectedResult.details && selectedResult.details.length > 0 ? (
-                                            <table className="w-full text-left text-sm">
-                                                <thead className="bg-gray-50 dark:bg-gray-800/80 sticky top-0 border-b border-gray-100 dark:border-gray-700 font-semibold text-slate-500 dark:text-gray-400">
-                                                    <tr>
-                                                        <th className="p-4 w-20 text-center">{t('validation.line')}</th>
-                                                        <th className="p-4 w-1/3">{t('validation.untranslatedText')}</th>
-                                                        <th className="p-4">{t('validation.contextMessage')}</th>
-                                                        <th className="p-4 w-16"></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody className="divide-y divide-gray-100 dark:divide-gray-700/50">
-                                                    {selectedResult.details.map((detail, idx) => (
-                                                        <tr
-                                                            key={idx}
-                                                            className="hover:bg-blue-50/50 dark:hover:bg-gray-700/30 cursor-pointer group transition-colors"
-                                                            onClick={() => handleJumpToCode(detail.line)}
-                                                        >
-                                                            <td className="p-4 text-center">
-                                                                <span className="inline-block px-2 py-1 rounded bg-slate-100 dark:bg-gray-700 text-slate-500 dark:text-gray-400 font-mono text-xs font-bold">
-                                                                    {detail.line}
-                                                                </span>
-                                                            </td>
-                                                            <td className="p-4">
-                                                                <div className="font-mono text-sm break-all text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/10 p-2 rounded border border-red-100 dark:border-red-900/20">
-                                                                    {detail.text}
-                                                                </div>
-                                                            </td>
-                                                            <td className="p-4 text-slate-600 dark:text-gray-300 text-sm">
-                                                                {detail.message}
-                                                            </td>
-                                                            <td className="p-4 text-center text-slate-300 group-hover:text-blue-500">
-                                                                <Code size={16} />
-                                                            </td>
+                                    <div className="w-px h-8 bg-slate-200 dark:bg-gray-700 mx-1"></div>
+
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); setSelectedResult(null); }}
+                                        className="p-2 text-slate-400 hover:text-slate-600 dark:text-gray-500 dark:hover:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-700 rounded-full transition-colors"
+                                    >
+                                        <X size={24} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="p-0 overflow-hidden flex-1 flex flex-col bg-slate-50 dark:bg-gray-900">
+                                {viewMode === 'list' ? (
+                                    <>
+                                        <div className="p-6 flex-shrink-0 grid grid-cols-2 gap-4">
+                                            <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-between">
+                                                <div>
+                                                    <div className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">{t('validation.status')}</div>
+                                                    {selectedResult.isValid ? (
+                                                        <span className="inline-flex items-center gap-1.5 text-base font-bold text-green-600 dark:text-green-400">
+                                                            <CheckCircle size={18} /> {t('validation.translated')}
+                                                        </span>
+                                                    ) : ignoredPaths.has(selectedResult.path) ? (
+                                                        <span className="inline-flex items-center gap-1.5 text-base font-bold text-slate-500 dark:text-gray-400">
+                                                            <EyeOff size={18} /> {t('validation.ignored')}
+                                                        </span>
+                                                    ) : (
+                                                        <span className="inline-flex items-center gap-1.5 text-base font-bold text-red-600 dark:text-red-400">
+                                                            <AlertCircle size={18} /> {t('validation.untranslated')}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <div className={clsx(
+                                                    "p-3 rounded-full bg-opacity-10",
+                                                    selectedResult.isValid ? "bg-green-500 text-green-500" : "bg-red-500 text-red-500"
+                                                )}>
+                                                    {selectedResult.isValid ? <CheckCircle size={24} /> : <AlertTriangle size={24} />}
+                                                </div>
+                                            </div>
+                                            <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center justify-between">
+                                                <div>
+                                                    <div className="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">{t('validation.totalIssues')}</div>
+                                                    <div className="text-2xl font-black text-slate-800 dark:text-white">{selectedResult.details?.length || 0}</div>
+                                                </div>
+                                                <div className="p-3 rounded-full bg-blue-50 text-blue-500 dark:bg-blue-900/20 dark:text-blue-400">
+                                                    <List size={24} />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex-1 overflow-y-auto p-0 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                                            {selectedResult.details && selectedResult.details.length > 0 ? (
+                                                <table className="w-full text-left text-sm">
+                                                    <thead className="bg-gray-50 dark:bg-gray-800/80 sticky top-0 border-b border-gray-100 dark:border-gray-700 font-semibold text-slate-500 dark:text-gray-400">
+                                                        <tr>
+                                                            <th className="p-4 w-20 text-center">{t('validation.line')}</th>
+                                                            <th className="p-4 w-1/3">{t('validation.untranslatedText')}</th>
+                                                            <th className="p-4">{t('validation.contextMessage')}</th>
+                                                            <th className="p-4 w-16"></th>
                                                         </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody className="divide-y divide-gray-100 dark:divide-gray-700/50">
+                                                        {selectedResult.details.map((detail, idx) => (
+                                                            <tr
+                                                                key={idx}
+                                                                className="hover:bg-blue-50/50 dark:hover:bg-gray-700/30 cursor-pointer group transition-colors"
+                                                                onClick={() => handleJumpToCode(detail.line)}
+                                                            >
+                                                                <td className="p-4 text-center">
+                                                                    <span className="inline-block px-2 py-1 rounded bg-slate-100 dark:bg-gray-700 text-slate-500 dark:text-gray-400 font-mono text-xs font-bold">
+                                                                        {detail.line}
+                                                                    </span>
+                                                                </td>
+                                                                <td className="p-4">
+                                                                    <div className="font-mono text-sm break-all text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/10 p-2 rounded border border-red-100 dark:border-red-900/20">
+                                                                        {detail.text}
+                                                                    </div>
+                                                                </td>
+                                                                <td className="p-4 text-slate-600 dark:text-gray-300 text-sm">
+                                                                    {detail.message}
+                                                                </td>
+                                                                <td className="p-4 text-center text-slate-300 group-hover:text-blue-500">
+                                                                    <Code size={16} />
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            ) : (
+                                                <div className="flex flex-col items-center justify-center h-full text-center p-12 text-slate-400">
+                                                    <CheckCircle size={48} className="mb-4 text-green-100 dark:text-green-900/30" />
+                                                    <p className="text-lg font-medium text-slate-600 dark:text-gray-300">{t('validation.noUntranslatedFound')}</p>
+                                                    <p className="text-sm text-slate-400">{t('validation.noIssues')}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </>
+                                ) : (
+                                    // Code View
+                                    <div className="flex-1 overflow-auto bg-[#1e1e1e] text-blue-100 text-sm font-mono p-6 leading-relaxed" ref={codeViewRef}>
+                                        {selectedResult.content ? (
+                                            <div className="relative">
+                                                {selectedResult.content.split('\n').map((line, idx) => {
+                                                    const lineNumber = idx + 1;
+                                                    const issuesOnLine = selectedResult.details?.filter(d => d.line === lineNumber);
+                                                    const hasIssues = issuesOnLine && issuesOnLine.length > 0;
+                                                    const isHighlighted = highlightedLine === lineNumber;
+
+                                                    // Very basic syntax highlighting for text/tags
+                                                    const highlightedLineContent = (text: string) => {
+                                                        // Simple heuristic to colorize tags and values
+                                                        const parts = text.split(/(<[^>]+>)/g);
+                                                        return parts.map((part, i) => {
+                                                            if (part.startsWith('<') && part.endsWith('>')) {
+                                                                return <span key={i} className="text-blue-400">{part}</span>
+                                                            } else {
+                                                                return <span key={i} className="text-gray-300">{part}</span>
+                                                            }
+                                                        });
+                                                    };
+
+                                                    return (
+                                                        <div
+                                                            key={idx}
+                                                            data-line={lineNumber}
+                                                            className={clsx(
+                                                                "flex -mx-6 px-6 border-l-4",
+                                                                isHighlighted
+                                                                    ? "bg-yellow-900/30 border-yellow-500"
+                                                                    : hasIssues
+                                                                        ? "bg-red-900/10 border-red-500/50"
+                                                                        : "border-transparent hover:bg-white/5"
+                                                            )}
+                                                        >
+                                                            <div className="w-12 text-right pr-4 text-gray-500 select-none flex-shrink-0 text-xs py-0.5">
+                                                                {lineNumber}
+                                                            </div>
+                                                            <div className="flex-1 whitespace-pre-wrap break-all py-0.5">
+                                                                {hasIssues ? (() => {
+                                                                    const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                                                                    const uniqueTexts = Array.from(new Set(issuesOnLine.map(d => d.text)))
+                                                                        .sort((a, b) => b.length - a.length);
+
+                                                                    if (uniqueTexts.length === 0) return highlightedLineContent(line);
+
+                                                                    const pattern = new RegExp(`(${uniqueTexts.map(escapeRegExp).join('|')})`, 'g');
+                                                                    const parts = line.split(pattern);
+
+                                                                    return (
+                                                                        <>
+                                                                            {parts.map((part, i) => {
+                                                                                const isMatch = uniqueTexts.includes(part);
+                                                                                if (isMatch) {
+                                                                                    return (
+                                                                                        <span key={i} className="bg-red-500/30 text-red-200 rounded px-0.5 box-decoration-clone outline outline-1 outline-red-500/60 relative group cursor-help">
+                                                                                            {part}
+                                                                                            <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 p-2 bg-black text-white text-xs rounded shadow-lg whitespace-nowrap z-50">
+                                                                                                {t('validation.untranslatedText')}
+                                                                                            </span>
+                                                                                        </span>
+                                                                                    );
+                                                                                }
+                                                                                return highlightedLineContent(part);
+                                                                            })}
+                                                                        </>
+                                                                    );
+                                                                })() : (
+                                                                    highlightedLineContent(line)
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
                                         ) : (
-                                            <div className="flex flex-col items-center justify-center h-full text-center p-12 text-slate-400">
-                                                <CheckCircle size={48} className="mb-4 text-green-100 dark:text-green-900/30" />
-                                                <p className="text-lg font-medium text-slate-600 dark:text-gray-300">{t('validation.noUntranslatedFound')}</p>
-                                                <p className="text-sm text-slate-400">{t('validation.noIssues')}</p>
+                                            <div className="text-center py-20 text-gray-500 italic">
+                                                {t('validation.noContent')}
                                             </div>
                                         )}
                                     </div>
-                                </>
-                            ) : (
-                                // Code View
-                                <div className="flex-1 overflow-auto bg-[#1e1e1e] text-blue-100 text-sm font-mono p-6 leading-relaxed" ref={codeViewRef}>
-                                    {selectedResult.content ? (
-                                        <div className="relative">
-                                            {selectedResult.content.split('\n').map((line, idx) => {
-                                                const lineNumber = idx + 1;
-                                                const issuesOnLine = selectedResult.details?.filter(d => d.line === lineNumber);
-                                                const hasIssues = issuesOnLine && issuesOnLine.length > 0;
-                                                const isHighlighted = highlightedLine === lineNumber;
-
-                                                // Very basic syntax highlighting for text/tags
-                                                const highlightedLineContent = (text: string) => {
-                                                    // Simple heuristic to colorize tags and values
-                                                    const parts = text.split(/(<[^>]+>)/g);
-                                                    return parts.map((part, i) => {
-                                                        if (part.startsWith('<') && part.endsWith('>')) {
-                                                            return <span key={i} className="text-blue-400">{part}</span>
-                                                        } else {
-                                                            return <span key={i} className="text-gray-300">{part}</span>
-                                                        }
-                                                    });
-                                                };
-
-                                                return (
-                                                    <div
-                                                        key={idx}
-                                                        data-line={lineNumber}
-                                                        className={clsx(
-                                                            "flex -mx-6 px-6 border-l-4",
-                                                            isHighlighted
-                                                                ? "bg-yellow-900/30 border-yellow-500"
-                                                                : hasIssues
-                                                                    ? "bg-red-900/10 border-red-500/50"
-                                                                    : "border-transparent hover:bg-white/5"
-                                                        )}
-                                                    >
-                                                        <div className="w-12 text-right pr-4 text-gray-500 select-none flex-shrink-0 text-xs py-0.5">
-                                                            {lineNumber}
-                                                        </div>
-                                                        <div className="flex-1 whitespace-pre-wrap break-all py-0.5">
-                                                            {hasIssues ? (() => {
-                                                                const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                                                                const uniqueTexts = Array.from(new Set(issuesOnLine.map(d => d.text)))
-                                                                    .sort((a, b) => b.length - a.length);
-
-                                                                if (uniqueTexts.length === 0) return highlightedLineContent(line);
-
-                                                                const pattern = new RegExp(`(${uniqueTexts.map(escapeRegExp).join('|')})`, 'g');
-                                                                const parts = line.split(pattern);
-
-                                                                return (
-                                                                    <>
-                                                                        {parts.map((part, i) => {
-                                                                            const isMatch = uniqueTexts.includes(part);
-                                                                            if (isMatch) {
-                                                                                return (
-                                                                                    <span key={i} className="bg-red-500/30 text-red-200 rounded px-0.5 box-decoration-clone outline outline-1 outline-red-500/60 relative group cursor-help">
-                                                                                        {part}
-                                                                                        <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 p-2 bg-black text-white text-xs rounded shadow-lg whitespace-nowrap z-50">
-                                                                                            Untranslated text
-                                                                                        </span>
-                                                                                    </span>
-                                                                                );
-                                                                            }
-                                                                            return highlightedLineContent(part);
-                                                                        })}
-                                                                    </>
-                                                                );
-                                                            })() : (
-                                                                highlightedLineContent(line)
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    ) : (
-                                        <div className="text-center py-20 text-gray-500 italic">
-                                            No content available for preview.
-                                        </div>
-                                    )}
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 }

@@ -59,14 +59,35 @@
         "process": "処理",
         "error": "エラー",
         "pending": "保留中",
-        "done": "完了"
+        "done": "完了",
+        "saved": "Saved",
+        "savedPercentage": "Saved {{percentage}}%",
+        "search": "Search...",
+        "favorites": "Favorites",
+        "allTools": "All Tools",
+        "noResults": "No results found"
     },
     "iconGenerator": {
         "title": "アプリアイコン生成",
         "description": "高解像度の正方形画像をアップロード（1024x1024推奨）。iOS（App Store）とAndroid（Play Store）に必要なすべてのサイズを生成します。",
         "upload": "画像をアップロード",
         "generate": "アイコンを生成",
-        "download": "ZIPをダウンロード"
+        "download": "ZIPをダウンロード",
+        "preview": "Icon Preview",
+        "alert": {
+            "generateError": "Failed to generate icons. Please try again."
+        },
+        "platform": {
+            "android": "Android",
+            "androidRound": "Android Round",
+            "androidSplash": "Android Splash",
+            "iosIPhone": "iOS - iPhone",
+            "iosIPad": "iOS - iPad",
+            "iosAppStore": "iOS - App Store",
+            "macos": "macOS",
+            "windows": "Windows",
+            "linux": "Linux"
+        }
     },
     "imageEnhancer": {
         "title": "画像品質向上",
@@ -84,7 +105,11 @@
         "uploadNew": "新規アップロード",
         "process": "処理",
         "processing": "処理中",
-        "download": "ダウンロード"
+        "download": "ダウンロード",
+        "alert": {
+            "sharpenError": "Failed to sharpen image. Please try again.",
+            "bgRemovalError": "Failed to remove background. Please try again."
+        }
     },
     "imageEditor": {
         "title": "画像エディタ",
@@ -109,7 +134,13 @@
         "brightness": "明るさ",
         "contrast": "コントラスト",
         "saturation": "彩度",
-        "download": "ダウンロード"
+        "download": "ダウンロード",
+        "clickToEdit": "Click to edit",
+        "alert": {
+            "waitParams": "Please wait for the editor to initialize and try again.",
+            "loadError": "Failed to load image. Please try again.",
+            "readError": "Failed to read file. Please try again."
+        }
     },
     "qrGenerator": {
         "title": "QRコード生成",
@@ -156,7 +187,51 @@
         "foregroundColor": "QRの色",
         "backgroundColor": "背景色",
         "errorCorrection": "エラー訂正レベル",
-        "noPassword": "パスワードなし"
+        "noPassword": "パスワードなし",
+        "barcode": "Barcode Generator",
+        "scanner": "QR/Barcode Scanner",
+        "modes": {
+            "qr": "QR Code",
+            "barcode": "Barcode",
+            "scan": "Scanner"
+        },
+        "styles": "Styles",
+        "dots": "Dots Style",
+        "cornersSquare": "Corners Square Style",
+        "cornersDot": "Corners Dot Style",
+        "uploadLogo": "Upload Logo",
+        "barcodeValue": "Barcode Value",
+        "format": "Format",
+        "width": "Width",
+        "height": "Height",
+        "margin": "Margin",
+        "displayValue": "Display Value",
+        "uploadImage": "Upload Image",
+        "placeholder": {
+            "enterValue": "Enter value"
+        },
+        "copyText": "Copy Text",
+        "scanning": "Scanning...",
+        "uploadToScan": "Upload an image to scan",
+        "result": "Result:",
+        "dragLogo": "Drag logo or click",
+        "dragScan": "Drag QR/Barcode image here",
+        "style": {
+            "square": "Square",
+            "dots": "Dots",
+            "rounded": "Rounded",
+            "extraRounded": "Extra Rounded",
+            "classy": "Classy",
+            "classyRounded": "Classy Rounded",
+            "dot": "Dot"
+        },
+        "encryption": {
+            "wpa": "WPA/WPA2",
+            "wep": "WEP",
+            "none": "None",
+            "type": "Encryption Type"
+        },
+        "scanError": "Failed to read QR/Barcode. Please try a clearer image."
     },
     "svgToDrawable": {
         "title": "SVGからAndroid Drawableへ",
@@ -181,7 +256,11 @@
         "copy": "コピー",
         "copied": "コピーしました！",
         "remove": "削除",
-        "ok": "OK"
+        "ok": "OK",
+        "search": "Search...",
+        "favorites": "Favorites",
+        "allTools": "All Tools",
+        "noResults": "No results found"
     },
     "encryption": {
         "title": "Encryption / Decryption Tool",
@@ -304,7 +383,21 @@
         "untranslatedText": "未翻訳のテキスト",
         "contextMessage": "コンテキスト / メッセージ",
         "noUntranslatedFound": "未翻訳の文字列は見つかりませんでした。",
-        "close": "閉じる"
+        "close": "閉じる",
+        "exportExcel": "Export Excel",
+        "fileName": "File Name",
+        "view": {
+            "list": "List",
+            "code": "Code"
+        },
+        "statusLabel": {
+            "ignored": "Ignored"
+        },
+        "noContent": "No content available for preview.",
+        "tooltip": {
+            "untranslated": "Untranslated text"
+        },
+        "fontDetector": "Font Detector"
     },
     "sourceCompare": {
         "title": "ソース比較",
@@ -338,27 +431,124 @@
         "addedCount": "追加済み",
         "deletedCount": "削除済み",
         "comparisonResult": "比較結果",
-        "sizeDiff": "サイズ差"
+        "sizeDiff": "サイズ差",
+        "identicalCount": "Identical Files"
+    },
+    "lottie": {
+        "title": "Lottie プレーヤー",
+        "controls": "コントロール",
+        "layers": "レイヤー",
+        "colors": "色",
+        "text": "テキスト",
+        "settings": "設定",
+        "playback": "再生",
+        "speed": "速度",
+        "loop": "ループ再生",
+        "appearance": "外観",
+        "backgroundColor": "背景色",
+        "supportInfo": ".json、.lottie、および .svg に対応（シングルまたはシーケンス用の複数）",
+        "direction": "方向を切り替え",
+        "stop": "停止",
+        "play": "再生",
+        "pause": "一時停止",
+        "noLayers": "レイヤーが見つかりません",
+        "noColors": "色が検出されません",
+        "palette": "検出された色",
+        "colorTip": "色の円をクリックして新しい色を選択し、すべての出現箇所を置換します。",
+        "textLayers": "テキストレイヤー",
+        "noText": "テキストレイヤーが見つかりません",
+        "properties": "アニメーションプロパティ",
+        "width": "幅 (px)",
+        "height": "高さ (px)",
+        "fps": "フレームレート (FPS)",
+        "propsWarning": "寸法やフレームレートを変更すると、アニメーションの再生速度やレイアウトに影響する場合があります。",
+        "invalidFile": "有効な JSON、.lottie、または .svg ファイルをアップロードしてください",
+        "parseError": "ファイルの解析に失敗しました",
+        "uploadToEdit": "Upload a file to edit",
+        "layer": "Layer",
+        "textLayer": "Text Layer",
+        "svgSequence": "{{count}} SVG Sequence"
+    },
+    "jsonFormatter": {
+        "title": "JSON Formatter",
+        "description": "Format, beautify, or minify JSON data",
+        "input": "JSON Input",
+        "output": "Formatted Output",
+        "inputPlaceholder": "Paste your JSON here...",
+        "outputPlaceholder": "Formatted JSON will appear here...",
+        "beautify": "Beautify",
+        "minify": "Minify",
+        "format": "Format"
+    },
+    "jwtDecoder": {
+        "title": "JWT Decoder",
+        "description": "Decode and inspect JWT tokens",
+        "tokenInput": "JWT Token",
+        "tokenPlaceholder": "Paste your JWT token here...",
+        "header": "Header",
+        "payload": "Payload",
+        "signature": "Signature (verify)"
+    },
+    "sha": {
+        "title": "SHA Hash Generator",
+        "description": "Generate MD5, SHA-1, SHA-256, SHA-384, and SHA-512 hashes",
+        "input": "Text Input",
+        "inputPlaceholder": "Enter text to hash...",
+        "results": "Hash Results",
+        "length": "Length",
+        "characters": "characters",
+        "note": "Note:",
+        "noteText": "All hashes are automatically generated as you type. These are cryptographic hash functions used for data integrity verification."
+    },
+    "deeplink": {
+        "title": "ディープリンク生成",
+        "description": "モバイルアプリで開くディープリンクを作成してテストします",
+        "scheme": "スキーム",
+        "host": "ホスト",
+        "pathPrefix": "パスプレフィックス",
+        "queryParams": "クエリパラメータ",
+        "addParam": "パラメータを追加",
+        "noParams": "パラメータがありません",
+        "generatedUrl": "生成されたURL",
+        "openApp": "アプリを開く",
+        "schemePlaceholder": "例: myapp",
+        "hostPlaceholder": "例: example.com",
+        "pathPlaceholder": "例: /products/123",
+        "paramKey": "キー",
+        "paramValue": "値"
+    },
+    "jsMinifier": {
+        "title": "JS ミニファイア",
+        "inputUrl": "入力 URL / コード",
+        "minifiedOutput": "ミニファイされた出力",
+        "minify": "JavaScriptをミニファイ",
+        "mangle": "変数を難読化",
+        "compress": "圧縮",
+        "keepFnames": "関数名を保持",
+        "copyCode": "コードをコピー",
+        "download": ".js をダウンロード",
+        "clear": "クリア",
+        "error": "エラーが発生しました"
     },
     "storeValidator": {
-        "title": "App Store Validator",
-        "dropToValidate": "Drop images here to validate dimensions and size",
-        "invalidFileType": "Invalid file type. Allowed: {{allowed}}",
-        "widthError": "Width must be {{width}}px (found {{found}}px)",
-        "heightError": "Height must be {{height}}px (found {{found}}px)",
-        "minWidthError": "Width must be at least {{minWidth}}px (found {{found}}px)",
-        "minHeightError": "Height must be at least {{minHeight}}px (found {{found}}px)",
-        "fileTooLarge": "File too large. Max: {{max}}MB (found {{found}}MB)",
-        "failedToLoad": "Failed to load image",
-        "appIcon": "App Icon",
-        "featureGraphic": "Feature Graphic",
-        "phoneScreenshots": "Phone Screenshots",
-        "tablet7": "7\" Tablet",
-        "tablet10": "10\" Tablet",
-        "iphone65": "iPhone 6.5\"",
-        "iphone55": "iPhone 5.5\"",
+        "title": "アプリストアバリデーター",
+        "dropToValidate": "画像をここにドロップして寸法とサイズを検証します",
+        "invalidFileType": "無効なファイルタイプです。許可：{{allowed}}",
+        "widthError": "幅は {{width}}px である必要があります（検出：{{found}}px）",
+        "heightError": "高さは {{height}}px である必要があります（検出：{{found}}px）",
+        "minWidthError": "幅は少なくとも {{minWidth}}px である必要があります（検出：{{found}}px）",
+        "minHeightError": "高さは少なくとも {{minHeight}}px である必要があります（検出：{{found}}px）",
+        "fileTooLarge": "ファイルが大きすぎます。最大：{{max}}MB（検出：{{found}}MB）",
+        "failedToLoad": "画像の読み込みに失敗しました",
+        "appIcon": "アプリアイコン",
+        "featureGraphic": "フィーチャーグラフィック",
+        "phoneScreenshots": "スマホのスクリーンショット",
+        "tablet7": "7インチタブレット",
+        "tablet10": "10インチタブレット",
+        "iphone65": "iPhone 6.5インチ",
+        "iphone55": "iPhone 5.5インチ",
         "ipadPro": "iPad Pro",
-        "usingSpecs": "Using specs for <0>{{name}}</0>. Drag images to check dimensions and file size limits.",
-        "redIndicators": "Red indicators will show exactly why an asset is rejected (e.g., wrong resolution or file too large)."
+        "usingSpecs": "<0>{{name}}</0> の仕様を使用しています。画像をドロップして、寸法とファイルサイズの制限を確認してください。",
+        "redIndicators": "赤いインジケーターは、資産が拒否された理由（例：解像度が間違っている、ファイルが大きすぎる）を正確に示します。"
     }
 }

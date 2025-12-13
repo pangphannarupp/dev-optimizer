@@ -6,6 +6,51 @@ export interface ReleaseNote {
 
 export const releaseNotes: ReleaseNote[] = [
     {
+        version: '1.0.18',
+        date: '2025-12-13',
+        changes: [
+            'Improve feature "Source Comparison"',
+            'Improve feature "Store Validator"',
+            'Add new feature "JS Minifier"',
+            'Add new feature "Deeplink Generator"',
+            'Improve feature "Validate Translation"',
+            'Improve menu'
+        ]
+    },
+    {
+        version: '1.0.17',
+        date: '2025-12-13',
+        changes: [
+            'Add new feature "Lottie Player"',
+            'Add new feature "Search Menu"',
+            'Add new feature "Add favorite Menu"',
+            'Improve feature "Validate Translation"',
+            'Improve feature "Store Validator"',
+            'Improve translation'
+        ]
+    },
+    {
+        version: '1.0.16',
+        date: '2025-12-13',
+        changes: [
+            'Add new feature "View Mindmap" in CSV to JSON',
+            'Implement barcode generator',
+            'Implement qr extractor',
+            'Improve qr code generator',
+            'Improve translation validation to support more file types',
+            'Improve performance'
+        ]
+    },
+    {
+        version: '1.0.15',
+        date: '2025-12-13',
+        changes: [
+            'Implement App Store Validator',
+            'Upgrade translation validation export to XLSX',
+            'Improve performance'
+        ]
+    },
+    {
         version: '1.0.14',
         date: '2025-12-12',
         changes: [

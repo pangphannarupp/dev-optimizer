@@ -59,14 +59,35 @@
         "process": "Traiter",
         "error": "Erreur",
         "pending": "En attente",
-        "done": "Terminé"
+        "done": "Terminé",
+        "saved": "Saved",
+        "savedPercentage": "Saved {{percentage}}%",
+        "search": "Search...",
+        "favorites": "Favorites",
+        "allTools": "All Tools",
+        "noResults": "No results found"
     },
     "iconGenerator": {
         "title": "Générateur d'Icônes d'App",
         "description": "Téléchargez une seule image pour générer toutes les tailles d'icônes",
         "upload": "Télécharger l'image",
         "generate": "Générer des icônes",
-        "download": "Télécharger ZIP"
+        "download": "Télécharger ZIP",
+        "preview": "Icon Preview",
+        "alert": {
+            "generateError": "Failed to generate icons. Please try again."
+        },
+        "platform": {
+            "android": "Android",
+            "androidRound": "Android Round",
+            "androidSplash": "Android Splash",
+            "iosIPhone": "iOS - iPhone",
+            "iosIPad": "iOS - iPad",
+            "iosAppStore": "iOS - App Store",
+            "macos": "macOS",
+            "windows": "Windows",
+            "linux": "Linux"
+        }
     },
     "imageEnhancer": {
         "title": "Améliorateur d'Images",
@@ -84,7 +105,11 @@
         "uploadNew": "Télécharger Nouveau",
         "process": "Traiter",
         "processing": "Traitement en cours",
-        "download": "Télécharger"
+        "download": "Télécharger",
+        "alert": {
+            "sharpenError": "Failed to sharpen image. Please try again.",
+            "bgRemovalError": "Failed to remove background. Please try again."
+        }
     },
     "imageEditor": {
         "title": "Éditeur d'Images",
@@ -109,7 +134,13 @@
         "brightness": "Luminosité",
         "contrast": "Contraste",
         "saturation": "Saturation",
-        "download": "Télécharger"
+        "download": "Télécharger",
+        "clickToEdit": "Click to edit",
+        "alert": {
+            "waitParams": "Please wait for the editor to initialize and try again.",
+            "loadError": "Failed to load image. Please try again.",
+            "readError": "Failed to read file. Please try again."
+        }
     },
     "qrGenerator": {
         "title": "Générateur de Code QR",
@@ -156,7 +187,51 @@
         "foregroundColor": "Couleur QR",
         "backgroundColor": "Couleur d'Arrière-plan",
         "errorCorrection": "Niveau de Correction d'Erreur",
-        "noPassword": "Pas de Mot de Passe"
+        "noPassword": "Pas de Mot de Passe",
+        "barcode": "Barcode Generator",
+        "scanner": "QR/Barcode Scanner",
+        "modes": {
+            "qr": "QR Code",
+            "barcode": "Barcode",
+            "scan": "Scanner"
+        },
+        "styles": "Styles",
+        "dots": "Dots Style",
+        "cornersSquare": "Corners Square Style",
+        "cornersDot": "Corners Dot Style",
+        "uploadLogo": "Upload Logo",
+        "barcodeValue": "Barcode Value",
+        "format": "Format",
+        "width": "Width",
+        "height": "Height",
+        "margin": "Margin",
+        "displayValue": "Display Value",
+        "uploadImage": "Upload Image",
+        "placeholder": {
+            "enterValue": "Enter value"
+        },
+        "copyText": "Copy Text",
+        "scanning": "Scanning...",
+        "uploadToScan": "Upload an image to scan",
+        "result": "Result:",
+        "dragLogo": "Drag logo or click",
+        "dragScan": "Drag QR/Barcode image here",
+        "style": {
+            "square": "Square",
+            "dots": "Dots",
+            "rounded": "Rounded",
+            "extraRounded": "Extra Rounded",
+            "classy": "Classy",
+            "classyRounded": "Classy Rounded",
+            "dot": "Dot"
+        },
+        "encryption": {
+            "wpa": "WPA/WPA2",
+            "wep": "WEP",
+            "none": "None",
+            "type": "Encryption Type"
+        },
+        "scanError": "Failed to read QR/Barcode. Please try a clearer image."
     },
     "svgToDrawable": {
         "title": "SVG vers Android Drawable",
@@ -181,7 +256,11 @@
         "copy": "Copier",
         "copied": "Copié !",
         "remove": "Supprimer",
-        "ok": "OK"
+        "ok": "OK",
+        "search": "Search...",
+        "favorites": "Favorites",
+        "allTools": "All Tools",
+        "noResults": "No results found"
     },
     "encryption": {
         "title": "Outil de Chiffrement/Déchiffrement",
@@ -304,7 +383,21 @@
         "untranslatedText": "Texte non traduit",
         "contextMessage": "Contexte / Message",
         "noUntranslatedFound": "Aucune chaîne non traduite trouvée.",
-        "close": "Fermer"
+        "close": "Fermer",
+        "exportExcel": "Export Excel",
+        "fileName": "File Name",
+        "view": {
+            "list": "List",
+            "code": "Code"
+        },
+        "statusLabel": {
+            "ignored": "Ignored"
+        },
+        "noContent": "No content available for preview.",
+        "tooltip": {
+            "untranslated": "Untranslated text"
+        },
+        "fontDetector": "Font Detector"
     },
     "sourceCompare": {
         "title": "Comparaison de sources",
@@ -338,27 +431,128 @@
         "addedCount": "Ajouté",
         "deletedCount": "Supprimé",
         "comparisonResult": "Résultat de la comparaison",
-        "sizeDiff": "Différence de taille"
+        "sizeDiff": "Différence de taille",
+        "identicalCount": "Identical Files"
+    },
+    "lottie": {
+        "title": "Lecteur Lottie",
+        "controls": "Contrôles",
+        "layers": "Calques",
+        "colors": "Couleurs",
+        "text": "Texte",
+        "settings": "Paramètres",
+        "playback": "Lecture",
+        "speed": "Vitesse",
+        "loop": "Boucle",
+        "appearance": "Apparence",
+        "backgroundColor": "Couleur de fond",
+        "supportInfo": "Supporte .json, .lottie et .svg (unique ou multiple)",
+        "direction": "Changer direction",
+        "stop": "Arrêter",
+        "play": "Lire",
+        "pause": "Pause",
+        "noLayers": "Aucun calque trouvé",
+        "noColors": "Aucune couleur détectée",
+        "palette": "Couleurs détectées",
+        "colorTip": "Cliquez sur un cercle de couleur pour choisir une nouvelle couleur et remplacer toutes les occurrences.",
+        "textLayers": "Calques de texte",
+        "noText": "Aucun calque de texte trouvé",
+        "properties": "Propriétés d'animation",
+        "width": "Largeur (px)",
+        "height": "Hauteur (px)",
+        "fps": "IPS",
+        "propsWarning": "Changer les dimensions ou les IPS peut affecter la vitesse et la mise en page.",
+        "invalidFile": "Veuillez télécharger un fichier JSON, .lottie ou .svg valide",
+        "parseError": "Échec de l'analyse du fichier",
+        "uploadToEdit": "Upload a file to edit",
+        "layer": "Layer",
+        "textLayer": "Text Layer",
+        "svgSequence": "{{count}} SVG Sequence"
+    },
+    "jsonFormatter": {
+        "title": "JSON Formatter",
+        "description": "Format, beautify, or minify JSON data",
+        "input": "JSON Input",
+        "output": "Formatted Output",
+        "inputPlaceholder": "Paste your JSON here...",
+        "outputPlaceholder": "Formatted JSON will appear here...",
+        "beautify": "Beautify",
+        "minify": "Minify",
+        "format": "Format"
+    },
+    "jwtDecoder": {
+        "title": "JWT Decoder",
+        "description": "Decode and inspect JWT tokens",
+        "tokenInput": "JWT Token",
+        "tokenPlaceholder": "Paste your JWT token here...",
+        "header": "Header",
+        "payload": "Payload",
+        "signature": "Signature (verify)"
+    },
+    "sha": {
+        "title": "SHA Hash Generator",
+        "description": "Generate MD5, SHA-1, SHA-256, SHA-384, and SHA-512 hashes",
+        "input": "Text Input",
+        "inputPlaceholder": "Enter text to hash...",
+        "results": "Hash Results",
+        "length": "Length",
+        "characters": "characters",
+        "note": "Note:",
+        "noteText": "All hashes are automatically generated as you type. These are cryptographic hash functions used for data integrity verification."
+    },
+    "deeplink": {
+        "title": "Générateur de liens profonds",
+        "description": "Construire et tester des liens profonds à ouvrir dans votre application mobile",
+        "scheme": "Schéma",
+        "host": "Hôte",
+        "pathPrefix": "Préfixe du chemin",
+        "queryParams": "Paramètres de requête",
+        "addParam": "Ajouter un paramètre",
+        "noParams": "Aucun paramètre ajouté",
+        "generatedUrl": "URL générée",
+        "openApp": "Ouvrir l'application",
+        "schemePlaceholder": "ex. myapp",
+        "hostPlaceholder": "ex. example.com",
+        "pathPlaceholder": "ex. /products/123",
+        "paramKey": "Clé",
+        "paramValue": "Valeur"
+    },
+    "jsMinifier": {
+        "title": "Minifieur JS",
+        "inputUrl": "URL d'entrée / Code",
+        "minifiedOutput": "Sortie minifiée",
+        "minify": "Minifier Javascript",
+        "mangle": "Mutiler les variables",
+        "compress": "Compresser",
+        "keepFnames": "Garder les noms de fonctions",
+        "copyCode": "Copier le code",
+        "download": "Télécharger .js",
+        "clear": "Effacer",
+        "error": "Une erreur s'est produite"
     },
     "storeValidator": {
-        "title": "App Store Validator",
-        "dropToValidate": "Drop images here to validate dimensions and size",
-        "invalidFileType": "Invalid file type. Allowed: {{allowed}}",
-        "widthError": "Width must be {{width}}px (found {{found}}px)",
-        "heightError": "Height must be {{height}}px (found {{found}}px)",
-        "minWidthError": "Width must be at least {{minWidth}}px (found {{found}}px)",
-        "minHeightError": "Height must be at least {{minHeight}}px (found {{found}}px)",
-        "fileTooLarge": "File too large. Max: {{max}}MB (found {{found}}MB)",
-        "failedToLoad": "Failed to load image",
-        "appIcon": "App Icon",
-        "featureGraphic": "Feature Graphic",
-        "phoneScreenshots": "Phone Screenshots",
-        "tablet7": "7\" Tablet",
-        "tablet10": "10\" Tablet",
+        "title": "Validateur de Store",
+        "dropToValidate": "Déposez les images ici pour valider les dimensions et la taille",
+        "invalidFileType": "Type de fichier invalide. Autorisé: {{allowed}}",
+        "widthError": "La largeur doit être de {{width}}px (trouvé {{found}}px)",
+        "heightError": "La hauteur doit être de {{height}}px (trouvé {{found}}px)",
+        "minWidthError": "La largeur doit être d'au moins {{minWidth}}px (trouvé {{found}}px)",
+        "minHeightError": "La hauteur doit être d'au moins {{minHeight}}px (trouvé {{found}}px)",
+        "fileTooLarge": "Fichier trop volumineux. Max: {{max}}Mo (trouvé {{found}}Mo)",
+        "failedToLoad": "Échec du chargement de l'image",
+        "transparencyError": "La transparence n'est pas autorisée pour ce type d'image",
+        "maxDimensionError": "La dimension dépasse {{max}}px (trouvé {{found}}px)",
+        "aspectRatioError": "Ratio d'aspect trop extrême (max 2:1)",
+        "squareError": "Les images carrées (1:1) ne sont pas autorisées",
+        "appIcon": "Icône de l'application",
+        "featureGraphic": "Graphique de fonctionnalité",
+        "phoneScreenshots": "Captures d'écran téléphone",
+        "tablet7": "Tablette 7\"",
+        "tablet10": "Tablette 10\"",
         "iphone65": "iPhone 6.5\"",
         "iphone55": "iPhone 5.5\"",
         "ipadPro": "iPad Pro",
-        "usingSpecs": "Using specs for <0>{{name}}</0>. Drag images to check dimensions and file size limits.",
-        "redIndicators": "Red indicators will show exactly why an asset is rejected (e.g., wrong resolution or file too large)."
+        "usingSpecs": "Utilisation des spécifications pour <0>{{name}}</0>. Faites glisser les images pour vérifier les dimensions et les limites de taille.",
+        "redIndicators": "Les indicateurs rouges montreront exactement pourquoi un actif est rejeté (par exemple, mauvaise résolution ou fichier trop volumineux)."
     }
 }

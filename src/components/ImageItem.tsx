@@ -90,7 +90,7 @@ export const ImageItem: React.FC<ImageItemProps> = ({ item, onRemove, onUpdate, 
                             {formatSize(item.processedBlob.size)}
                         </div>
                         <div className="text-xs text-green-700 dark:text-green-500">
-                            Saved {Math.round((1 - item.processedBlob.size / item.originalFile.size) * 100)}%
+                            {t('imageItem.savedPercentage', { percentage: Math.round((1 - item.processedBlob.size / item.originalFile.size) * 100) })}
                         </div>
                     </div>
                 )}
