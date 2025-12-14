@@ -258,10 +258,12 @@
         "copied": "¡Copiado!",
         "remove": "Eliminar",
         "ok": "OK",
-        "search": "Search...",
-        "favorites": "Favorites",
-        "allTools": "All Tools",
-        "noResults": "No results found"
+        "search": "Buscar...",
+        "favorites": "Favoritos",
+        "allTools": "Todas las herramientas",
+        "noResults": "No se encontraron resultados",
+        "home": "Inicio",
+        "tools": "Herramientas"
     },
     "encryption": {
         "title": "Herramienta de Cifrado/Descifrado",
@@ -595,5 +597,32 @@
         "transform": "Transformación",
         "glassmorphism": "Vidriomorfismo",
         "clipPath": "Recorte"
+    },
+    "densityConverter": {
+        "title": "Convertidor de Densidad",
+        "description": "Convierta dimensiones de píxeles entre diferentes densidades de pantalla (dp/pt ↔ px).",
+        "value": "Valor",
+        "unit": "Unidad de entrada",
+        "sourceDensity": "Densidad de origen (si la entrada es px)"
+    },
+    "screenshotFramer": {
+        "title": "Enmarcador de Capturas",
+        "description": "Cree maquetas de dispositivos profesionales para sus listados de App Store.",
+        "image": "Captura de pantalla",
+        "device": "Marco del dispositivo",
+        "background": "Fondo",
+        "padding": "Relleno",
+        "caption": "Título",
+        "download": "Descargar PNG"
+    },
+    "totp": {
+        "title": "Generador TOTP",
+        "description": "Genere códigos 2FA manualmente introduciendo su clave secreta.",
+        "secretLabel": "Clave Secreta (Base32)",
+        "secretHint": "Introduzca la clave proporcionada por el servicio (normalmente oculta tras el código QR).",
+        "clickCopy": "Clic para copiar"
+    },
+    "home": {
+        "subtitle": "Todas tus herramientas de desarrollador en un solo lugar."
     }
 }

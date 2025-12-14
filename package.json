@@ -1,7 +1,7 @@
 {
   "name": "dev-optimizer",
   "private": true,
-  "version": "1.0.19",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,7 @@
     "build:win": "tsc && vite build && electron-builder --win",
     "build:linux": "tsc && vite build && electron-builder --linux",
     "build:all": "tsc && vite build && electron-builder -mwl",
-    "build:web": "tsc && vite build",
+    "build:web": "tsc && cross-env IS_WEB_BUILD=true vite build",
     "deploy": "npm run build:web && firebase deploy",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
@@ -106,6 +106,7 @@
     "@typescript-eslint/parser": "^7.1.1",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.22",
+    "cross-env": "^10.1.0",
     "electron": "^30.0.1",
     "electron-builder": "^24.13.3",
     "eslint": "^8.57.0",

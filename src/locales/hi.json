@@ -258,10 +258,12 @@
         "copied": "कॉपी हो गया!",
         "remove": "हटाएं",
         "ok": "ठीक है",
-        "search": "Search...",
-        "favorites": "Favorites",
-        "allTools": "All Tools",
-        "noResults": "No results found"
+        "search": "खोजें...",
+        "favorites": "पसंदीदा",
+        "allTools": "सभी टूल्स",
+        "noResults": "कोई परिणाम नहीं मिला",
+        "home": "होम",
+        "tools": "टूल्स"
     },
     "encryption": {
         "title": "Encryption / Decryption Tool",
@@ -591,5 +593,52 @@
         "transform": "परिवर्तन",
         "glassmorphism": "ग्लासमॉर्फिज़्म",
         "clipPath": "क्लिप पथ"
+    },
+    "regexTester": {
+        "title": "Regex Tester",
+        "description": "Test and debug your regular expressions in real-time.",
+        "regexPattern": "Regex Pattern",
+        "testString": "Test String",
+        "testStringPlaceholder": "Paste your text here...",
+        "matchHighlight": "Match Highlight",
+        "matchCount": "{{count}} matches",
+        "matchDetails": "Match Details",
+        "noMatches": "No matches found",
+        "guide": {
+            "title": "Regex Cheat Sheet",
+            "anchors": "Anchors",
+            "classes": "Character Classes",
+            "quantifiers": "Quantifiers",
+            "groups": "Groups & Lookaround",
+            "common": "Common Patterns",
+            "description": "Quick reference for common regular expression patterns and syntax."
+        }
+    },
+    "densityConverter": {
+        "title": "घनत्व परिवर्तक",
+        "description": "विभिन्न स्क्रीन घनत्वों (dp/pt ↔ px) में पिक्सेल आयामों को परिवर्तित करें।",
+        "value": "मूल्य",
+        "unit": "इनपुट इकाई",
+        "sourceDensity": "स्रोत घनत्व (यदि इनपुट px है)"
+    },
+    "screenshotFramer": {
+        "title": "स्क्रीनशॉट फ्रेमर",
+        "description": "अपने ऐप स्टोर लिस्टिंग के लिए पेशेवर डिवाइस मॉकअप बनाएं।",
+        "image": "स्क्रीनशॉट",
+        "device": "डिवाइस फ्रेम",
+        "background": "पृष्ठभूमि",
+        "padding": "पैडिंग",
+        "caption": "शीर्षक",
+        "download": "PNG डाउनलोड करें"
+    },
+    "totp": {
+        "title": "TOTP जेनरेटर",
+        "description": "अपने गुप्त कुंजी दर्ज करके मैन्युअल रूप से 2FA कोड उत्पन्न करें।",
+        "secretLabel": "गुप्त कुंजी (Base32)",
+        "secretHint": "सेवा द्वारा प्रदान की गई कुंजी दर्ज करें (आमतौर पर QR कोड के पीछे छिपी होती है)।",
+        "clickCopy": "कॉपी करने के लिए क्लिक करें"
+    },
+    "home": {
+        "subtitle": "आपके सभी डेवलपर टूल्स एक ही जगह पर।"
     }
 }

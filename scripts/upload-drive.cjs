@@ -76,9 +76,22 @@ async function authorize() {
         scopes: SCOPES,
         keyfilePath: CREDENTIALS_PATH,
     });
+
     if (client.credentials) {
+        console.log('✅ Auth successful. Credentials received.');
+        if (!client.credentials.refresh_token) {
+            console.warn('⚠️ No refresh token received! Token handling might fail later.');
+        }
         await saveCredentials(client);
     }
+
+    // Verify immediately
+    const valid = await verifyClient(client);
+    if (!valid) {
+        console.error('❌ Immediate token verification failed!');
+        process.exit(1);
+    }
+
     return client;
 }
 

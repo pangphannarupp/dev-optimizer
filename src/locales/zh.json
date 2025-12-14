@@ -258,10 +258,12 @@
         "copied": "已复制！",
         "remove": "移除",
         "ok": "确定",
-        "search": "Search...",
-        "favorites": "Favorites",
-        "allTools": "All Tools",
-        "noResults": "No results found"
+        "search": "搜索...",
+        "favorites": "收藏",
+        "allTools": "所有工具",
+        "noResults": "未找到结果",
+        "home": "主页",
+        "tools": "工具"
     },
     "encryption": {
         "title": "加密/解密工具",
@@ -591,5 +593,32 @@
         "transform": "变换",
         "glassmorphism": "玻璃拟态",
         "clipPath": "裁剪路径"
+    },
+    "densityConverter": {
+        "title": "密度转换器",
+        "description": "在不同屏幕密度 (dp/pt ↔ px) 之间转换像素尺寸。",
+        "value": "数值",
+        "unit": "输入单位",
+        "sourceDensity": "源密度 (如果输入是 px)"
+    },
+    "screenshotFramer": {
+        "title": "截图加框",
+        "description": "为您的 App Store 列表创建专业的设备模型。",
+        "image": "截图",
+        "device": "设备边框",
+        "background": "背景",
+        "padding": "内边距",
+        "caption": "标题",
+        "download": "下载 PNG"
+    },
+    "totp": {
+        "title": "TOTP 生成器",
+        "description": "通过输入密钥手动生成 2FA 代码。",
+        "secretLabel": "密钥 (Base32)",
+        "secretHint": "输入服务提供的密钥 (通常隐藏在 QR 码后面)。",
+        "clickCopy": "点击复制"
+    },
+    "home": {
+        "subtitle": "您所有的开发者工具都在一个地方。"
     }
 }

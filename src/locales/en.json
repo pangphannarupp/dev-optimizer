@@ -351,7 +351,9 @@
         "search": "Search...",
         "favorites": "Favorites",
         "allTools": "All Tools",
-        "noResults": "No results found"
+        "noResults": "No results found",
+        "home": "Home",
+        "tools": "Tools"
     },
     "jsonFormatter": {
         "title": "JSON Formatter",
@@ -578,6 +580,34 @@
             "description": "Quick reference for common regular expression patterns and syntax."
         }
     },
+    "unixConverter": {
+        "title": "Unix Timestamp Converter",
+        "description": "Convert between Unix timestamps and human-readable dates."
+    },
+    "densityConverter": {
+        "title": "Density Converter",
+        "description": "Convert pixel dimensions across different screen densities (dp/pt ↔ px).",
+        "value": "Value",
+        "unit": "Input Unit",
+        "sourceDensity": "Source Density (if input is px)"
+    },
+    "screenshotFramer": {
+        "title": "Screenshot Framer",
+        "description": "Create professional device mockups for your app store listings.",
+        "image": "Screenshot",
+        "device": "Device Frame",
+        "background": "Background",
+        "padding": "Padding",
+        "caption": "Caption",
+        "download": "Download PNG"
+    },
+    "totp": {
+        "title": "TOTP Generator",
+        "description": "Generate 2FA codes manually by entering your secret key.",
+        "secretLabel": "Secret Key (Base32)",
+        "secretHint": "Enter the key provided by the service (usually hidden behind the QR code).",
+        "clickCopy": "Click to copy"
+    },
     "cssGenerator": {
         "title": "CSS Generator",
         "boxShadow": "Box Shadow",
@@ -588,5 +618,8 @@
         "transform": "Transform",
         "glassmorphism": "Glassmorphism",
         "clipPath": "Clip Path"
+    },
+    "home": {
+        "subtitle": "All your developer tools in one place."
     }
 }

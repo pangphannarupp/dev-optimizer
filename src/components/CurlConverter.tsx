@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Copy, Upload, Zap } from 'lucide-react';
+import { Copy, Zap } from 'lucide-react';
 import * as curlConverter from 'curlconverter';
 import { Collection, Item, ItemGroup } from 'postman-collection';
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -132,32 +132,39 @@ const CurlConverter = () => {
     const [requests, setRequests] = useState<any[]>([]);
     const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState<'code' | 'headers' | 'body'>('code');
+    const [parsedRequest, setParsedRequest] = useState<any>(null);
 
     useEffect(() => {
         if (!curlInput.trim()) {
             setGeneratedCode('');
+            setParsedRequest(null);
             return;
         }
 
+        const converter = curlConverter as any;
+
+        // Parse Request Details
+        try {
+            if (converter.toJsonString) {
+                const jsonStr = converter.toJsonString(curlInput);
+                const json = JSON.parse(jsonStr);
+                setParsedRequest(json);
+            }
+        } catch (e) {
+            console.warn('Failed to parse cURL details', e);
+            setParsedRequest(null);
+        }
+
+        // Generate Code
         try {
             let code = '';
-            // Depending on language, call specific function
-            // Note: curlconverter usually has specific exports like toPython, toJava, etc.
-            // TypeScript types for curlconverter might be tricky if not strict.
-            // We'll cast to any for dynamic access or use specific calls.
-
-            // Map our Lang to Converter Function Name
-            // python -> toPython
-            // javascript -> toJavaScript (fetch usually)
-            // node -> toNode (node-fetch)
-            const converter = curlConverter as any;
-
             switch (targetLang) {
                 case 'python': code = converter.toPython(curlInput); break;
                 case 'javascript': code = converter.toJavaScript(curlInput); break;
                 case 'node': code = converter.toNode(curlInput); break;
                 case 'java': code = converter.toJava(curlInput); break;
-                case 'android': code = converter.toJava(curlInput); break; // Usually just Java, Android specific might need adjustments
+                case 'android': code = converter.toJava(curlInput); break;
                 case 'kotlin': code = converter.toKotlin ? converter.toKotlin(curlInput) : '// Kotlin generator not available'; break;
                 case 'swift': code = converter.toSwift(curlInput); break;
                 case 'objc': code = converter.toObjectiveC ? converter.toObjectiveC(curlInput) : '// Objective-C generator not available'; break;
@@ -213,7 +220,13 @@ const CurlConverter = () => {
     };
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(generatedCode);
+        if (activeTab === 'code') {
+            navigator.clipboard.writeText(generatedCode);
+        } else if (activeTab === 'body' && parsedRequest?.data) {
+            navigator.clipboard.writeText(JSON.stringify(parsedRequest.data, null, 2));
+        } else if (activeTab === 'headers' && parsedRequest?.headers) {
+            navigator.clipboard.writeText(JSON.stringify(parsedRequest.headers, null, 2));
+        }
     };
 
     return (
@@ -272,41 +285,130 @@ const CurlConverter = () => {
                 {/* Right Panel: Output */}
                 <div className="flex-1 flex flex-col min-h-0 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
                     <div className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
-                        <select
-                            value={targetLang}
-                            onChange={(e) => setTargetLang(e.target.value as Language)}
-                            className="bg-transparent border-none text-sm font-medium text-gray-700 dark:text-gray-300 focus:ring-0 cursor-pointer"
-                        >
-                            <option value="python">Python (Requests)</option>
-                            <option value="javascript">JavaScript (Fetch)</option>
-                            <option value="node">Node.js (Fetch)</option>
-                            <option value="java">Java (HttpURLConnection)</option>
-                            <option value="android">Android (Java)</option>
-                            <option value="kotlin">Android (Kotlin)</option>
-                            <option value="swift">iOS (Swift)</option>
-                            <option value="objc">iOS (Objective-C)</option>
-                            <option value="dart">Dart (Http)</option>
-                            <option value="php">PHP</option>
-                            <option value="go">Go</option>
-                            <option value="rust">Rust</option>
-                        </select>
-                        <button
-                            onClick={handleCopy}
-                            className="p-1.5 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                            title="Copy Code"
-                        >
-                            <Copy size={16} />
-                        </button>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => setActiveTab('code')}
+                                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${activeTab === 'code'
+                                    ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                                    : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                                    }`}
+                            >
+                                Code
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('headers')}
+                                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${activeTab === 'headers'
+                                    ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                                    : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                                    }`}
+                            >
+                                Headers
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('body')}
+                                className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${activeTab === 'body'
+                                    ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                                    : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+                                    }`}
+                            >
+                                Body
+                            </button>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            {activeTab === 'code' && (
+                                <select
+                                    value={targetLang}
+                                    onChange={(e) => setTargetLang(e.target.value as Language)}
+                                    className="bg-transparent border-none text-sm font-medium text-gray-700 dark:text-gray-300 focus:ring-0 cursor-pointer"
+                                >
+                                    <option value="python">Python (Requests)</option>
+                                    <option value="javascript">JavaScript (Fetch)</option>
+                                    <option value="node">Node.js (Fetch)</option>
+                                    <option value="java">Java (HttpURLConnection)</option>
+                                    <option value="android">Android (Java)</option>
+                                    <option value="kotlin">Android (Kotlin)</option>
+                                    <option value="swift">iOS (Swift)</option>
+                                    <option value="objc">iOS (Objective-C)</option>
+                                    <option value="dart">Dart (Http)</option>
+                                    <option value="php">PHP</option>
+                                    <option value="go">Go</option>
+                                    <option value="rust">Rust</option>
+                                </select>
+                            )}
+                            <button
+                                onClick={handleCopy}
+                                className="p-1.5 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                                title="Copy"
+                            >
+                                <Copy size={16} />
+                            </button>
+                        </div>
                     </div>
 
-                    <div className="flex-1 overflow-auto bg-[#1e1e1e]">
-                        <SyntaxHighlighter
-                            language={targetLang === 'node' || targetLang === 'android' ? 'javascript' : (targetLang === 'objc' ? 'objectivec' : targetLang)} // mapping fallback
-                            style={vs2015}
-                            customStyle={{ margin: 0, height: '100%', fontSize: '14px', lineHeight: '1.5' }}
-                        >
-                            {generatedCode || '// Generated code will appear here'}
-                        </SyntaxHighlighter>
+                    <div className="flex-1 overflow-auto bg-[#1e1e1e] relative">
+                        {/* Display Method & URL if parsed */}
+                        {parsedRequest && (
+                            <div className="absolute top-0 left-0 right-0 bg-gray-800/90 text-white text-xs px-2 py-1 border-b border-gray-700 flex gap-2 z-10 backdrop-blur-sm">
+                                <span className={`font-bold px-1 rounded ${parsedRequest.method === 'get' ? 'bg-green-600' :
+                                    parsedRequest.method === 'post' ? 'bg-yellow-600' :
+                                        parsedRequest.method === 'put' ? 'bg-blue-600' :
+                                            parsedRequest.method === 'delete' ? 'bg-red-600' : 'bg-gray-600'
+                                    }`}>{parsedRequest.method.toUpperCase()}</span>
+                                <span className="truncate opacity-80" title={parsedRequest.url}>{parsedRequest.url}</span>
+                            </div>
+                        )}
+
+                        {activeTab === 'code' && (
+                            <div className={parsedRequest ? 'pt-8 h-full' : 'h-full'}>
+                                <SyntaxHighlighter
+                                    language={targetLang === 'node' || targetLang === 'android' ? 'javascript' : (targetLang === 'objc' ? 'objectivec' : targetLang)} // mapping fallback
+                                    style={vs2015}
+                                    customStyle={{ margin: 0, height: '100%', fontSize: '14px', lineHeight: '1.5' }}
+                                >
+                                    {generatedCode || '// Generated code will appear here'}
+                                </SyntaxHighlighter>
+                            </div>
+                        )}
+
+                        {activeTab === 'headers' && (
+                            <div className={`p-4 text-gray-300 font-mono text-sm ${parsedRequest ? 'pt-10' : ''}`}>
+                                {parsedRequest?.headers ? (
+                                    <table className="w-full text-left border-collapse">
+                                        <thead>
+                                            <tr className="border-b border-gray-700 text-gray-500">
+                                                <th className="py-2 pr-4 w-1/3">Key</th>
+                                                <th className="py-2">Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Object.entries(parsedRequest.headers).map(([k, v]) => (
+                                                <tr key={k} className="border-b border-gray-700/50">
+                                                    <td className="py-2 pr-4 text-blue-400">{k}</td>
+                                                    <td className="py-2 text-green-400 break-all">{String(v)}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    <p className="text-gray-500 italic">No headers found or invalid cURL.</p>
+                                )}
+                            </div>
+                        )}
+
+                        {activeTab === 'body' && (
+                            <div className={`p-4 text-gray-300 font-mono text-sm ${parsedRequest ? 'pt-10' : ''}`}>
+                                {parsedRequest?.data ? (
+                                    <pre className="whitespace-pre-wrap">
+                                        {typeof parsedRequest.data === 'string'
+                                            ? parsedRequest.data
+                                            : JSON.stringify(parsedRequest.data, null, 2)}
+                                    </pre>
+                                ) : (
+                                    <p className="text-gray-500 italic">No body data found.</p>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

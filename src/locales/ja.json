@@ -258,10 +258,12 @@
         "copied": "コピーしました！",
         "remove": "削除",
         "ok": "OK",
-        "search": "Search...",
-        "favorites": "Favorites",
-        "allTools": "All Tools",
-        "noResults": "No results found"
+        "search": "検索...",
+        "favorites": "お気に入り",
+        "allTools": "すべてのツール",
+        "noResults": "結果が見つかりません",
+        "home": "ホーム",
+        "tools": "ツール"
     },
     "encryption": {
         "title": "Encryption / Decryption Tool",
@@ -591,5 +593,32 @@
         "transform": "変形",
         "glassmorphism": "グラスモーフィズム",
         "clipPath": "クリップパス"
+    },
+    "densityConverter": {
+        "title": "密度コンバーター",
+        "description": "異なる画面密度 (dp/pt ↔ px) 間でピクセル寸法を変換します。",
+        "value": "値",
+        "unit": "入力単位",
+        "sourceDensity": "ソース密度 (入力がpxの場合)"
+    },
+    "screenshotFramer": {
+        "title": "スクリーンショットフレーマー",
+        "description": "App Storeのリスト用にプロフェッショナルなデバイスモックアップを作成します。",
+        "image": "スクリーンショット",
+        "device": "デバイスフレーム",
+        "background": "背景",
+        "padding": "パディング",
+        "caption": "キャプション",
+        "download": "PNGをダウンロード"
+    },
+    "totp": {
+        "title": "TOTP ジェネレーター",
+        "description": "秘密鍵を入力して2FAコードを手動で生成します。",
+        "secretLabel": "秘密鍵 (Base32)",
+        "secretHint": "サービスから提供されたキーを入力します (通常はQRコードの後ろに隠されています)。",
+        "clickCopy": "クリックしてコピー"
+    },
+    "home": {
+        "subtitle": "すべての開発者ツールを1か所に。"
     }
 }

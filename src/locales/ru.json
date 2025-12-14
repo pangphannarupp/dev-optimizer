@@ -258,10 +258,12 @@
         "copied": "Скопировано!",
         "remove": "Удалить",
         "ok": "OK",
-        "search": "Search...",
-        "favorites": "Favorites",
-        "allTools": "All Tools",
-        "noResults": "No results found"
+        "search": "Поиск...",
+        "favorites": "Избранное",
+        "allTools": "Все инструменты",
+        "noResults": "Результатов не найдено",
+        "home": "Главная",
+        "tools": "Инструменты"
     },
     "encryption": {
         "title": "Инструмент Шифрования/Расшифровки",
@@ -591,5 +593,32 @@
         "transform": "Трансформация",
         "glassmorphism": "Глассморфизм",
         "clipPath": "Обрезка"
+    },
+    "densityConverter": {
+        "title": "Конвертер плотности",
+        "description": "Преобразование размеров пикселей для разных плотностей экрана (dp/pt ↔ px).",
+        "value": "Значение",
+        "unit": "Единица ввода",
+        "sourceDensity": "Исходная плотность (если ввод в px)"
+    },
+    "screenshotFramer": {
+        "title": "Создание скриншотов",
+        "description": "Создавайте профессиональные макеты устройств для App Store.",
+        "image": "Скриншот",
+        "device": "Рамка устройства",
+        "background": "Фон",
+        "padding": "Отступ",
+        "caption": "Заголовок",
+        "download": "Скачать PNG"
+    },
+    "totp": {
+        "title": "TOTP Генератор",
+        "description": "Генерация 2FA кодов вручную по секретному ключу.",
+        "secretLabel": "Секретный ключ (Base32)",
+        "secretHint": "Введите ключ, предоставленный сервисом (обычно скрыт за QR-кодом).",
+        "clickCopy": "Нажмите, чтобы скопировать"
+    },
+    "home": {
+        "subtitle": "Все ваши инструменты разработчика в одном месте."
     }
 }

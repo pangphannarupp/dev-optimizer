@@ -258,10 +258,12 @@
         "copied": "Kopiert!",
         "remove": "Entfernen",
         "ok": "OK",
-        "search": "Search...",
-        "favorites": "Favorites",
-        "allTools": "All Tools",
-        "noResults": "No results found"
+        "search": "Suchen...",
+        "favorites": "Favoriten",
+        "allTools": "Alle Werkzeuge",
+        "noResults": "Keine Ergebnisse gefunden",
+        "home": "Startseite",
+        "tools": "Werkzeuge"
     },
     "encryption": {
         "title": "Verschlüsselungs-/Entschlüsselungstool",
@@ -595,5 +597,32 @@
         "transform": "Transformation",
         "glassmorphism": "Glasmorphismus",
         "clipPath": "Beschneidungspfad"
+    },
+    "densityConverter": {
+        "title": "Dichterechner",
+        "description": "Konvertieren Sie Pixelabmessungen über verschiedene Bildschirmdichten (dp/pt ↔ px).",
+        "value": "Wert",
+        "unit": "Eingabeeinheit",
+        "sourceDensity": "Quelldichte (wenn Eingabe px ist)"
+    },
+    "screenshotFramer": {
+        "title": "Screenshot Framer",
+        "description": "Erstellen Sie professionelle Gerätemockups für Ihre App Store Listings.",
+        "image": "Screenshot",
+        "device": "Geräte-Rahmen",
+        "background": "Hintergrund",
+        "padding": "Abstand",
+        "caption": "Beschriftung",
+        "download": "PNG herunterladen"
+    },
+    "totp": {
+        "title": "TOTP Generator",
+        "description": "Generieren Sie 2FA-Codes manuell durch Eingabe Ihres geheimen Schlüssels.",
+        "secretLabel": "Geheimer Schlüssel (Base32)",
+        "secretHint": "Geben Sie den vom Dienst bereitgestellten Schlüssel ein (normalerweise hinter dem QR-Code versteckt).",
+        "clickCopy": "Klicken zum Kopieren"
+    },
+    "home": {
+        "subtitle": "Alle Ihre Entwicklertools an einem Ort."
     }
 }

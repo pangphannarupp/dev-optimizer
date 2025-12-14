@@ -23,6 +23,10 @@ import { LottiePlayer } from './components/LottiePlayer';
 import { JsMinifier } from './components/JsMinifier';
 import { DeeplinkGenerator } from './components/DeeplinkGenerator';
 import CurlConverter from './components/CurlConverter';
+import UnixTimestampConverter from './components/UnixTimestampConverter';
+import DensityConverter from './components/DensityConverter';
+import { ScreenshotFramer } from './components/ScreenshotFramer';
+import { TotpGenerator } from './components/TotpGenerator';
 import RegexTester from './components/RegexTester';
 import { CssGenerator } from './components/CssGenerator';
 import { DownloadScreen } from './components/DownloadScreen';
@@ -35,13 +39,12 @@ import { Play, Trash2 } from 'lucide-react';
 import './i18n';
 import { useTranslation } from 'react-i18next';
 
+import { HomeMenu } from './components/HomeMenu';
+import { ToolId } from './config/tools';
 import { WhatsNewSnackbar } from './components/WhatsNewSnackbar';
 
 function AppContent() {
-  const [activeTab, setActiveTab] = useState<'optimizer' | 'generator' | 'enhancer' | 'editor' | 'qr' | 'svg-drawable' | 'base64' | 'json' | 'csv-json' | 'jwt' | 'encryption' | 'sha' | 'validate-translation' | 'source-compare' | 'store-validator' | 'lottie-player' | 'js-minifier' | 'deeplink-generator' | 'curl-converter'
-    | 'regex-tester'
-    | 'css-generator'
-    | 'download'>('optimizer');
+  const [activeTab, setActiveTab] = useState<ToolId | 'home'>('home');
   const [images, setImages] = useState<ProcessedImage[]>([]);
   const [defaultFormat, setDefaultFormat] = useState<'image/jpeg' | 'image/png' | 'image/webp'>('image/webp');
   const [defaultQuality, setDefaultQuality] = useState(0.8);
@@ -144,39 +147,60 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex transition-colors">
-      <Sidebar
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        onSettingsClick={() => setIsSettingsOpen(true)}
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-      />
+      {activeTab !== 'home' && (
+        <Sidebar
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          onSettingsClick={() => setIsSettingsOpen(true)}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
+      )}
 
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        {/* Mobile Header */}
-        <div className="md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-gray-800 dark:text-white">{t('app.title')}</h1>
-          <button
-            onClick={() => setIsSidebarOpen(true)}
-            className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-          </button>
-        </div>
-        <div className="flex-1 overflow-y-auto relative">
+        {/* Mobile Header - Hide on Home */}
+        {activeTab !== 'home' && (
+          <div className="md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
+            <h1 className="text-lg font-bold text-gray-800 dark:text-white">{t('app.title')}</h1>
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        )}
+        <div className="flex-1 h-full overflow-hidden flex flex-col relative">
           <AnimatePresence mode="wait">
-            {activeTab === 'optimizer' ? (
+            {activeTab === 'home' ? (
+              <motion.main
+                key="home"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-hidden"
+              >
+                <HomeMenu
+                  onNavigate={(id) => {
+                    setActiveTab(id);
+                    setIsSidebarOpen(false);
+                  }}
+                  onSettingsClick={() => setIsSettingsOpen(true)}
+                />
+              </motion.main>
+            ) : activeTab === 'optimizer' ? (
               <motion.div
                 key="optimizer"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="h-full"
+                className="h-full overflow-y-auto"
               >
                 <SettingsPanel
                   defaultFormat={defaultFormat}
@@ -243,7 +267,7 @@ function AppContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="p-6 h-full"
+                className="p-6 h-full overflow-y-auto"
               >
                 <IconGenerator />
               </motion.main>
@@ -254,7 +278,7 @@ function AppContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="p-6 h-full"
+                className="p-6 h-full overflow-y-auto"
               >
                 <ImageEnhancer />
               </motion.main>
@@ -265,7 +289,7 @@ function AppContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="p-6 h-full"
+                className="p-6 h-full overflow-y-auto"
               >
                 <ImageEditor />
               </motion.main>
@@ -276,7 +300,7 @@ function AppContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="p-6 h-full"
+                className="p-6 h-full overflow-y-auto"
               >
                 <QRGenerator />
               </motion.main>
@@ -287,7 +311,7 @@ function AppContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="p-6 h-full"
+                className="p-6 h-full overflow-y-auto"
               >
                 <SvgToDrawableConverter />
               </motion.main>
@@ -298,7 +322,7 @@ function AppContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="p-6 h-full"
+                className="p-6 h-full overflow-y-auto"
               >
                 <JSONFormatter />
               </motion.main>
@@ -309,7 +333,7 @@ function AppContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="p-6 h-full"
+                className="p-6 h-full overflow-y-auto"
               >
                 <CsvToJsonConverter />
               </motion.main>
@@ -320,7 +344,7 @@ function AppContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="p-6 h-full"
+                className="p-6 h-full overflow-y-auto"
               >
                 <JWTDecoder />
               </motion.main>
@@ -331,7 +355,7 @@ function AppContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="p-6 h-full"
+                className="p-6 h-full overflow-y-auto"
               >
                 <EncryptionTool />
               </motion.main>
@@ -342,7 +366,7 @@ function AppContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="p-6 h-full"
+                className="p-6 h-full overflow-y-auto"
               >
                 <SHAGenerator />
               </motion.main>
@@ -353,7 +377,7 @@ function AppContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="h-full"
+                className="h-full overflow-y-auto"
               >
                 <ValidateTranslation />
               </motion.main>
@@ -364,7 +388,7 @@ function AppContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="h-full"
+                className="h-full overflow-y-auto"
               >
                 <SourceComparator />
               </motion.main>
@@ -435,7 +459,38 @@ function AppContent() {
                 <CurlConverter />
               </motion.main>
             ) : activeTab === 'css-generator' ? (
-              <CssGenerator />
+              <motion.main
+                key="css-generator"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <CssGenerator />
+              </motion.main>
+            ) : activeTab === 'unix-timestamp' ? (
+              <motion.main
+                key="unix-timestamp"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <UnixTimestampConverter />
+              </motion.main>
+            ) : activeTab === 'density-converter' ? (
+              <motion.main
+                key="density-converter"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <DensityConverter />
+              </motion.main>
             ) : activeTab === 'regex-tester' ? (
               <motion.main
                 key="regex-tester"
@@ -447,6 +502,28 @@ function AppContent() {
               >
                 <RegexTester />
               </motion.main>
+            ) : activeTab === 'screenshot-framer' ? (
+              <motion.main
+                key="screenshot-framer"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <ScreenshotFramer />
+              </motion.main>
+            ) : activeTab === 'totp-generator' ? (
+              <motion.main
+                key="totp-generator"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <TotpGenerator />
+              </motion.main>
             ) : (
               <motion.main
                 key="base64"
@@ -454,7 +531,7 @@ function AppContent() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="p-6 h-full"
+                className="p-6 h-full overflow-y-auto"
               >
                 <ImageToBase64 />
               </motion.main>

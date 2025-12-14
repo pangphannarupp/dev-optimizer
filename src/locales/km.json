@@ -353,7 +353,9 @@
         "search": "ស្វែងរក...",
         "favorites": "ចំណូលចិត្ត",
         "allTools": "ឧបករណ៍ទាំងអស់",
-        "noResults": "រកមិនឃើញលទ្ធផលទេ"
+        "noResults": "រកមិនឃើញលទ្ធផលទេ",
+        "home": "ទំព័រដើម",
+        "tools": "ឧបករណ៍"
     },
     "jsonFormatter": {
         "title": "កំណត់ទ្រង់ JSON",
@@ -591,5 +593,45 @@
         "transform": "បំប្លែង",
         "glassmorphism": "បែបកញ្ចក់",
         "clipPath": "កាត់រូបរាង"
+    },
+    "regexTester": {
+        "title": "អ្នកសាកល្បង Regex",
+        "inputPlaceholder": "បញ្ចូលអត្ថបទសាកល្បងនៅទីនេះ...",
+        "regexPlaceholder": "បញ្ចូលកន្សោមធម្មតា...",
+        "flags": "Flags",
+        "matches": "ការផ្គូផ្គង",
+        "noMatches": "រកមិនឃើញការផ្គូផ្គងទេ។",
+        "cheatSheet": "សន្លឹកបន្លំ",
+        "commonPatterns": "លំនាំទូទៅ",
+        "matchInfo": "ព័ត៌មានផ្គូផ្គង",
+        "group": "ក្រុម",
+        "index": "លិបិក្រម"
+    },
+    "densityConverter": {
+        "title": "កម្មវិធីបម្លែង ដង់ស៊ីតេ",
+        "description": "បម្លែងវិមាត្រភីកសែលឆ្លងកាត់ដង់ស៊ីតេអេក្រង់ផ្សេងៗគ្នា (dp/pt ↔ px) ។",
+        "value": "តម្លៃ",
+        "unit": "ឯកតាបញ្ចូល",
+        "sourceDensity": "ដង់ស៊ីតេប្រភព (ប្រសិនបើបញ្ចូលជា px)"
+    },
+    "screenshotFramer": {
+        "title": "Screenshot Framer",
+        "description": "បង្កើតគំរូឧបករណ៍ដែលមានជំនាញវិជ្ជាជីវៈសម្រាប់ការចុះបញ្ជី App Store របស់អ្នក។",
+        "image": "រូបថតអេក្រង់",
+        "device": "ស៊ុមឧបករណ៍",
+        "background": "ផ្ទៃខាងក្រោយ",
+        "padding": "គម្លាត",
+        "caption": "ចំណងជើង",
+        "download": "ទាញយក PNG"
+    },
+    "totp": {
+        "title": "TOTP Generator",
+        "description": "បង្កើតកូដ 2FA ដោយដៃដោយបញ្ចូលកូនសោសម្ងាត់របស់អ្នក។",
+        "secretLabel": "កូនសោសម្ងាត់ (Base32)",
+        "secretHint": "បញ្ចូលកូនសោដែលផ្តល់ដោយសេវាកម្ម (ជាធម្មតាត្រូវបានលាក់នៅពីក្រោយ QR code)។",
+        "clickCopy": "ចុចដើម្បីចម្លង"
+    },
+    "home": {
+        "subtitle": "ឧបករណ៍អ្នកអភិវឌ្ឍន៍ទាំងអស់នៅកន្លែងតែមួយ។"
     }
 }

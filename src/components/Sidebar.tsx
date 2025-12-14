@@ -1,11 +1,13 @@
-import { Image as ImageIcon, Layers, Sparkles, QrCode, FileCode, Settings, X, Code, Key, Lock, Hash, FileUp, Split, Film, Search, Star, Link, Download, Zap, ScanSearch, Palette } from 'lucide-react';
+import { Star, X, Search, Home, Settings } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import AppLogo from '../assets/icon.png';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
+import { useTools, ToolId } from '../config/tools';
+import { useFavorites } from '../hooks/useFavorites';
 
-export type TabType = 'optimizer' | 'generator' | 'enhancer' | 'editor' | 'qr' | 'svg-drawable' | 'base64' | 'json' | 'csv-json' | 'jwt' | 'encryption' | 'sha' | 'validate-translation' | 'source-compare' | 'store-validator' | 'lottie-player' | 'js-minifier' | 'deeplink-generator' | 'curl-converter' | 'regex-tester' | 'css-generator' | 'download';
+export type TabType = ToolId | 'home';
 
 interface SidebarProps {
     activeTab: TabType;
@@ -18,50 +20,15 @@ interface SidebarProps {
 export function Sidebar({ activeTab, onTabChange, onSettingsClick, isOpen, onClose }: SidebarProps) {
     const { t } = useTranslation();
     const [searchQuery, setSearchQuery] = useState('');
-    const [favorites, setFavorites] = useState<string[]>(() => {
-        try {
-            const saved = localStorage.getItem('sidebar_favorites');
-            return saved ? JSON.parse(saved) : [];
-        } catch (e) {
-            return [];
-        }
-    });
+    const toolList = useTools();
+    const { favorites, toggleFavorite, isFavorite } = useFavorites();
 
-    useEffect(() => {
-        localStorage.setItem('sidebar_favorites', JSON.stringify(favorites));
-    }, [favorites]);
-
-    const toggleFavorite = (id: string, e: React.MouseEvent) => {
+    const handleToggleFavorite = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
-        setFavorites(prev =>
-            prev.includes(id) ? prev.filter(fid => fid !== id) : [...prev, id]
-        );
+        toggleFavorite(id);
     };
 
-    const navItems = useMemo(() => [
-        { id: 'optimizer', icon: ImageIcon, label: t('app.optimizerTab') },
-        { id: 'generator', icon: Layers, label: t('app.generatorTab') },
-        { id: 'enhancer', icon: Sparkles, label: t('app.enhancerTab') },
-        // { id: 'editor', icon: Edit3, label: t('app.editorTab') },
-        { id: 'source-compare', icon: Split, label: t('sourceCompare.title') },
-        { id: 'lottie-player', icon: Film, label: t('lottie.title', 'Lottie Player') },
-        { id: 'store-validator', icon: Layers, label: t('app.storeValidatorTab') },
-        { id: 'js-minifier', icon: FileCode, label: t('jsMinifier.title', 'JS Minifier') },
-        { id: 'curl-converter', icon: Zap, label: t('curlConverter.title', 'CURL Converter') },
-        { id: 'regex-tester', icon: ScanSearch, label: t('regexTester.title', 'Regex Tester') },
-        { id: 'css-generator', icon: Palette, label: t('cssGenerator.title', 'CSS Generator') },
-        { id: 'deeplink-generator', icon: Link, label: t('deeplink.title', 'Deeplink Generator') },
-        { id: 'qr', icon: QrCode, label: t('app.qrTab') },
-        { id: 'svg-drawable', icon: FileCode, label: t('app.svgTab') },
-        { id: 'base64', icon: FileCode, label: t('app.base64Tab') },
-        { id: 'json', icon: Code, label: t('app.jsonTab') },
-        { id: 'csv-json', icon: FileCode, label: t('app.csvJsonTab') },
-        { id: 'validate-translation', icon: FileUp, label: t('app.validateTranslation', 'Validate Translation') },
-        { id: 'jwt', icon: Key, label: t('app.jwtTab') },
-        { id: 'encryption', icon: Lock, label: t('app.encryptionTab') },
-        { id: 'sha', icon: Hash, label: t('app.shaTab') },
-        { id: 'download', icon: Download, label: t('app.downloadTab', 'Download App') },
-    ], [t]);
+    const navItems = useMemo(() => toolList, [toolList]);
 
     const filteredItems = useMemo(() => {
         if (!searchQuery) return navItems;
@@ -74,47 +41,40 @@ export function Sidebar({ activeTab, onTabChange, onSettingsClick, isOpen, onClo
         return navItems.filter(item => favorites.includes(item.id));
     }, [navItems, favorites]);
 
-    const renderLink = (item: typeof navItems[0]) => (
-        <motion.button
-            key={item.id}
-            onClick={() => {
-                onTabChange(item.id as TabType);
-                onClose();
-            }}
-            whileHover={{ scale: 1.02, x: 4 }}
-            whileTap={{ scale: 0.98 }}
-            className={clsx(
-                "group w-full flex items-center justify-between px-4 py-3 rounded-lg text-sm font-medium transition-colors relative text-left",
-                activeTab === item.id
-                    ? "text-blue-600 dark:text-blue-400"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-            )}
-        >
-            {activeTab === item.id && (
-                <motion.div
-                    layoutId="activeTab"
-                    className="absolute inset-0 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
-                    initial={false}
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                />
-            )}
-            <span className="relative z-10 flex items-center gap-3">
-                <item.icon size={20} />
-                {item.label}
-            </span>
-            <span
-                onClick={(e) => toggleFavorite(item.id, e)}
+    const renderLink = (item: { id: ToolId; icon: any; label: string }) => {
+        const isFav = isFavorite(item.id);
+        const isActive = activeTab === item.id;
+
+        return (
+            <motion.button
+                key={item.id}
+                onClick={() => {
+                    onTabChange(item.id);
+                    onClose();
+                }}
+                whileHover={{ scale: 1.02, x: 4 }}
+                whileTap={{ scale: 0.98 }}
                 className={clsx(
-                    "relative z-20 p-1 rounded-md transition-opacity duration-200",
-                    favorites.includes(item.id)
-                        ? "opacity-100 text-yellow-500 hover:text-yellow-600"
-                        : "opacity-0 group-hover:opacity-100 text-gray-400 hover:text-yellow-500"
+                    "group w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors relative mb-1 text-left",
+                    isActive
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-200"
                 )}
             >
-                <Star size={16} fill={favorites.includes(item.id) ? "currentColor" : "none"} />
-            </span>
-        </motion.button>
-    );
+                <item.icon size={20} className={clsx("transition-transform group-hover:scale-110", isActive && "text-blue-600 dark:text-blue-400")} />
+                <span className="flex-1 truncate">{item.label}</span>
+                <div
+                    onClick={(e) => handleToggleFavorite(item.id, e)}
+                    className={clsx(
+                        "opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700",
+                        isFav && "opacity-100 text-yellow-500"
+                    )}
+                >
+                    <Star size={16} fill={isFav ? "currentColor" : "none"} />
+                </div>
+            </motion.button >
+        );
+    };
 
     const sidebarContent = (
         <div className="flex flex-col h-full">
@@ -157,6 +117,30 @@ export function Sidebar({ activeTab, onTabChange, onSettingsClick, isOpen, onClo
                     </>
                 ) : (
                     <>
+                        <motion.button
+                            key="home"
+                            onClick={() => {
+                                onTabChange('home');
+                                onClose();
+                            }}
+                            whileHover={{ scale: 1.02, x: 4 }}
+                            whileTap={{ scale: 0.98 }}
+                            className={clsx(
+                                "group w-full flex items-center gap-3 px-4 py-3 mb-4 rounded-lg text-sm font-medium transition-colors relative text-left",
+                                activeTab === 'home'
+                                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+                                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-200"
+                            )}
+                        >
+                            <Home size={20} />
+                            {t('common.home', 'Home')}
+                        </motion.button>
+
+                        <h3 className="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 mt-4">
+                            {t('common.tools', 'Tools')}
+                        </h3>
+
+                        {/* Favorites */}
                         {favoriteItems.length > 0 && (
                             <div className="mb-6">
                                 <h3 className="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">
@@ -166,6 +150,7 @@ export function Sidebar({ activeTab, onTabChange, onSettingsClick, isOpen, onClo
                             </div>
                         )}
 
+                        {/* All Tools */}
                         <div>
                             {favoriteItems.length > 0 && (
                                 <h3 className="px-4 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">

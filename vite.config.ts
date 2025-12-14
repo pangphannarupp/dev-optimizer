@@ -8,25 +8,38 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 export default defineConfig({
   plugins: [
     react(),
-    nodePolyfills(),
-    // Temporarily disabled for testing
-    electron({
+    nodePolyfills({
+      protocolImports: true,
+      globals: {
+        Buffer: true,
+        global: true,
+        process: true,
+      },
+    }),
+    // Only enable electron plugin if NOT a web build
+    !process.env.IS_WEB_BUILD && electron({
       main: {
-        // Shortcut of `build.lib.entry`.
         entry: 'electron/main.ts',
       },
       preload: {
-        // Shortcut of `build.rollupOptions.input`.
-        // Preload scripts may contain Web assets, so use the `build.rollupOptions.input` instead `build.lib.entry`.
         input: 'electron/preload.ts',
       },
-      // Ployfill the Electron and Node.js built-in modules for Renderer process.
-      // See 👉 https://github.com/electron-vite/vite-plugin-electron-renderer
       renderer: {},
     }),
-  ],
+  ].filter(Boolean),
+  resolve: {
+    alias: [
+      {
+        find: /curlconverter\/dist\/src\/shell\/Parser\.js$/,
+        replacement: path.resolve(__dirname, 'node_modules/curlconverter/dist/src/shell/webParser.js'),
+      },
+    ]
+  },
   build: {
     target: 'esnext',
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
   },
   esbuild: {
     supported: {
@@ -34,6 +47,7 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
+    include: ['curlconverter', 'web-tree-sitter', 'postman-collection'],
     esbuildOptions: {
       target: 'esnext',
       supported: {

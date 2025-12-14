@@ -6,6 +6,41 @@ export interface ReleaseNote {
 
 export const releaseNotes: ReleaseNote[] = [
     {
+        version: '1.1.0',
+        date: '2025-12-14',
+        changes: [
+            'Improve performance',
+            'Improve translation',
+            'Improve UI'
+        ]
+    },
+    {
+        version: '1.0.21',
+        date: '2025-12-14',
+        changes: [
+            'Add new feature "TOTP Generator"',
+            'Add new feature "Unix Timestamp Converter"',
+            'Add new feature "Density Converter"',
+            'Add new feature "Regex Tester"',
+            'Add new feature "CSS Generator"',
+            'Add new feature "Screenshot Frame"',
+            'Add new feature "TOTP Generator"',
+            'Improve feature "CSV to JSON"',
+        ]
+    },
+    {
+        version: '1.0.20',
+        date: '2025-12-14',
+        changes: [
+            'Add new feature "Regex Tester"',
+            'Add new feature "Curl Converter"',
+            'Add new feature "CSS Generator"',
+            'Improve Splash animation',
+            'Improve performance',
+            'Improve translation'
+        ]
+    },
+    {
         version: '1.0.19',
         date: '2025-12-13',
         changes: [

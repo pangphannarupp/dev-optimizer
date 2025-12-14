@@ -258,10 +258,12 @@
         "copied": "복사됨!",
         "remove": "제거",
         "ok": "확인",
-        "search": "Search...",
-        "favorites": "Favorites",
-        "allTools": "All Tools",
-        "noResults": "No results found"
+        "search": "검색...",
+        "favorites": "즐겨찾기",
+        "allTools": "모든 도구",
+        "noResults": "결과가 없습니다",
+        "home": "홈",
+        "tools": "도구"
     },
     "encryption": {
         "title": "Encryption / Decryption Tool",
@@ -591,5 +593,32 @@
         "transform": "변형",
         "glassmorphism": "글래스모피즘",
         "clipPath": "클립 경로"
+    },
+    "densityConverter": {
+        "title": "밀도 변환기",
+        "description": "다양한 화면 밀도 (dp/pt ↔ px) 간에 픽셀 치수를 변환합니다.",
+        "value": "값",
+        "unit": "입력 단위",
+        "sourceDensity": "소스 밀도 (입력이 px인 경우)"
+    },
+    "screenshotFramer": {
+        "title": "스크린샷 프레임",
+        "description": "앱 스토어 목록을 위한 전문적인 기기 목업을 만드세요.",
+        "image": "스크린샷",
+        "device": "기기 프레임",
+        "background": "배경",
+        "padding": "패딩",
+        "caption": "캡션",
+        "download": "PNG 다운로드"
+    },
+    "totp": {
+        "title": "TOTP 생성기",
+        "description": "비밀 키를 입력하여 2FA 코드를 수동으로 생성하세요.",
+        "secretLabel": "비밀 키 (Base32)",
+        "secretHint": "서비스에서 제공한 키를 입력하세요 (보통 QR 코드 뒤에 숨겨져 있음).",
+        "clickCopy": "클릭하여 복사"
+    },
+    "home": {
+        "subtitle": "모든 개발자 도구를 한 곳에서."
     }
 }

@@ -258,10 +258,12 @@
         "copied": "تم النسخ!",
         "remove": "إزالة",
         "ok": "حسنا",
-        "search": "Search...",
-        "favorites": "Favorites",
-        "allTools": "All Tools",
-        "noResults": "No results found"
+        "search": "بحث...",
+        "favorites": "المفضلة",
+        "allTools": "كل الأدوات",
+        "noResults": "لا توجد نتائج",
+        "home": "الرئيسية",
+        "tools": "أدوات"
     },
     "encryption": {
         "title": "أداة التشفير / فك التشفير",
@@ -591,5 +593,32 @@
         "transform": "تحويل",
         "glassmorphism": "زجاجي",
         "clipPath": "مسار القص"
+    },
+    "densityConverter": {
+        "title": "محول الكثافة",
+        "description": "تحويل أبعاد البكسل عبر كثافات الشاشة المختلفة (dp/pt ↔ px).",
+        "value": "القيمة",
+        "unit": "وحدة الإدخال",
+        "sourceDensity": "كثافة المصدر (إذا كان الإدخال بكسل)"
+    },
+    "screenshotFramer": {
+        "title": "مؤطر لقطة الشاشة",
+        "description": "إنشاء نماذج أجهزة احترافية لقوائم متجر التطبيقات.",
+        "image": "لقطة شاشة",
+        "device": "إطار الجهاز",
+        "background": "الخلفية",
+        "padding": "الحشو",
+        "caption": "التسمية التوضيحية",
+        "download": "تنزيل PNG"
+    },
+    "totp": {
+        "title": "مولد TOTP",
+        "description": "توليد رموز 2FA يدويًا عن طريق إدخال مفتاحك السري.",
+        "secretLabel": "المفتاح السري (Base32)",
+        "secretHint": "أدخل المفتاح المقدم من الخدمة (عادة ما يكون مخفيًا خلف رمز QR).",
+        "clickCopy": "انقر للنسخ"
+    },
+    "home": {
+        "subtitle": "كل أدوات المطورين الخاصة بك في مكان واحد."
     }
 }
