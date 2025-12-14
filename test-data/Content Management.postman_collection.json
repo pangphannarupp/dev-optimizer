@@ -1,0 +1,281 @@
+{
+	"info": {
+		"_postman_id": "743440b6-b6c6-4634-b87e-08de325dab60",
+		"name": "Content Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11283701"
+	},
+	"item": [
+		{
+			"name": "/api/apps",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlContentManagement}}/api/apps",
+					"host": [
+						"{{baseUrlContentManagement}}"
+					],
+					"path": [
+						"api",
+						"apps"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/apps",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"My New App\",\n    \"key\": \"APP_KEY_001\",\n    \"description\": \"Integration testing app\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrlContentManagement}}/api/apps",
+					"host": [
+						"{{baseUrlContentManagement}}"
+					],
+					"path": [
+						"api",
+						"apps"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://localhost:5001/api/apps\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"name\": \"My New App\",\n    \"key\": \"APP_KEY_001\",\n    \"description\": \"Integration testing app\"\n  }'"
+			},
+			"response": []
+		},
+		{
+			"name": "/api/apps/APP_KEY_001",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"description\": \"Updated description for this app\",\n    \"name\": \"New App 001\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrlContentManagement}}/api/apps/APP_KEY_001",
+					"host": [
+						"{{baseUrlContentManagement}}"
+					],
+					"path": [
+						"api",
+						"apps",
+						"APP_KEY_001"
+					]
+				},
+				"description": "Generated from cURL: curl -X PUT \"http://localhost:5001/api/apps/YOUR_APP_ID\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"description\": \"Updated description for this app\"\n  }'"
+			},
+			"response": []
+		},
+		{
+			"name": "/api/apps/RHZnI2EEFDHNUvjRWAgM",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"description\": \"Updated description for this app\",\n    \"name\": \"New App 001\"\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrlContentManagement}}/api/apps/RHZnI2EEFDHNUvjRWAgM",
+					"host": [
+						"{{baseUrlContentManagement}}"
+					],
+					"path": [
+						"api",
+						"apps",
+						"RHZnI2EEFDHNUvjRWAgM"
+					]
+				},
+				"description": "Generated from cURL: curl --location --request PUT 'http://localhost:5001/api/apps/RHZnI2EEFDHNUvjRWAgM' \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"description\": \"Updated description for this app\",\n    \"name\": \"New App 001\"\n  }'"
+			},
+			"response": []
+		},
+		{
+			"name": "/api/apps/YOUR_APP_ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlContentManagement}}/api/apps/RHZnI2EEFDHNUvjRWAgM",
+					"host": [
+						"{{baseUrlContentManagement}}"
+					],
+					"path": [
+						"api",
+						"apps",
+						"RHZnI2EEFDHNUvjRWAgM"
+					]
+				},
+				"description": "Generated from cURL: curl -X DELETE \"http://localhost:5001/api/apps/YOUR_APP_ID\""
+			},
+			"response": []
+		},
+		{
+			"name": "/api/get-latest-content",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"appKey\": \"FFS\",\n    \"mainVersion\": \"0\",\n    \"partialVersion\": \"2\" \n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrlContentManagement}}/api/get-latest-content",
+					"host": [
+						"{{baseUrlContentManagement}}"
+					],
+					"path": [
+						"api",
+						"get-latest-content"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST \"http://localhost:5001/api/get-latest-content\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"appKey\": \"YOUR_APP_KEY\",\n    \"mainVersion\": \"1\",\n    \"partialVersion\": \"0\" \n  }'"
+			},
+			"response": []
+		},
+		{
+			"name": "/api/download-content?appId=zg0vGcX9aWLwN32nOYms&fileName=APP_KEY_001.2.0.zip",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlContentManagement}}/api/download-content?appId=9kM9NQJ8mmCHA2HBizOr&fileName=FFS.1.0.zip",
+					"host": [
+						"{{baseUrlContentManagement}}"
+					],
+					"path": [
+						"api",
+						"download-content"
+					],
+					"query": [
+						{
+							"key": "appId",
+							"value": "9kM9NQJ8mmCHA2HBizOr"
+						},
+						{
+							"key": "fileName",
+							"value": "FFS.1.0.zip"
+						}
+					]
+				},
+				"description": "Generated from cURL: curl -X GET \"http://localhost:5001/api/download-content?appId=YOUR_APP_ID&fileName=version_1.0.zip\" \\\n  --output my_download.zip"
+			},
+			"response": []
+		},
+		{
+			"name": "/api/download-content?appId=zg0vGcX9aWLwN32nOYms&fileName=APP_KEY_001.2.0.zip Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrlContentManagement}}/api/download-content?appId=9kM9NQJ8mmCHA2HBizOr&fileName=FFS.1.0.zip",
+					"host": [
+						"{{baseUrlContentManagement}}"
+					],
+					"path": [
+						"api",
+						"download-content"
+					],
+					"query": [
+						{
+							"key": "appId",
+							"value": "9kM9NQJ8mmCHA2HBizOr"
+						},
+						{
+							"key": "fileName",
+							"value": "FFS.1.0.zip"
+						}
+					]
+				},
+				"description": "Generated from cURL: curl -X GET \"http://localhost:5001/api/download-content?appId=YOUR_APP_ID&fileName=version_1.0.zip\" \\\n  --output my_download.zip"
+			},
+			"response": []
+		},
+		{
+			"name": "https://kh-mcnc-001.mcnc.com.kh/los/file/DFD01001I01",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"header\": {\n        \"uuid\": \"706fe9ea-80dd-4083-bc14-ffb82bc75f04\",\n        \"messageTypeCode\": \"\",\n        \"messageVersion\": \"\",\n        \"systemVersion\": \"\",\n        \"requestIpAddress\": \"\",\n        \"channelTypeCode\": \"1\",\n        \"systemTypeCode\": \"\",\n        \"sessionId\": \"\",\n        \"compId\": \"\",\n        \"serviceId\": \"DFD01001I01\",\n        \"screenId\": \"\",\n        \"trxBranchCode\": \"00\",\n        \"actualTrxBranchCode\": \"\",\n        \"locale\": \"en\",\n        \"businessDate\": \"\",\n        \"accountProcessYn\": \"N\",\n        \"staffId\": \"12\",\n        \"staffCashBalanceApplyYn\": \"\",\n        \"slipTransactionYn\": \"\",\n        \"slipNo\": \"\",\n        \"staffCashs\": [],\n        \"transactionDate\": \"\",\n        \"transationTime\": \"\",\n        \"systemDate\": \"\",\n        \"systemTime\": \"\",\n        \"approvals\": [],\n        \"messageInfo\": {\n            \"result\": true,\n            \"code\": \"\",\n            \"message\": \"\",\n            \"detailMessage\": \"\"\n        }\n    },\n    \"payload\": {\n        \"fileId\": \"1B2C4523913243629308ACF61224D25A\",\n        \"viewMode\": \"view\" \n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://kh-mcnc-001.mcnc.com.kh/los/file/DFD01001I01",
+					"protocol": "https",
+					"host": [
+						"kh-mcnc-001",
+						"mcnc",
+						"com",
+						"kh"
+					],
+					"path": [
+						"los",
+						"file",
+						"DFD01001I01"
+					]
+				},
+				"description": "Generated from cURL: curl --location 'https://kh-mcnc-001.mcnc.com.kh/los/file/DFD01001I01' \\\n--header 'Content-Type: application/json' \\\n--data '{\n    \"header\": {\n        \"uuid\": \"706fe9ea-80dd-4083-bc14-ffb82bc75f04\",\n        \"messageTypeCode\": \"\",\n        \"messageVersion\": \"\",\n        \"systemVersion\": \"\",\n        \"requestIpAddress\": \"\",\n        \"channelTypeCode\": \"1\",\n        \"systemTypeCode\": \"\",\n        \"sessionId\": \"\",\n        \"compId\": \"\",\n        \"serviceId\": \"DFD01001I01\",\n        \"screenId\": \"\",\n        \"trxBranchCode\": \"00\",\n        \"actualTrxBranchCode\": \"\",\n        \"locale\": \"en\",\n        \"businessDate\": \"\",\n        \"accountProcessYn\": \"N\",\n        \"staffId\": \"12\",\n        \"staffCashBalanceApplyYn\": \"\",\n        \"slipTransactionYn\": \"\",\n        \"slipNo\": \"\",\n        \"staffCashs\": [],\n        \"transactionDate\": \"\",\n        \"transationTime\": \"\",\n        \"systemDate\": \"\",\n        \"systemTime\": \"\",\n        \"approvals\": [],\n        \"messageInfo\": {\n            \"result\": true,\n            \"code\": \"\",\n            \"message\": \"\",\n            \"detailMessage\": \"\"\n        }\n    },\n    \"payload\": {\n        \"fileId\": \"1B2C4523913243629308ACF61224D25A\",\n        \"viewMode\": \"view\" \n    }\n}'"
+			},
+			"response": []
+		}
+	]
+}

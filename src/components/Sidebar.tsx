@@ -1,11 +1,11 @@
-import { Image as ImageIcon, Layers, Sparkles, QrCode, FileCode, Settings, X, Code, Key, Lock, Hash, FileUp, Split, Film, Search, Star, Link } from 'lucide-react';
+import { Image as ImageIcon, Layers, Sparkles, QrCode, FileCode, Settings, X, Code, Key, Lock, Hash, FileUp, Split, Film, Search, Star, Link, Download, Zap, ScanSearch, Palette } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import AppLogo from '../assets/icon.png';
 import { useState, useEffect, useMemo } from 'react';
 
-export type TabType = 'optimizer' | 'generator' | 'enhancer' | 'editor' | 'qr' | 'svg-drawable' | 'base64' | 'json' | 'csv-json' | 'jwt' | 'encryption' | 'sha' | 'validate-translation' | 'source-compare' | 'store-validator' | 'lottie-player' | 'js-minifier' | 'deeplink-generator';
+export type TabType = 'optimizer' | 'generator' | 'enhancer' | 'editor' | 'qr' | 'svg-drawable' | 'base64' | 'json' | 'csv-json' | 'jwt' | 'encryption' | 'sha' | 'validate-translation' | 'source-compare' | 'store-validator' | 'lottie-player' | 'js-minifier' | 'deeplink-generator' | 'curl-converter' | 'regex-tester' | 'css-generator' | 'download';
 
 interface SidebarProps {
     activeTab: TabType;
@@ -47,6 +47,9 @@ export function Sidebar({ activeTab, onTabChange, onSettingsClick, isOpen, onClo
         { id: 'lottie-player', icon: Film, label: t('lottie.title', 'Lottie Player') },
         { id: 'store-validator', icon: Layers, label: t('app.storeValidatorTab') },
         { id: 'js-minifier', icon: FileCode, label: t('jsMinifier.title', 'JS Minifier') },
+        { id: 'curl-converter', icon: Zap, label: t('curlConverter.title', 'CURL Converter') },
+        { id: 'regex-tester', icon: ScanSearch, label: t('regexTester.title', 'Regex Tester') },
+        { id: 'css-generator', icon: Palette, label: t('cssGenerator.title', 'CSS Generator') },
         { id: 'deeplink-generator', icon: Link, label: t('deeplink.title', 'Deeplink Generator') },
         { id: 'qr', icon: QrCode, label: t('app.qrTab') },
         { id: 'svg-drawable', icon: FileCode, label: t('app.svgTab') },
@@ -57,6 +60,7 @@ export function Sidebar({ activeTab, onTabChange, onSettingsClick, isOpen, onClo
         { id: 'jwt', icon: Key, label: t('app.jwtTab') },
         { id: 'encryption', icon: Lock, label: t('app.encryptionTab') },
         { id: 'sha', icon: Hash, label: t('app.shaTab') },
+        { id: 'download', icon: Download, label: t('app.downloadTab', 'Download App') },
     ], [t]);
 
     const filteredItems = useMemo(() => {

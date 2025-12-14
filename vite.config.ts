@@ -2,11 +2,13 @@ import { defineConfig } from 'vite'
 import path from 'node:path'
 import electron from 'vite-plugin-electron/simple'
 import react from '@vitejs/plugin-react'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     react(),
+    nodePolyfills(),
     // Temporarily disabled for testing
     electron({
       main: {
@@ -23,6 +25,22 @@ export default defineConfig({
       renderer: {},
     }),
   ],
+  build: {
+    target: 'esnext',
+  },
+  esbuild: {
+    supported: {
+      'top-level-await': true,
+    },
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'esnext',
+      supported: {
+        'top-level-await': true
+      },
+    },
+  },
   test: {
     globals: true,
     environment: 'happy-dom',

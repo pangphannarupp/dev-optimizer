@@ -345,6 +345,7 @@
         "outputString": "ខ្សែអក្សរ Base64"
     },
     "common": {
+        "guide": "ការណែនាំ",
         "copy": "ចម្លង",
         "copied": "បានចម្លង!",
         "remove": "លុប",
@@ -472,7 +473,10 @@
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
-        }
+        },
+        "selectLanguages": "ជ្រើសរើសភាសា",
+        "selectLanguagesDesc": "សូមជ្រើសរើសជួរឈរដែលតំណាងឱ្យភាសាដើម្បីនាំចូល។",
+        "processSelected": "ដំណើរការភាសា {{count}}"
     },
     "whatsNew": {
         "title": "អ្វីថ្មី",
@@ -513,6 +517,26 @@
         "comparisonResult": "លទ្ធផលនៃការប្រៀបធៀប",
         "sizeDiff": "ភាពខុសគ្នានៃទំហំ"
     },
+    "regexTester": {
+        "title": "អ្នកសាកល្បង Regex",
+        "description": "សាកល្បង និងកែកំហុសកន្សោមធម្មតារបស់អ្នកក្នុងពេលជាក់ស្តែង។",
+        "regexPattern": "លំនាំ Regex",
+        "testString": "អត្ថបទសាកល្បង",
+        "testStringPlaceholder": "បិទភ្ជាប់អត្ថបទរបស់អ្នកនៅទីនេះ...",
+        "matchHighlight": "ការបន្លិចដែលត្រូវគ្នា",
+        "matchCount": "{{count}} ផ្គូផ្គង",
+        "matchDetails": "ព័ត៌មានលម្អិតនៃការផ្គូផ្គង",
+        "noMatches": "រកមិនឃើញការផ្គូផ្គងទេ។",
+        "guide": {
+            "title": "សន្លឹកបន្លំ Regex",
+            "anchors": "យុថ្កា (Anchors)",
+            "classes": "ថ្នាក់តួអក្សរ (Character Classes)",
+            "quantifiers": "បរិមាណ (Quantifiers)",
+            "groups": "ក្រុម & Lookaround",
+            "common": "លំនាំទូទៅ",
+            "description": "ឯកសារយោងរហ័សសម្រាប់លំនាំកន្សោមធម្មតា និងវាក្យសម្ព័ន្ធ។"
+        }
+    },
     "storeValidator": {
         "title": "កម្មវិធីផ្ទៀងផ្ទាត់ Store Asset",
         "dropToValidate": "ទម្លាក់រូបភាពនៅទីនេះដើម្បីផ្ទៀងផ្ទាត់វិមាត្រ និងទំហំ",
@@ -539,16 +563,33 @@
         "redIndicators": "សូចនាករពណ៌ក្រហមនឹងបង្ហាញយ៉ាងច្បាស់ពីមូលហេតុដែលទ្រព្យសកម្មត្រូវបានបដិសេធ (ឧទាហរណ៍ គុណភាពបង្ហាញខុស ឬឯកសារធំពេក)។"
     },
     "jsMinifier": {
-        "title": "Javascript Minifier",
+        "title": "កម្មវិធីបង្រួម Javascript",
         "inputUrl": "បញ្ចូល URL / កូដ",
         "minifiedOutput": "លទ្ធផលដែលបានបង្រួម",
         "minify": "បង្រួម Javascript",
-        "mangle": "Mangle អថេរ",
-        "compress": "បង្រួម",
+        "mangle": "បំលែងអថេរ",
+        "compress": "បង្ហាប់",
         "keepFnames": "រក្សាឈ្មោះអនុគមន៍",
         "copyCode": "ចម្លងកូដ",
         "download": "ទាញយក .js",
         "clear": "សម្អាត",
-        "error": "មានកំហុសកើតឡើង"
+        "error": "មានកំហុសមួយបានកើតឡើង"
+    },
+    "curlConverter": {
+        "title": "CURL Converter",
+        "description": "បម្លែងពាក្យបញ្ជា cURL ឬ Postman Collections ទៅជាកូដក្នុងភាសាផ្សេងៗ។",
+        "uploadPostmanDesc": "បង្ហោះ Postman Collection (JSON)",
+        "upload": "បង្ហោះ Collection"
+    },
+    "cssGenerator": {
+        "title": "CSS កម្មវិធីបង្កើត",
+        "boxShadow": "ស្រមោលប្រអប់",
+        "borderRadius": "កាំរង្វង់",
+        "gradient": "ពណ៌លាយ",
+        "textShadow": "ស្រមោលអក្សរ",
+        "filter": "តម្រង",
+        "transform": "បំប្លែង",
+        "glassmorphism": "បែបកញ្ចក់",
+        "clipPath": "កាត់រូបរាង"
     }
 }

@@ -253,6 +253,7 @@
         "outputString": "سلسلة Base64"
     },
     "common": {
+        "guide": "Guide",
         "copy": "نسخ",
         "copied": "تم النسخ!",
         "remove": "إزالة",
@@ -349,7 +350,10 @@
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
-        }
+        },
+        "selectLanguages": "اختر اللغات",
+        "selectLanguagesDesc": "يرجى اختيار الأعمدة التي تمثل اللغات للاستيراد.",
+        "processSelected": "معالجة {{count}} لغات"
     },
     "whatsNew": {
         "title": "ما الجديد",
@@ -530,6 +534,32 @@
         "clear": "مسح",
         "error": "حدث خطأ"
     },
+    "curlConverter": {
+        "title": "محول CURL",
+        "description": "تحويل أوامر cURL أو مجموعات Postman إلى كود بلغات مختلفة.",
+        "uploadPostmanDesc": "رفع ملف مجموعة Postman (JSON)",
+        "upload": "رفع المجموعة"
+    },
+    "regexTester": {
+        "title": "Regex Tester",
+        "description": "Test and debug your regular expressions in real-time.",
+        "regexPattern": "Regex Pattern",
+        "testString": "Test String",
+        "testStringPlaceholder": "Paste your text here...",
+        "matchHighlight": "Match Highlight",
+        "matchCount": "{{count}} matches",
+        "matchDetails": "Match Details",
+        "noMatches": "No matches found",
+        "guide": {
+            "title": "Regex Cheat Sheet",
+            "anchors": "Anchors",
+            "classes": "Character Classes",
+            "quantifiers": "Quantifiers",
+            "groups": "Groups & Lookaround",
+            "common": "Common Patterns",
+            "description": "Quick reference for common regular expression patterns and syntax."
+        }
+    },
     "storeValidator": {
         "title": "مدقق متجر التطبيقات",
         "dropToValidate": "قم بإسقاط الصور هنا للتحقق من الأبعاد والحجم",
@@ -550,5 +580,16 @@
         "ipadPro": "ايباد برو",
         "usingSpecs": "استخدام المواصفات لـ <0>{{name}}</0>. اسحب الصور للتحقق من الأبعاد وحدود حجم الملف.",
         "redIndicators": "ستظهر المؤشرات الحمراء بالضبط سبب رفض الأصل (على سبيل المثال، دقة خاطئة أو ملف كبير جدًا)."
+    },
+    "cssGenerator": {
+        "title": "منشئ CSS",
+        "boxShadow": "ظل الصندوق",
+        "borderRadius": "نصف قطر الحدود",
+        "gradient": "تدرج",
+        "textShadow": "ظل النص",
+        "filter": "مرشح",
+        "transform": "تحويل",
+        "glassmorphism": "زجاجي",
+        "clipPath": "مسار القص"
     }
 }

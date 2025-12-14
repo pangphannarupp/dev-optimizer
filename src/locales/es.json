@@ -253,6 +253,7 @@
         "outputString": "Cadena Base64"
     },
     "common": {
+        "guide": "Guide",
         "copy": "Copiar",
         "copied": "¡Copiado!",
         "remove": "Eliminar",
@@ -349,7 +350,10 @@
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
-        }
+        },
+        "selectLanguages": "Seleccionar idiomas",
+        "selectLanguagesDesc": "Por favor, seleccione las columnas que representan idiomas para importar.",
+        "processSelected": "Procesar {{count}} idiomas"
     },
     "whatsNew": {
         "title": "Novedades",
@@ -518,8 +522,8 @@
         "paramValue": "Valor"
     },
     "jsMinifier": {
-        "title": "Minificador JS",
-        "inputUrl": "URL de entrada / Código",
+        "title": "Minificador de Javascript",
+        "inputUrl": "Entrada URL / Código",
         "minifiedOutput": "Salida Minificada",
         "minify": "Minificar Javascript",
         "mangle": "Ofuscar variables",
@@ -529,6 +533,32 @@
         "download": "Descargar .js",
         "clear": "Limpiar",
         "error": "Ocurrió un error"
+    },
+    "curlConverter": {
+        "title": "Convertidor CURL",
+        "description": "Convierta comandos cURL o colecciones Postman a código en varios idiomas.",
+        "uploadPostmanDesc": "Subir colección de Postman (JSON)",
+        "upload": "Subir colección"
+    },
+    "regexTester": {
+        "title": "Regex Tester",
+        "description": "Test and debug your regular expressions in real-time.",
+        "regexPattern": "Regex Pattern",
+        "testString": "Test String",
+        "testStringPlaceholder": "Paste your text here...",
+        "matchHighlight": "Match Highlight",
+        "matchCount": "{{count}} matches",
+        "matchDetails": "Match Details",
+        "noMatches": "No matches found",
+        "guide": {
+            "title": "Regex Cheat Sheet",
+            "anchors": "Anchors",
+            "classes": "Character Classes",
+            "quantifiers": "Quantifiers",
+            "groups": "Groups & Lookaround",
+            "common": "Common Patterns",
+            "description": "Quick reference for common regular expression patterns and syntax."
+        }
     },
     "storeValidator": {
         "title": "Validador de Tienda",
@@ -554,5 +584,16 @@
         "ipadPro": "iPad Pro",
         "usingSpecs": "Usando especificaciones para <0>{{name}}</0>. Arrastra imágenes para verificar dimensiones y límites de tamaño.",
         "redIndicators": "Los indicadores rojos mostrarán exactamente por qué se rechaza un activo (ej. resolución incorrecta o archivo demasiado grande)."
+    },
+    "cssGenerator": {
+        "title": "Generador CSS",
+        "boxShadow": "Sombra de Caja",
+        "borderRadius": "Radio del Borde",
+        "gradient": "Degradado",
+        "textShadow": "Sombra de Texto",
+        "filter": "Filtro",
+        "transform": "Transformación",
+        "glassmorphism": "Vidriomorfismo",
+        "clipPath": "Recorte"
     }
 }

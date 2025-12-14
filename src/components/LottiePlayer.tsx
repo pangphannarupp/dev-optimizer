@@ -346,9 +346,9 @@ export const LottiePlayer: React.FC = () => {
                 {t('lottie.title', 'Lottie Player')}
             </h1>
 
-            <div className="flex-1 flex flex-col lg:flex-row gap-6 overflow-hidden min-h-0">
+            <div className="flex-1 flex flex-col lg:flex-row gap-6 overflow-y-auto lg:overflow-hidden min-h-0">
                 {/* Player Area */}
-                <div className="flex-1 flex flex-col bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden min-h-0 relative">
+                <div className="flex-1 flex flex-col bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden min-h-0 relative shrink-0">
                     <div
                         className="flex-1 flex items-center justify-center p-8 relative transition-colors duration-300 min-h-[400px]"
                         style={{ backgroundColor: animationData ? bgColor : 'transparent' }}
@@ -439,7 +439,7 @@ export const LottiePlayer: React.FC = () => {
                 </div>
 
                 {/* Controls Sidebar */}
-                <div className="w-full lg:w-96 flex flex-col gap-4 shrink-0 h-full overflow-hidden">
+                <div className="w-full lg:w-96 flex flex-col gap-4 shrink-0 h-auto lg:h-full overflow-hidden">
 
                     <div className="bg-gray-100 dark:bg-gray-700/50 p-1 rounded-lg flex shrink-0 justify-between">
                         {[

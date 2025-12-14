@@ -253,6 +253,7 @@
         "outputString": "Stringa Base64"
     },
     "common": {
+        "guide": "Guide",
         "copy": "Copia",
         "copied": "Copiato!",
         "remove": "Rimuovi",
@@ -349,7 +350,10 @@
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
-        }
+        },
+        "selectLanguages": "Seleziona Lingue",
+        "selectLanguagesDesc": "Seleziona le colonne che rappresentano le lingue da importare.",
+        "processSelected": "Elabora {{count}} lingue"
     },
     "whatsNew": {
         "title": "Novità",
@@ -518,17 +522,43 @@
         "paramValue": "Valore"
     },
     "jsMinifier": {
-        "title": "Minificatore JS",
-        "inputUrl": "URL Input / Codice",
+        "title": "Minificatore Javascript",
+        "inputUrl": "Input URL / Codice",
         "minifiedOutput": "Output Minificato",
         "minify": "Minifica Javascript",
-        "mangle": "Mangle Variabili",
+        "mangle": "Offusca variabili",
         "compress": "Comprimi",
-        "keepFnames": "Mantieni Nomi Funzioni",
+        "keepFnames": "Mantieni nomi funzioni",
         "copyCode": "Copia Codice",
         "download": "Scarica .js",
         "clear": "Pulisci",
         "error": "Si è verificato un errore"
+    },
+    "curlConverter": {
+        "title": "Convertitore CURL",
+        "description": "Converti comandi cURL o raccolte Postman in codice in varie lingue.",
+        "uploadPostmanDesc": "Carica collezione Postman (JSON)",
+        "upload": "Carica collezione"
+    },
+    "regexTester": {
+        "title": "Regex Tester",
+        "description": "Test and debug your regular expressions in real-time.",
+        "regexPattern": "Regex Pattern",
+        "testString": "Test String",
+        "testStringPlaceholder": "Paste your text here...",
+        "matchHighlight": "Match Highlight",
+        "matchCount": "{{count}} matches",
+        "matchDetails": "Match Details",
+        "noMatches": "No matches found",
+        "guide": {
+            "title": "Regex Cheat Sheet",
+            "anchors": "Anchors",
+            "classes": "Character Classes",
+            "quantifiers": "Quantifiers",
+            "groups": "Groups & Lookaround",
+            "common": "Common Patterns",
+            "description": "Quick reference for common regular expression patterns and syntax."
+        }
     },
     "storeValidator": {
         "title": "Validatore App Store",
@@ -550,5 +580,16 @@
         "ipadPro": "iPad Pro",
         "usingSpecs": "Utilizzo delle specifiche per <0>{{name}}</0>. Trascina le immagini per controllare le dimensioni e i limiti delle dimensioni del file.",
         "redIndicators": "Gli indicatori rossi mostreranno esattamente perché una risorsa viene rifiutata (ad es. risoluzione errata o file troppo grande)."
+    },
+    "cssGenerator": {
+        "title": "Generatore CSS",
+        "boxShadow": "Ombra Riquadro",
+        "borderRadius": "Raggio Bordo",
+        "gradient": "Sfumatura",
+        "textShadow": "Ombra Testo",
+        "filter": "Filtro",
+        "transform": "Trasformazione",
+        "glassmorphism": "Glassmorfismo",
+        "clipPath": "Percorso Ritaglio"
     }
 }

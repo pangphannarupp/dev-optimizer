@@ -253,6 +253,7 @@
         "outputString": "String Base64"
     },
     "common": {
+        "guide": "Guide",
         "copy": "Copiar",
         "copied": "Copiado!",
         "remove": "Remover",
@@ -349,7 +350,10 @@
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
-        }
+        },
+        "selectLanguages": "Selecionar idiomas",
+        "selectLanguagesDesc": "Selecione as colunas que representam os idiomas a importar.",
+        "processSelected": "Processar {{count}} idiomas"
     },
     "whatsNew": {
         "title": "Novidades",
@@ -530,6 +534,32 @@
         "clear": "Limpar",
         "error": "Ocorreu um erro"
     },
+    "curlConverter": {
+        "title": "Conversor CURL",
+        "description": "Converta comandos cURL ou Coleções Postman para código em várias linguagens.",
+        "uploadPostmanDesc": "Carregar Coleção Postman (JSON)",
+        "upload": "Carregar Coleção"
+    },
+    "regexTester": {
+        "title": "Regex Tester",
+        "description": "Test and debug your regular expressions in real-time.",
+        "regexPattern": "Regex Pattern",
+        "testString": "Test String",
+        "testStringPlaceholder": "Paste your text here...",
+        "matchHighlight": "Match Highlight",
+        "matchCount": "{{count}} matches",
+        "matchDetails": "Match Details",
+        "noMatches": "No matches found",
+        "guide": {
+            "title": "Regex Cheat Sheet",
+            "anchors": "Anchors",
+            "classes": "Character Classes",
+            "quantifiers": "Quantifiers",
+            "groups": "Groups & Lookaround",
+            "common": "Common Patterns",
+            "description": "Quick reference for common regular expression patterns and syntax."
+        }
+    },
     "storeValidator": {
         "title": "Validador da App Store",
         "dropToValidate": "Solte imagens aqui para validar dimensões e tamanho",
@@ -550,5 +580,16 @@
         "ipadPro": "iPad Pro",
         "usingSpecs": "Usando especificações para <0>{{name}}</0>. Arraste imagens para verificar dimensões e limites de tamanho de arquivo.",
         "redIndicators": "Indicadores vermelhos mostrarão exatamente por que um ativo é rejeitado (por exemplo, resolução errada ou arquivo muito grande)."
+    },
+    "cssGenerator": {
+        "title": "Gerador CSS",
+        "boxShadow": "Sombra da Caixa",
+        "borderRadius": "Raio da Borda",
+        "gradient": "Gradiente",
+        "textShadow": "Sombra de Texto",
+        "filter": "Filtro",
+        "transform": "Transformação",
+        "glassmorphism": "Glassmorfismo",
+        "clipPath": "Caminho de Recorte"
     }
 }

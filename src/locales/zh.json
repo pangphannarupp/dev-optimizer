@@ -253,6 +253,7 @@
         "outputString": "Base64字符串"
     },
     "common": {
+        "guide": "Guide",
         "copy": "复制",
         "copied": "已复制！",
         "remove": "移除",
@@ -349,7 +350,10 @@
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
-        }
+        },
+        "selectLanguages": "选择语言",
+        "selectLanguagesDesc": "请选择代表要导入语言的列。",
+        "processSelected": "处理 {{count}} 种语言"
     },
     "whatsNew": {
         "title": "新功能",
@@ -518,17 +522,43 @@
         "paramValue": "值"
     },
     "jsMinifier": {
-        "title": "JS 压缩器",
+        "title": "Javascript 压缩器",
         "inputUrl": "输入 URL / 代码",
         "minifiedOutput": "压缩输出",
         "minify": "压缩 Javascript",
-        "mangle": "混淆变量",
+        "mangle": "变量混淆",
         "compress": "压缩",
         "keepFnames": "保留函数名",
         "copyCode": "复制代码",
         "download": "下载 .js",
         "clear": "清除",
         "error": "发生错误"
+    },
+    "curlConverter": {
+        "title": "CURL 转换器",
+        "description": "将 cURL 命令或 Postman 集合转换为各种语言的代码。",
+        "uploadPostmanDesc": "上传 Postman 集合 (JSON)",
+        "upload": "上传集合"
+    },
+    "regexTester": {
+        "title": "Regex Tester",
+        "description": "Test and debug your regular expressions in real-time.",
+        "regexPattern": "Regex Pattern",
+        "testString": "Test String",
+        "testStringPlaceholder": "Paste your text here...",
+        "matchHighlight": "Match Highlight",
+        "matchCount": "{{count}} matches",
+        "matchDetails": "Match Details",
+        "noMatches": "No matches found",
+        "guide": {
+            "title": "Regex Cheat Sheet",
+            "anchors": "Anchors",
+            "classes": "Character Classes",
+            "quantifiers": "Quantifiers",
+            "groups": "Groups & Lookaround",
+            "common": "Common Patterns",
+            "description": "Quick reference for common regular expression patterns and syntax."
+        }
     },
     "storeValidator": {
         "title": "App Store Validator",
@@ -550,5 +580,16 @@
         "ipadPro": "iPad Pro",
         "usingSpecs": "Using specs for <0>{{name}}</0>. Drag images to check dimensions and file size limits.",
         "redIndicators": "Red indicators will show exactly why an asset is rejected (e.g., wrong resolution or file too large)."
+    },
+    "cssGenerator": {
+        "title": "CSS 生成器",
+        "boxShadow": "盒子阴影",
+        "borderRadius": "边框半径",
+        "gradient": "渐变",
+        "textShadow": "文字阴影",
+        "filter": "滤镜",
+        "transform": "变换",
+        "glassmorphism": "玻璃拟态",
+        "clipPath": "裁剪路径"
     }
 }

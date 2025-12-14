@@ -22,6 +22,10 @@ import { AppStoreValidator } from './components/AppStoreValidator';
 import { LottiePlayer } from './components/LottiePlayer';
 import { JsMinifier } from './components/JsMinifier';
 import { DeeplinkGenerator } from './components/DeeplinkGenerator';
+import CurlConverter from './components/CurlConverter';
+import RegexTester from './components/RegexTester';
+import { CssGenerator } from './components/CssGenerator';
+import { DownloadScreen } from './components/DownloadScreen';
 
 
 import { Sidebar } from './components/Sidebar';
@@ -34,7 +38,10 @@ import { useTranslation } from 'react-i18next';
 import { WhatsNewSnackbar } from './components/WhatsNewSnackbar';
 
 function AppContent() {
-  const [activeTab, setActiveTab] = useState<'optimizer' | 'generator' | 'enhancer' | 'editor' | 'qr' | 'svg-drawable' | 'base64' | 'json' | 'csv-json' | 'jwt' | 'encryption' | 'sha' | 'validate-translation' | 'source-compare' | 'store-validator' | 'lottie-player' | 'js-minifier' | 'deeplink-generator'>('optimizer');
+  const [activeTab, setActiveTab] = useState<'optimizer' | 'generator' | 'enhancer' | 'editor' | 'qr' | 'svg-drawable' | 'base64' | 'json' | 'csv-json' | 'jwt' | 'encryption' | 'sha' | 'validate-translation' | 'source-compare' | 'store-validator' | 'lottie-player' | 'js-minifier' | 'deeplink-generator' | 'curl-converter'
+    | 'regex-tester'
+    | 'css-generator'
+    | 'download'>('optimizer');
   const [images, setImages] = useState<ProcessedImage[]>([]);
   const [defaultFormat, setDefaultFormat] = useState<'image/jpeg' | 'image/png' | 'image/webp'>('image/webp');
   const [defaultQuality, setDefaultQuality] = useState(0.8);
@@ -404,6 +411,41 @@ function AppContent() {
                 className="h-full overflow-y-auto"
               >
                 <DeeplinkGenerator />
+              </motion.main>
+            ) : activeTab === 'download' ? (
+              <motion.main
+                key="download"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="p-6 h-full overflow-y-auto"
+              >
+                <DownloadScreen />
+              </motion.main>
+            ) : activeTab === 'curl-converter' ? (
+              <motion.main
+                key="curl-converter"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <CurlConverter />
+              </motion.main>
+            ) : activeTab === 'css-generator' ? (
+              <CssGenerator />
+            ) : activeTab === 'regex-tester' ? (
+              <motion.main
+                key="regex-tester"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <RegexTester />
               </motion.main>
             ) : (
               <motion.main

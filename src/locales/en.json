@@ -291,8 +291,7 @@
         "totalIssues": "Total Issues",
         "untranslatedStrings": "Untranslated Strings",
         "close": "Close",
-        "fontDetector": "Font Detector",
-        "filePath": "File Path"
+        "fontDetector": "Font Detector"
     },
     "imageEditor": {
         "title": "Image Editor",
@@ -472,7 +471,10 @@
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
-        }
+        },
+        "selectLanguages": "Select Languages",
+        "selectLanguagesDesc": "Please select the columns that represent languages to import.",
+        "processSelected": "Process {{count}} Languages"
     },
     "whatsNew": {
         "title": "What's New",
@@ -549,5 +551,42 @@
         "download": "Download .js",
         "clear": "Clear",
         "error": "An error occurred"
+    },
+    "curlConverter": {
+        "title": "CURL Converter",
+        "description": "Convert cURL commands or Postman Collections to code in various languages.",
+        "uploadPostmanDesc": "Upload Postman Collection JSON",
+        "upload": "Upload Collection"
+    },
+    "regexTester": {
+        "title": "Regex Tester",
+        "description": "Test and debug your regular expressions in real-time.",
+        "regexPattern": "Regex Pattern",
+        "testString": "Test String",
+        "testStringPlaceholder": "Paste your text here...",
+        "matchHighlight": "Match Highlight",
+        "matchCount": "{{count}} matches",
+        "matchDetails": "Match Details",
+        "noMatches": "No matches found",
+        "guide": {
+            "title": "Regex Cheat Sheet",
+            "anchors": "Anchors",
+            "classes": "Character Classes",
+            "quantifiers": "Quantifiers",
+            "groups": "Groups & Lookaround",
+            "common": "Common Patterns",
+            "description": "Quick reference for common regular expression patterns and syntax."
+        }
+    },
+    "cssGenerator": {
+        "title": "CSS Generator",
+        "boxShadow": "Box Shadow",
+        "borderRadius": "Border Radius",
+        "gradient": "Gradient",
+        "textShadow": "Text Shadow",
+        "filter": "Filter",
+        "transform": "Transform",
+        "glassmorphism": "Glassmorphism",
+        "clipPath": "Clip Path"
     }
 }

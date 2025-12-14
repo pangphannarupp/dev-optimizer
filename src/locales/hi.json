@@ -253,6 +253,7 @@
         "outputString": "Base64 स्ट्रिंग"
     },
     "common": {
+        "guide": "Guide",
         "copy": "कॉपी करें",
         "copied": "कॉपी हो गया!",
         "remove": "हटाएं",
@@ -349,7 +350,10 @@
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
-        }
+        },
+        "selectLanguages": "भाषाएँ चुनें",
+        "selectLanguagesDesc": "कृपया उन कॉलमों का चयन करें जो आयात करने के लिए भाषाओं का प्रतिनिधित्व करते हैं।",
+        "processSelected": "{{count}} भाषाओं को संसाधित करें"
     },
     "whatsNew": {
         "title": "नया क्या है",
@@ -433,6 +437,26 @@
         "comparisonResult": "तुलना परिणाम",
         "sizeDiff": "आकार का अंतर",
         "identicalCount": "Identical Files"
+    },
+    "regexTester": {
+        "title": "Regex Tester",
+        "description": "Test and debug your regular expressions in real-time.",
+        "regexPattern": "Regex Pattern",
+        "testString": "Test String",
+        "testStringPlaceholder": "Paste your text here...",
+        "matchHighlight": "Match Highlight",
+        "matchCount": "{{count}} matches",
+        "matchDetails": "Match Details",
+        "noMatches": "No matches found",
+        "guide": {
+            "title": "Regex Cheat Sheet",
+            "anchors": "Anchors",
+            "classes": "Character Classes",
+            "quantifiers": "Quantifiers",
+            "groups": "Groups & Lookaround",
+            "common": "Common Patterns",
+            "description": "Quick reference for common regular expression patterns and syntax."
+        }
     },
     "storeValidator": {
         "title": "ऐप स्टोर सत्यापनकर्ता",
@@ -550,5 +574,22 @@
         "download": ".js डाउनलोड करें",
         "clear": "साफ़ करें",
         "error": "एक त्रुटि हुई"
+    },
+    "curlConverter": {
+        "title": "CURL कनवर्टर",
+        "description": "cURL कमांड या Postman कलेक्शन को विभिन्न भाषाओं के कोड में बदलें।",
+        "uploadPostmanDesc": "Postman कलेक्शन (JSON) अपलोड करें",
+        "upload": "कलेक्शन अपलोड करें"
+    },
+    "cssGenerator": {
+        "title": "CSS जनरेटर",
+        "boxShadow": "बॉक्स छाया",
+        "borderRadius": "सीमा त्रिज्या",
+        "gradient": "ग्रेडिएंट",
+        "textShadow": "पाठ छाया",
+        "filter": "फ़िल्टर",
+        "transform": "परिवर्तन",
+        "glassmorphism": "ग्लासमॉर्फिज़्म",
+        "clipPath": "क्लिप पथ"
     }
 }

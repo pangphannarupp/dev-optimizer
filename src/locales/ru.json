@@ -253,6 +253,7 @@
         "outputString": "Строка Base64"
     },
     "common": {
+        "guide": "Guide",
         "copy": "Копировать",
         "copied": "Скопировано!",
         "remove": "Удалить",
@@ -349,7 +350,10 @@
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
-        }
+        },
+        "selectLanguages": "Выберите языки",
+        "selectLanguagesDesc": "Пожалуйста, выберите столбцы, которые представляют языки для импорта.",
+        "processSelected": "Обработать {{count}} языков"
     },
     "whatsNew": {
         "title": "Что нового",
@@ -530,6 +534,32 @@
         "clear": "Очистить",
         "error": "Произошла ошибка"
     },
+    "curlConverter": {
+        "title": "CURL Конвертер",
+        "description": "Преобразование команд cURL или коллекций Postman в код на различных языках.",
+        "uploadPostmanDesc": "Загрузить коллекцию Postman (JSON)",
+        "upload": "Загрузить коллекцию"
+    },
+    "regexTester": {
+        "title": "Regex Tester",
+        "description": "Test and debug your regular expressions in real-time.",
+        "regexPattern": "Regex Pattern",
+        "testString": "Test String",
+        "testStringPlaceholder": "Paste your text here...",
+        "matchHighlight": "Match Highlight",
+        "matchCount": "{{count}} matches",
+        "matchDetails": "Match Details",
+        "noMatches": "No matches found",
+        "guide": {
+            "title": "Regex Cheat Sheet",
+            "anchors": "Anchors",
+            "classes": "Character Classes",
+            "quantifiers": "Quantifiers",
+            "groups": "Groups & Lookaround",
+            "common": "Common Patterns",
+            "description": "Quick reference for common regular expression patterns and syntax."
+        }
+    },
     "storeValidator": {
         "title": "Валидатор App Store",
         "dropToValidate": "Перетащите изображения сюда для проверки размеров и веса",
@@ -550,5 +580,16 @@
         "ipadPro": "iPad Pro",
         "usingSpecs": "Используются спецификации для <0>{{name}}</0>. Перетащите изображения, чтобы проверить размеры и ограничения размера файла.",
         "redIndicators": "Красные индикаторы точно покажут, почему актив отклонен (например, неправильное разрешение или файл слишком большой)."
+    },
+    "cssGenerator": {
+        "title": "CSS Генератор",
+        "boxShadow": "Тень блока",
+        "borderRadius": "Радиус границы",
+        "gradient": "Градиент",
+        "textShadow": "Тень текста",
+        "filter": "Фильтр",
+        "transform": "Трансформация",
+        "glassmorphism": "Глассморфизм",
+        "clipPath": "Обрезка"
     }
 }

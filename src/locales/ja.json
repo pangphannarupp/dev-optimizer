@@ -253,6 +253,7 @@
         "outputString": "Base64文字列"
     },
     "common": {
+        "guide": "Guide",
         "copy": "コピー",
         "copied": "コピーしました！",
         "remove": "削除",
@@ -349,7 +350,10 @@
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
-        }
+        },
+        "selectLanguages": "言語を選択",
+        "selectLanguagesDesc": "インポートする言語を表す列を選択してください。",
+        "processSelected": "{{count}} 言語を処理"
     },
     "whatsNew": {
         "title": "新着情報",
@@ -518,10 +522,10 @@
         "paramValue": "値"
     },
     "jsMinifier": {
-        "title": "JS ミニファイア",
+        "title": "Javascript ミニファイア",
         "inputUrl": "入力 URL / コード",
-        "minifiedOutput": "ミニファイされた出力",
-        "minify": "JavaScriptをミニファイ",
+        "minifiedOutput": "最小化された出力",
+        "minify": "Javascriptを最小化",
         "mangle": "変数を難読化",
         "compress": "圧縮",
         "keepFnames": "関数名を保持",
@@ -529,6 +533,32 @@
         "download": ".js をダウンロード",
         "clear": "クリア",
         "error": "エラーが発生しました"
+    },
+    "curlConverter": {
+        "title": "CURL コンバーター",
+        "description": "cURL コマンドや Postman コレクションをさまざまな言語のコードに変換します。",
+        "uploadPostmanDesc": "Postman コレクション (JSON) をアップロード",
+        "upload": "コレクションをアップロード"
+    },
+    "regexTester": {
+        "title": "Regex Tester",
+        "description": "Test and debug your regular expressions in real-time.",
+        "regexPattern": "Regex Pattern",
+        "testString": "Test String",
+        "testStringPlaceholder": "Paste your text here...",
+        "matchHighlight": "Match Highlight",
+        "matchCount": "{{count}} matches",
+        "matchDetails": "Match Details",
+        "noMatches": "No matches found",
+        "guide": {
+            "title": "Regex Cheat Sheet",
+            "anchors": "Anchors",
+            "classes": "Character Classes",
+            "quantifiers": "Quantifiers",
+            "groups": "Groups & Lookaround",
+            "common": "Common Patterns",
+            "description": "Quick reference for common regular expression patterns and syntax."
+        }
     },
     "storeValidator": {
         "title": "アプリストアバリデーター",
@@ -550,5 +580,16 @@
         "ipadPro": "iPad Pro",
         "usingSpecs": "<0>{{name}}</0> の仕様を使用しています。画像をドロップして、寸法とファイルサイズの制限を確認してください。",
         "redIndicators": "赤いインジケーターは、資産が拒否された理由（例：解像度が間違っている、ファイルが大きすぎる）を正確に示します。"
+    },
+    "cssGenerator": {
+        "title": "CSS ジェネレーター",
+        "boxShadow": "ボックスシャドウ",
+        "borderRadius": "境界半径",
+        "gradient": "グラデーション",
+        "textShadow": "テキストシャドウ",
+        "filter": "フィルター",
+        "transform": "変形",
+        "glassmorphism": "グラスモーフィズム",
+        "clipPath": "クリップパス"
     }
 }

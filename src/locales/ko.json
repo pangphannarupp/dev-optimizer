@@ -253,6 +253,7 @@
         "outputString": "Base64 문자열"
     },
     "common": {
+        "guide": "Guide",
         "copy": "복사",
         "copied": "복사됨!",
         "remove": "제거",
@@ -349,7 +350,10 @@
             "json": "JSON",
             "android": "Android",
             "ios": "iOS"
-        }
+        },
+        "selectLanguages": "언어 선택",
+        "selectLanguagesDesc": "가져올 언어를 나타내는 열을 선택하십시오.",
+        "processSelected": "{{count}}개 언어 처리"
     },
     "whatsNew": {
         "title": "새로운 기능",
@@ -530,6 +534,32 @@
         "clear": "지우기",
         "error": "오류가 발생했습니다"
     },
+    "curlConverter": {
+        "title": "CURL 변환기",
+        "description": "cURL 명령 또는 Postman 컬렉션을 다양한 언어의 코드로 변환하세요.",
+        "uploadPostmanDesc": "Postman 컬렉션(JSON) 업로드",
+        "upload": "컬렉션 업로드"
+    },
+    "regexTester": {
+        "title": "Regex Tester",
+        "description": "Test and debug your regular expressions in real-time.",
+        "regexPattern": "Regex Pattern",
+        "testString": "Test String",
+        "testStringPlaceholder": "Paste your text here...",
+        "matchHighlight": "Match Highlight",
+        "matchCount": "{{count}} matches",
+        "matchDetails": "Match Details",
+        "noMatches": "No matches found",
+        "guide": {
+            "title": "Regex Cheat Sheet",
+            "anchors": "Anchors",
+            "classes": "Character Classes",
+            "quantifiers": "Quantifiers",
+            "groups": "Groups & Lookaround",
+            "common": "Common Patterns",
+            "description": "Quick reference for common regular expression patterns and syntax."
+        }
+    },
     "storeValidator": {
         "title": "앱 스토어 검사기",
         "dropToValidate": "이미지를 이곳에 드롭하여 크기와 용량을 확인하세요",
@@ -550,5 +580,16 @@
         "ipadPro": "iPad Pro",
         "usingSpecs": "<0>{{name}}</0> 사양을 사용 중입니다. 이미지를 드래그하여 크기 및 파일 크기 제한을 확인하세요.",
         "redIndicators": "빨간색 표시기는 자산이 거부된 정확한 이유(예: 잘못된 해상도 또는 파일 너무 큼)를 보여줍니다."
+    },
+    "cssGenerator": {
+        "title": "CSS 생성기",
+        "boxShadow": "박스 그림자",
+        "borderRadius": "테두리 반경",
+        "gradient": "그라디언트",
+        "textShadow": "텍스트 그림자",
+        "filter": "필터",
+        "transform": "변형",
+        "glassmorphism": "글래스모피즘",
+        "clipPath": "클립 경로"
     }
 }
