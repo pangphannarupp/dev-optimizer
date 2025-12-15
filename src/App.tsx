@@ -30,6 +30,7 @@ import { TotpGenerator } from './components/TotpGenerator';
 import RegexTester from './components/RegexTester';
 import { CssGenerator } from './components/CssGenerator';
 import { DownloadScreen } from './components/DownloadScreen';
+import { CodeQualityChecker } from './components/CodeQualityChecker';
 
 
 import { Sidebar } from './components/Sidebar';
@@ -523,6 +524,17 @@ function AppContent() {
                 className="h-full overflow-y-auto"
               >
                 <TotpGenerator />
+              </motion.main>
+            ) : activeTab === 'code-quality' ? (
+              <motion.main
+                key="code-quality"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <CodeQualityChecker />
               </motion.main>
             ) : (
               <motion.main

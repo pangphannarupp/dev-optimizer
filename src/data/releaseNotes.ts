@@ -6,6 +6,13 @@ export interface ReleaseNote {
 
 export const releaseNotes: ReleaseNote[] = [
     {
+        version: '1.1.1',
+        date: '2025-12-15',
+        changes: [
+            'Add new feature "Code Quality Checker"',
+        ]
+    },
+    {
         version: '1.1.0',
         date: '2025-12-14',
         changes: [

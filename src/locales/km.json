@@ -521,23 +521,16 @@
     },
     "regexTester": {
         "title": "អ្នកសាកល្បង Regex",
-        "description": "សាកល្បង និងកែកំហុសកន្សោមធម្មតារបស់អ្នកក្នុងពេលជាក់ស្តែង។",
-        "regexPattern": "លំនាំ Regex",
-        "testString": "អត្ថបទសាកល្បង",
-        "testStringPlaceholder": "បិទភ្ជាប់អត្ថបទរបស់អ្នកនៅទីនេះ...",
-        "matchHighlight": "ការបន្លិចដែលត្រូវគ្នា",
-        "matchCount": "{{count}} ផ្គូផ្គង",
-        "matchDetails": "ព័ត៌មានលម្អិតនៃការផ្គូផ្គង",
+        "inputPlaceholder": "បញ្ចូលអត្ថបទសាកល្បងនៅទីនេះ...",
+        "regexPlaceholder": "បញ្ចូលកន្សោមធម្មតា...",
+        "flags": "Flags",
+        "matches": "ការផ្គូផ្គង",
         "noMatches": "រកមិនឃើញការផ្គូផ្គងទេ។",
-        "guide": {
-            "title": "សន្លឹកបន្លំ Regex",
-            "anchors": "យុថ្កា (Anchors)",
-            "classes": "ថ្នាក់តួអក្សរ (Character Classes)",
-            "quantifiers": "បរិមាណ (Quantifiers)",
-            "groups": "ក្រុម & Lookaround",
-            "common": "លំនាំទូទៅ",
-            "description": "ឯកសារយោងរហ័សសម្រាប់លំនាំកន្សោមធម្មតា និងវាក្យសម្ព័ន្ធ។"
-        }
+        "cheatSheet": "សន្លឹកបន្លំ",
+        "commonPatterns": "លំនាំទូទៅ",
+        "matchInfo": "ព័ត៌មានផ្គូផ្គង",
+        "group": "ក្រុម",
+        "index": "លិបិក្រម"
     },
     "storeValidator": {
         "title": "កម្មវិធីផ្ទៀងផ្ទាត់ Store Asset",
@@ -594,19 +587,6 @@
         "glassmorphism": "បែបកញ្ចក់",
         "clipPath": "កាត់រូបរាង"
     },
-    "regexTester": {
-        "title": "អ្នកសាកល្បង Regex",
-        "inputPlaceholder": "បញ្ចូលអត្ថបទសាកល្បងនៅទីនេះ...",
-        "regexPlaceholder": "បញ្ចូលកន្សោមធម្មតា...",
-        "flags": "Flags",
-        "matches": "ការផ្គូផ្គង",
-        "noMatches": "រកមិនឃើញការផ្គូផ្គងទេ។",
-        "cheatSheet": "សន្លឹកបន្លំ",
-        "commonPatterns": "លំនាំទូទៅ",
-        "matchInfo": "ព័ត៌មានផ្គូផ្គង",
-        "group": "ក្រុម",
-        "index": "លិបិក្រម"
-    },
     "densityConverter": {
         "title": "កម្មវិធីបម្លែង ដង់ស៊ីតេ",
         "description": "បម្លែងវិមាត្រភីកសែលឆ្លងកាត់ដង់ស៊ីតេអេក្រង់ផ្សេងៗគ្នា (dp/pt ↔ px) ។",
@@ -633,5 +613,407 @@
     },
     "home": {
         "subtitle": "ឧបករណ៍អ្នកអភិវឌ្ឍន៍ទាំងអស់នៅកន្លែងតែមួយ។"
+    },
+    "codeQuality": {
+        "rules": {
+            "console-log": {
+                "message": "ជៀសវាងការប្រើប្រាស់ console.log ក្នុងផលិតកម្ម",
+                "suggestion": "ប្រើសេវាកម្មកំណត់ហេតុ"
+            },
+            "index-key": {
+                "message": "ជៀសវាងការប្រើសន្ទស្សន៍អារេជាគន្លឹះ (key)",
+                "suggestion": "ប្រើ ID តែមួយគត់"
+            },
+            "inline-style": {
+                "message": "ជៀសវាងរចនាប័ទ្មក្នុងបន្ទាត់ (inline style)",
+                "suggestion": "ប្រើ CSS class"
+            },
+            "useEffect-missing-deps": {
+                "message": "Potential missing dependency in useEffect",
+                "suggestion": "Check if you really intend to run this only on mount. Ensure all utilized variables are in the dependency array."
+            },
+            "hardcoded-secret": {
+                "message": "អាចមានលេខកូដសម្ងាត់",
+                "suggestion": "ប្រើអថេរបរិស្ថាន (environment variables)"
+            },
+            "always-true": {
+                "message": "លក្ខខណ្ឌគឺពិត/មិនពិតជានិច្ច",
+                "suggestion": "លុបលក្ខខណ្ឌដែលមិនចាំបាច់"
+            },
+            "bad-equality": {
+                "message": "ជៀសវាងការស្មើសាមញ្ញ (==)",
+                "suggestion": "ប្រើការស្មើដាច់ខាត (===)"
+            },
+            "naming-class": {
+                "message": "Class/Interface should be PascalCase",
+                "suggestion": "Rename to start with an uppercase letter"
+            },
+            "naming-function": {
+                "message": "Function should be camelCase",
+                "suggestion": "Rename to camelCase (e.g., myFunction)"
+            },
+            "naming-variable": {
+                "message": "Variable should be camelCase",
+                "suggestion": "Rename to camelCase (avoid snake_case)"
+            },
+            "todo-comment": {
+                "message": "បានរកឃើញ TODO/FIXME",
+                "suggestion": "គ្រប់គ្រងកិច្ចការនេះនៅខាងក្រៅ"
+            },
+            "empty-block": {
+                "message": "ប្លុកទទេត្រូវបានរកឃើញ",
+                "suggestion": "លុប ឬបន្ថែមមតិយោបល់"
+            },
+            "missing-docs": {
+                "message": "បាត់ឯកសារយោង",
+                "suggestion": "បន្ថែម JSDoc/KDoc"
+            },
+            "no-access-state-in-setstate": {
+                "message": "Avoid accessing this.state inside setState",
+                "suggestion": "Use the functional form: this.setState(prevState => ({...}))"
+            },
+            "no-async-use-effect": {
+                "message": "useEffect callback cannot be async",
+                "suggestion": "Define an async function inside useEffect and call it immediately."
+            },
+            "useless-fragment": {
+                "message": "Avoid useless fragments",
+                "suggestion": "Remove the fragment or add a key if needed."
+            },
+            "duplicate-props": {
+                "message": "Duplicate props detected",
+                "suggestion": "Remove duplicate props."
+            },
+            "no-non-null-assertion": {
+                "message": "ជៀសវាង (!) non-null assertion",
+                "suggestion": "ប្រើ optional chaining"
+            },
+            "prefer-optional-chaining": {
+                "message": "Prefer optional chaining",
+                "suggestion": "Use optional chaining (e.g., foo?.bar)."
+            },
+            "inline-style-obj": {
+                "message": "Avoid inline style objects",
+                "suggestion": "Use StyleSheet.create() for better performance"
+            },
+            "hardcoded-color": {
+                "message": "Avoid hardcoded colors",
+                "suggestion": "Use a theme or constants file for colors"
+            },
+            "v-if-v-for": {
+                "message": "Avoid using v-if and v-for on the same element",
+                "suggestion": "Move v-if to a parent element or use a computed property to filter the list"
+            },
+            "mutating-props": {
+                "message": "Avoid mutating props directly",
+                "suggestion": "Emit an event to the parent to update the value"
+            },
+            "useless-mustache": {
+                "message": "Avoid useless mustache interpolation",
+                "suggestion": "Use static text instead."
+            },
+            "force-unwrap": {
+                "message": "ជៀសវាង force unwrap (!!)",
+                "suggestion": "ប្រើ safe calls (?)"
+            },
+            "global-scope-launch": {
+                "message": "Avoid GlobalScope.launch",
+                "suggestion": "Use lifecycle-aware scopes like viewModelScope or lifecycleScope"
+            },
+            "print-stack-trace": {
+                "message": "Avoid printStackTrace()",
+                "suggestion": "Use a logger (e.g., Timber) to handle exceptions"
+            },
+            "system-out": {
+                "message": "Avoid System.out.println",
+                "suggestion": "Use Android Log class or Timber"
+            },
+            "thread-sleep": {
+                "message": "Avoid Thread.sleep() on main thread",
+                "suggestion": "Use coroutines delay() or proper async mechanisms"
+            },
+            "missing-kdoc": {
+                "message": "Public class/function missing KDoc",
+                "suggestion": "Add KDoc (/** ... */) documentation for public API"
+            },
+            "magic-number": {
+                "message": "Avoid magic numbers",
+                "suggestion": "Extract magic numbers to constants"
+            },
+            "nested-blocks": {
+                "message": "Deeply nested blocks detected",
+                "suggestion": "Refactor code to reduce nesting (guard clauses, extract functions)"
+            },
+            "wildcard-import": {
+                "message": "Avoid wildcard imports",
+                "suggestion": "Import specific classes to avoid conflicts."
+            },
+            "hardcoded-content-desc": {
+                "message": "Avoid hardcoded contentDescription",
+                "suggestion": "Use a localized string resource (@string/...)"
+            },
+            "toast-show-missing": {
+                "message": "Toast.makeText() created but not shown",
+                "suggestion": "Did you forget to call .show()?"
+            },
+            "empty-list-check": {
+                "message": "Prefer .isEmpty() over .size == 0",
+                "suggestion": "Use .isEmpty() for clarity and potential performance checks."
+            },
+            "useless-elvis": {
+                "message": "Useless elvis operator",
+                "suggestion": "Remove redundant elvis operator."
+            },
+            "redundant-let": {
+                "message": "Redundant let block",
+                "suggestion": "Remove .let { it }"
+            },
+            "raw-types": {
+                "message": "Avoid raw types",
+                "suggestion": "Use Generics (e.g., List<String>)"
+            },
+            "public-field": {
+                "message": "Avoid public fields",
+                "suggestion": "Use private fields with getters and setters (encapsulation)"
+            },
+            "naming-method": {
+                "message": "Method should be camelCase",
+                "suggestion": "Rename to camelCase"
+            },
+            "hardcoded-sdcard": {
+                "message": "Avoid hardcoded /sdcard path",
+                "suggestion": "Use Environment.getExternalStorageDirectory()"
+            },
+            "missing-javadoc": {
+                "message": "Public class/method missing JavaDoc",
+                "suggestion": "Add JavaDoc (/** ... */) documentation"
+            },
+            "empty-catch": {
+                "message": "Empty catch block detected",
+                "suggestion": "Handle the exception or log it"
+            },
+            "static-simple-date-format": {
+                "message": "Static SimpleDateFormat is not thread-safe",
+                "suggestion": "Use a thread-local usage or java.time API (DateTimeFormatter)."
+            },
+            "force-try": {
+                "message": "Avoid force try (try!)",
+                "suggestion": "Use do-catch blocks or try?"
+            },
+            "print-debug": {
+                "message": "Avoid print() in production",
+                "suggestion": "Use OSLog or a custom logging framework"
+            },
+            "ns-object": {
+                "message": "Avoid inheriting from NSObject unless necessary",
+                "suggestion": "Pure Swift classes are more performant if Obj-C interoperability is not needed"
+            },
+            "missing-swiftdoc": {
+                "message": "Public class/func missing documentation",
+                "suggestion": "Add documentation comment (///)"
+            },
+            "todo-comments": {
+                "message": "TODO/FIXME detected",
+                "suggestion": "Track this externally"
+            },
+            "force-cast": {
+                "message": "Avoid force casting (as!)",
+                "suggestion": "Use conditional cast (as?) and handle nil."
+            },
+            "strong-delegate": {
+                "message": "Delegate should be weak",
+                "suggestion": "Use "
+            },
+            "dispatch-sync-main": {
+                "message": "Avoid DispatchQueue.main.sync",
+                "suggestion": "Use async or run on a different queue to avoid deadlocks"
+            },
+            "collection-empty-check": {
+                "message": "Prefer .isEmpty over .count == 0",
+                "suggestion": "Use .isEmpty for clarity and performance."
+            },
+            "unowned-self": {
+                "message": "Avoid [unowned self], prefer [weak self]",
+                "suggestion": "Unowned references can crash if the object is deallocated. Use weak."
+            },
+            "final-class": {
+                "message": "Consider making class final",
+                "suggestion": "Mark class as "
+            },
+            "legacy-geometry": {
+                "message": "Use .width/.height directly",
+                "suggestion": "Use .width or .height directly on CGRect."
+            },
+            "ns-log": {
+                "message": "Avoid NSLog in production",
+                "suggestion": "Use os_log for better performance and privacy"
+            },
+            "retain-cycle-blocks": {
+                "message": "Potential retain cycle in block",
+                "suggestion": "Use __weak typeof(self) weakSelf = self; inside blocks avoiding direct self reference"
+            },
+            "atomic-property": {
+                "message": "Consider using nonatomic",
+                "suggestion": "most UI properties should be nonatomic for performance"
+            },
+            "string-literal-compare": {
+                "message": "Incorrect string literal comparison",
+                "suggestion": "Use [str isEqualToString:@"
+            },
+            "synch-self": {
+                "message": "Avoid locking on self",
+                "suggestion": "Use a private internal lock object."
+            },
+            "literal-conversion": {
+                "message": "Prefer literal syntax",
+                "suggestion": "Use @(number) instead."
+            },
+            "hardcoded-padding": {
+                "message": "Avoid hardcoded EdgeInsets",
+                "suggestion": "Use a constant or theme dimension for consistency"
+            },
+            "set-state-mounted": {
+                "message": "Check if mounted before setState",
+                "suggestion": "Ensure "
+            },
+            "missing-dartdoc": {
+                "message": "Public member missing documentation",
+                "suggestion": "Add documentation comment (///)"
+            },
+            "sized-box-shrink": {
+                "message": "Use SizedBox.shrink()",
+                "suggestion": ""
+            },
+            "unawaited-future": {
+                "message": "Future not awaited",
+                "suggestion": "Ensure you await this or use .then()"
+            },
+            "use-arrow": {
+                "message": "Prefer arrow syntax for one-line functions",
+                "suggestion": "Use => syntax."
+            },
+            "any-type": {
+                "message": "ជៀសវាងប្រភេទ \"any\"",
+                "suggestion": "បញ្ជាក់ប្រភេទឱ្យបានច្បាស់លាស់"
+            },
+            "debugger": {
+                "message": "Avoid \"debugger\" statement",
+                "suggestion": "Remove debugger before deployment"
+            },
+            "no-alert": {
+                "message": "Avoid \"alert()\"",
+                "suggestion": "Use a proper modal or notification system"
+            },
+            "no-eval": {
+                "message": "ជៀសវាងការប្រើ \"eval()\"",
+                "suggestion": "វាមានគ្រោះថ្នាក់និងយឺត"
+            },
+            "no-var": {
+                "message": "ជៀសវាង \"var\"",
+                "suggestion": "ប្រើ \"let\" ឬ \"const\""
+            },
+            "dangerously-set-html": {
+                "message": "ជៀសវាង \"dangerouslySetInnerHTML\"",
+                "suggestion": "ហានិភ័យ XSS"
+            },
+            "find-dom-node": {
+                "message": "Avoid \"findDOMNode\"",
+                "suggestion": "Use refs instead. findDOMNode is deprecated."
+            },
+            "jsx-no-bind": {
+                "message": "Avoid \".bind(this)\" in JSX",
+                "suggestion": "Use arrow functions in class properties or use functional components."
+            },
+            "no-http": {
+                "message": "ជៀសវាង \"http://\" ដែលមិនមានសុវត្ថិភាព",
+                "suggestion": "ប្រើ \"https://\""
+            },
+            "no-v-html": {
+                "message": "Avoid \"v-html\" to prevent XSS",
+                "suggestion": "Use text interpolation {{ }} or ensure content is sanitized"
+            },
+            "no-template-key": {
+                "message": "Avoid \"key\" on <template>",
+                "suggestion": "Key should be placed on the element inside the template or the component tag itself"
+            },
+            "no-this-in-template": {
+                "message": "Avoid \"this\" in templates",
+                "suggestion": "Template variables are automatically unscoped."
+            },
+            "var-usage": {
+                "message": "Prefer \"val\" over \"var\" where possible",
+                "suggestion": "Immutability improves thread safety and reduces bugs"
+            },
+            "lateinit-usage": {
+                "message": "Avoid extensive \"lateinit\"",
+                "suggestion": "Consider using nullable types or lazy initialization"
+            },
+            "run-blocking": {
+                "message": "Avoid \"runBlocking\" on main thread",
+                "suggestion": "Use suspend functions and proper coroutine scopes."
+            },
+            "string-equality": {
+                "message": "Use \".equals()\" for string comparison",
+                "suggestion": "Strings must be compared using .equals() in Java"
+            },
+            "thread-stop": {
+                "message": "Avoid \"Thread.stop()\"",
+                "suggestion": "Thread.stop is deprecated and unsafe."
+            },
+            "notify-all": {
+                "message": "Prefer \"notifyAll()\" over \"notify()\"",
+                "suggestion": "notify() can cause lost wake-ups if multiple threads wait on same condition."
+            },
+            "await-in-loop": {
+                "message": "Avoid \"await\" inside loops",
+                "suggestion": ""
+            }
+        },
+        "analyze": "វិភាគកូដ",
+        "clear": "សម្អាតកូដ",
+        "exportCSV": "នាំចេញទៅ Excel",
+        "placeholder": "បិទភ្ជាប់កូដរបស់អ្នកនៅទីនេះ...",
+        "suggestion": "សំណូមពរ",
+        "genericMessage": "បានរកឃើញបញ្ហា",
+        "title": "កម្មវិធីពិនិត្យគុណភាពកូដ",
+        "description": "វិភាគកូដរបស់អ្នកសម្រាប់បញ្ហាគុណភាព សុវត្ថិភាព និងប្រសិទ្ធភាព។",
+        "mode": {
+            "manual": "ពិនិត្យដោយដៃ",
+            "project": "ស្កេនគម្រោង"
+        },
+        "reupload": "ស្កេនម្តងទៀត",
+        "dropZip": "អូស និងទម្លាក់ឯកសារ ZIP នៅទីនេះ",
+        "zipSupport": "គាំទ្រឯកសារ .zip",
+        "tabs": {
+            "react_ts": "React (TS)",
+            "react_native": "React Native",
+            "vue_ts": "Vue (TS)",
+            "android_kotlin": "Android (Kotlin)",
+            "android_java": "Android (Java)",
+            "ios_swift": "iOS (Swift)",
+            "ios_objc": "iOS (Obj-C)",
+            "flutter_dart": "Flutter (Dart)"
+        },
+        "dashboard": {
+            "overview": "ទិដ្ឋភាពទូទៅ",
+            "totalFiles": "ឯកសារសរុប",
+            "errors": "កំហុស",
+            "warnings": "ការព្រមាន",
+            "passed": "ជាប់",
+            "error": "កំហុស",
+            "warning": "ការព្រមាន",
+            "filterAll": "ទាំងអស់",
+            "filterPassed": "ជាប់",
+            "filterWarning": "ការព្រមាន",
+            "filterError": "កំហុស",
+            "search": "ស្វែងរកឯកសារ...",
+            "columns": {
+                "file": "ឯកសារ",
+                "language": "ភាសា",
+                "issues": "បញ្ហា",
+                "status": "ស្ថានភាព",
+                "actions": "សកម្មភាព"
+            }
+        }
     }
 }

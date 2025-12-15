@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import {
     Image as ImageIcon, Layers, Sparkles, QrCode, FileCode, Code, Key, Lock, Hash,
     FileUp, Split, Film, Link, ScanLine, Palette, Zap, Clock, Monitor,
-    Smartphone, KeyRound
+    Smartphone, KeyRound, CheckCircle
 } from 'lucide-react';
 
 export type ToolId =
@@ -11,7 +11,7 @@ export type ToolId =
     | 'density-converter' | 'regex-tester' | 'css-generator' | 'screenshot-framer'
     | 'totp-generator' | 'deeplink-generator' | 'qr' | 'svg-drawable' | 'base64'
     | 'json' | 'csv-json' | 'validate-translation' | 'jwt' | 'encryption' | 'sha'
-    | 'download' | 'editor';
+    | 'download' | 'editor' | 'code-quality';
 
 export interface Tool {
     id: ToolId;
@@ -48,6 +48,7 @@ export const useTools = () => {
         { id: 'jwt', icon: Key, label: t('app.jwtTab'), description: 'Decode JWT tokens' },
         { id: 'encryption', icon: Lock, label: t('app.encryptionTab'), description: 'Encrypt/Decrypt text' },
         { id: 'sha', icon: Hash, label: t('app.shaTab'), description: 'Generate SHA hashes' },
+        { id: 'code-quality', icon: CheckCircle, label: t('codeQuality.title', 'Code Quality Checker'), description: t('codeQuality.description') },
         // { id: 'download', icon: Download, label: t('app.downloadTab', 'Download App'), description: 'Get the mobile app' },
     ];
 

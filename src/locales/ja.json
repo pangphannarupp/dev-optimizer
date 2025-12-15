@@ -620,5 +620,367 @@
     },
     "home": {
         "subtitle": "すべての開発者ツールを1か所に。"
+    },
+    "codeQuality": {
+        "rules": {
+            "console-log": {
+                "message": "本番コードでの console.log の使用は避けてください",
+                "suggestion": "ログサービスを使用するか、デプロイ前に削除してください"
+            },
+            "index-key": {
+                "message": "配列のインデックスをキーとして使用しないでください",
+                "suggestion": "データからの一意のIDを使用してください"
+            },
+            "inline-style": {
+                "message": "インラインスタイルの使用は避けてください",
+                "suggestion": "CSSクラスまたはstyled-componentsを使用してください"
+            },
+            "useEffect-missing-deps": {
+                "message": "Potential missing dependency in useEffect",
+                "suggestion": "Check if you really intend to run this only on mount. Ensure all utilized variables are in the dependency array."
+            },
+            "hardcoded-secret": {
+                "message": "ハードコードされたシークレットの可能性があります",
+                "suggestion": "環境変数を使用してください"
+            },
+            "always-true": {
+                "message": "条件は常に true/false です",
+                "suggestion": "決定論的な条件を削除してください"
+            },
+            "bad-equality": {
+                "message": "緩い等価演算子 (==) は避けてください",
+                "suggestion": "厳密な等価演算子 (===) を使用してください"
+            },
+            "naming-class": {
+                "message": "Class/Interface should be PascalCase",
+                "suggestion": "Rename to start with an uppercase letter"
+            },
+            "naming-function": {
+                "message": "Function should be camelCase",
+                "suggestion": "Rename to camelCase (e.g., myFunction)"
+            },
+            "naming-variable": {
+                "message": "Variable should be camelCase",
+                "suggestion": "Rename to camelCase (avoid snake_case)"
+            },
+            "todo-comment": {
+                "message": "TODO/FIXME コメントが検出されました",
+                "suggestion": "このタスクを外部で管理してください"
+            },
+            "empty-block": {
+                "message": "空のブロックが検出されました",
+                "suggestion": "削除するか、コメントを追加してください"
+            },
+            "missing-docs": {
+                "message": "ドキュメントが不足しています",
+                "suggestion": "JSDoc/KDoc を追加してください"
+            },
+            "no-access-state-in-setstate": {
+                "message": "Avoid accessing this.state inside setState",
+                "suggestion": "Use the functional form: this.setState(prevState => ({...}))"
+            },
+            "no-async-use-effect": {
+                "message": "useEffect callback cannot be async",
+                "suggestion": "Define an async function inside useEffect and call it immediately."
+            },
+            "useless-fragment": {
+                "message": "Avoid useless fragments",
+                "suggestion": "Remove the fragment or add a key if needed."
+            },
+            "duplicate-props": {
+                "message": "Duplicate props detected",
+                "suggestion": "Remove duplicate props."
+            },
+            "no-non-null-assertion": {
+                "message": "非nullアサーション (!) は避けてください",
+                "suggestion": "オプショナルチェーン (?.) を使用してください"
+            },
+            "prefer-optional-chaining": {
+                "message": "Prefer optional chaining",
+                "suggestion": "Use optional chaining (e.g., foo?.bar)."
+            },
+            "inline-style-obj": {
+                "message": "Avoid inline style objects",
+                "suggestion": "Use StyleSheet.create() for better performance"
+            },
+            "hardcoded-color": {
+                "message": "Avoid hardcoded colors",
+                "suggestion": "Use a theme or constants file for colors"
+            },
+            "v-if-v-for": {
+                "message": "Avoid using v-if and v-for on the same element",
+                "suggestion": "Move v-if to a parent element or use a computed property to filter the list"
+            },
+            "mutating-props": {
+                "message": "Avoid mutating props directly",
+                "suggestion": "Emit an event to the parent to update the value"
+            },
+            "useless-mustache": {
+                "message": "Avoid useless mustache interpolation",
+                "suggestion": "Use static text instead."
+            },
+            "force-unwrap": {
+                "message": "強制アンラップ (!!) は避けてください",
+                "suggestion": "安全な呼び出し (?) を使用してください"
+            },
+            "global-scope-launch": {
+                "message": "Avoid GlobalScope.launch",
+                "suggestion": "Use lifecycle-aware scopes like viewModelScope or lifecycleScope"
+            },
+            "print-stack-trace": {
+                "message": "Avoid printStackTrace()",
+                "suggestion": "Use a logger (e.g., Timber) to handle exceptions"
+            },
+            "system-out": {
+                "message": "Avoid System.out.println",
+                "suggestion": "Use Android Log class or Timber"
+            },
+            "thread-sleep": {
+                "message": "Avoid Thread.sleep() on main thread",
+                "suggestion": "Use coroutines delay() or proper async mechanisms"
+            },
+            "missing-kdoc": {
+                "message": "Public class/function missing KDoc",
+                "suggestion": "Add KDoc (/** ... */) documentation for public API"
+            },
+            "magic-number": {
+                "message": "Avoid magic numbers",
+                "suggestion": "Extract magic numbers to constants"
+            },
+            "nested-blocks": {
+                "message": "Deeply nested blocks detected",
+                "suggestion": "Refactor code to reduce nesting (guard clauses, extract functions)"
+            },
+            "wildcard-import": {
+                "message": "Avoid wildcard imports",
+                "suggestion": "Import specific classes to avoid conflicts."
+            },
+            "hardcoded-content-desc": {
+                "message": "Avoid hardcoded contentDescription",
+                "suggestion": "Use a localized string resource (@string/...)"
+            },
+            "toast-show-missing": {
+                "message": "Toast.makeText() created but not shown",
+                "suggestion": "Did you forget to call .show()?"
+            },
+            "empty-list-check": {
+                "message": "Prefer .isEmpty() over .size == 0",
+                "suggestion": "Use .isEmpty() for clarity and potential performance checks."
+            },
+            "useless-elvis": {
+                "message": "Useless elvis operator",
+                "suggestion": "Remove redundant elvis operator."
+            },
+            "redundant-let": {
+                "message": "Redundant let block",
+                "suggestion": "Remove .let { it }"
+            },
+            "raw-types": {
+                "message": "Avoid raw types",
+                "suggestion": "Use Generics (e.g., List<String>)"
+            },
+            "public-field": {
+                "message": "Avoid public fields",
+                "suggestion": "Use private fields with getters and setters (encapsulation)"
+            },
+            "naming-method": {
+                "message": "Method should be camelCase",
+                "suggestion": "Rename to camelCase"
+            },
+            "hardcoded-sdcard": {
+                "message": "Avoid hardcoded /sdcard path",
+                "suggestion": "Use Environment.getExternalStorageDirectory()"
+            },
+            "missing-javadoc": {
+                "message": "Public class/method missing JavaDoc",
+                "suggestion": "Add JavaDoc (/** ... */) documentation"
+            },
+            "empty-catch": {
+                "message": "Empty catch block detected",
+                "suggestion": "Handle the exception or log it"
+            },
+            "static-simple-date-format": {
+                "message": "Static SimpleDateFormat is not thread-safe",
+                "suggestion": "Use a thread-local usage or java.time API (DateTimeFormatter)."
+            },
+            "force-try": {
+                "message": "Avoid force try (try!)",
+                "suggestion": "Use do-catch blocks or try?"
+            },
+            "print-debug": {
+                "message": "Avoid print() in production",
+                "suggestion": "Use OSLog or a custom logging framework"
+            },
+            "ns-object": {
+                "message": "Avoid inheriting from NSObject unless necessary",
+                "suggestion": "Pure Swift classes are more performant if Obj-C interoperability is not needed"
+            },
+            "missing-swiftdoc": {
+                "message": "Public class/func missing documentation",
+                "suggestion": "Add documentation comment (///)"
+            },
+            "todo-comments": {
+                "message": "TODO/FIXME detected",
+                "suggestion": "Track this externally"
+            },
+            "force-cast": {
+                "message": "Avoid force casting (as!)",
+                "suggestion": "Use conditional cast (as?) and handle nil."
+            },
+            "strong-delegate": {
+                "message": "Delegate should be weak",
+                "suggestion": "Use "
+            },
+            "dispatch-sync-main": {
+                "message": "Avoid DispatchQueue.main.sync",
+                "suggestion": "Use async or run on a different queue to avoid deadlocks"
+            },
+            "collection-empty-check": {
+                "message": "Prefer .isEmpty over .count == 0",
+                "suggestion": "Use .isEmpty for clarity and performance."
+            },
+            "unowned-self": {
+                "message": "Avoid [unowned self], prefer [weak self]",
+                "suggestion": "Unowned references can crash if the object is deallocated. Use weak."
+            },
+            "final-class": {
+                "message": "Consider making class final",
+                "suggestion": "Mark class as "
+            },
+            "legacy-geometry": {
+                "message": "Use .width/.height directly",
+                "suggestion": "Use .width or .height directly on CGRect."
+            },
+            "ns-log": {
+                "message": "Avoid NSLog in production",
+                "suggestion": "Use os_log for better performance and privacy"
+            },
+            "retain-cycle-blocks": {
+                "message": "Potential retain cycle in block",
+                "suggestion": "Use __weak typeof(self) weakSelf = self; inside blocks avoiding direct self reference"
+            },
+            "atomic-property": {
+                "message": "Consider using nonatomic",
+                "suggestion": "most UI properties should be nonatomic for performance"
+            },
+            "string-literal-compare": {
+                "message": "Incorrect string literal comparison",
+                "suggestion": "Use [str isEqualToString:@"
+            },
+            "synch-self": {
+                "message": "Avoid locking on self",
+                "suggestion": "Use a private internal lock object."
+            },
+            "literal-conversion": {
+                "message": "Prefer literal syntax",
+                "suggestion": "Use @(number) instead."
+            },
+            "hardcoded-padding": {
+                "message": "Avoid hardcoded EdgeInsets",
+                "suggestion": "Use a constant or theme dimension for consistency"
+            },
+            "set-state-mounted": {
+                "message": "Check if mounted before setState",
+                "suggestion": "Ensure "
+            },
+            "missing-dartdoc": {
+                "message": "Public member missing documentation",
+                "suggestion": "Add documentation comment (///)"
+            },
+            "sized-box-shrink": {
+                "message": "Use SizedBox.shrink()",
+                "suggestion": ""
+            },
+            "unawaited-future": {
+                "message": "Future not awaited",
+                "suggestion": "Ensure you await this or use .then()"
+            },
+            "use-arrow": {
+                "message": "Prefer arrow syntax for one-line functions",
+                "suggestion": "Use => syntax."
+            },
+            "any-type": {
+                "message": "\"any\" 型の使用は避けてください",
+                "suggestion": "より正確な型を指定してください"
+            },
+            "debugger": {
+                "message": "Avoid \"debugger\" statement",
+                "suggestion": "Remove debugger before deployment"
+            },
+            "no-alert": {
+                "message": "Avoid \"alert()\"",
+                "suggestion": "Use a proper modal or notification system"
+            },
+            "no-eval": {
+                "message": "\"eval()\" の使用は避けてください",
+                "suggestion": "危険で低速です"
+            },
+            "no-var": {
+                "message": "\"var\" は避け、\"let\" または \"const\" を使用してください",
+                "suggestion": "\"const\" を推奨します"
+            },
+            "dangerously-set-html": {
+                "message": "\"dangerouslySetInnerHTML\" は避けてください",
+                "suggestion": "XSSのリスクがあります"
+            },
+            "find-dom-node": {
+                "message": "Avoid \"findDOMNode\"",
+                "suggestion": "Use refs instead. findDOMNode is deprecated."
+            },
+            "jsx-no-bind": {
+                "message": "Avoid \".bind(this)\" in JSX",
+                "suggestion": "Use arrow functions in class properties or use functional components."
+            },
+            "no-http": {
+                "message": "安全でない \"http://\" は避けてください",
+                "suggestion": "\"https://\" を使用してください"
+            },
+            "no-v-html": {
+                "message": "Avoid \"v-html\" to prevent XSS",
+                "suggestion": "Use text interpolation {{ }} or ensure content is sanitized"
+            },
+            "no-template-key": {
+                "message": "Avoid \"key\" on <template>",
+                "suggestion": "Key should be placed on the element inside the template or the component tag itself"
+            },
+            "no-this-in-template": {
+                "message": "Avoid \"this\" in templates",
+                "suggestion": "Template variables are automatically unscoped."
+            },
+            "var-usage": {
+                "message": "Prefer \"val\" over \"var\" where possible",
+                "suggestion": "Immutability improves thread safety and reduces bugs"
+            },
+            "lateinit-usage": {
+                "message": "Avoid extensive \"lateinit\"",
+                "suggestion": "Consider using nullable types or lazy initialization"
+            },
+            "run-blocking": {
+                "message": "Avoid \"runBlocking\" on main thread",
+                "suggestion": "Use suspend functions and proper coroutine scopes."
+            },
+            "string-equality": {
+                "message": "Use \".equals()\" for string comparison",
+                "suggestion": "Strings must be compared using .equals() in Java"
+            },
+            "thread-stop": {
+                "message": "Avoid \"Thread.stop()\"",
+                "suggestion": "Thread.stop is deprecated and unsafe."
+            },
+            "notify-all": {
+                "message": "Prefer \"notifyAll()\" over \"notify()\"",
+                "suggestion": "notify() can cause lost wake-ups if multiple threads wait on same condition."
+            },
+            "await-in-loop": {
+                "message": "Avoid \"await\" inside loops",
+                "suggestion": ""
+            }
+        },
+        "analyze": "コードを解析する",
+        "clear": "クリア",
+        "exportCSV": "Excelにエクスポート",
+        "placeholder": "ここにコードを貼り付けてください...",
+        "suggestion": "提案",
+        "genericMessage": "問題が検出されました"
     }
 }

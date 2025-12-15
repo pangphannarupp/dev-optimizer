@@ -44,9 +44,9 @@ export const DonutChart: React.FC<DonutChartProps> = ({ items, total, centerLabe
     }, [items, total]);
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 flex flex-col md:flex-row items-center gap-8 justify-center">
+        <div className="flex flex-row items-center justify-between gap-4 w-full h-full">
             {/* Donut Chart */}
-            <div className="relative w-48 h-48 flex-shrink-0">
+            <div className="relative w-24 h-24 flex-shrink-0">
                 <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                     {/* Background Circle */}
                     <circle
@@ -54,7 +54,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({ items, total, centerLabe
                         cy="50"
                         r="40"
                         fill="transparent"
-                        strokeWidth="12"
+                        strokeWidth="8"
                         className="text-gray-100 dark:text-gray-700 stroke-current"
                     />
 
@@ -66,14 +66,14 @@ export const DonutChart: React.FC<DonutChartProps> = ({ items, total, centerLabe
                             cy="50"
                             r="40"
                             fill="transparent"
-                            strokeWidth="12"
+                            strokeWidth="8"
                             className={clsx("stroke-current transition-colors", segment.color)}
                             strokeDasharray={segment.strokeDasharray}
-                            strokeDashoffset={segment.strokeDashoffset} // Initial offset for calculation
+                            strokeDashoffset={segment.strokeDashoffset}
                             initial={{ strokeDasharray: `0 251.2` }}
                             animate={{ strokeDasharray: segment.strokeDasharray }}
                             transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
-                            strokeLinecap="butt" // Use butt for seamless segments
+                            strokeLinecap="butt"
                         />
                     ))}
                 </svg>
@@ -84,7 +84,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({ items, total, centerLabe
                         initial={{ opacity: 0, scale: 0.5 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.5 }}
-                        className="text-3xl font-bold text-gray-800 dark:text-white"
+                        className="text-xl font-bold text-gray-800 dark:text-white"
                     >
                         {centerLabel || total}
                     </motion.span>
@@ -93,7 +93,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({ items, total, centerLabe
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.7 }}
-                            className="text-xs text-gray-500 uppercase font-medium tracking-wider"
+                            className="text-[8px] text-gray-500 uppercase font-bold tracking-widest mt-0.5"
                         >
                             {centerSubLabel}
                         </motion.span>
@@ -102,30 +102,28 @@ export const DonutChart: React.FC<DonutChartProps> = ({ items, total, centerLabe
             </div>
 
             {/* Legend */}
-            <div className="grid grid-cols-2 gap-4 w-full md:w-auto">
+            <div className="flex-1 flex flex-col gap-1.5 min-w-0">
                 {data.map((item, index) => (
                     <motion.div
                         key={item.id}
-                        initial={{ opacity: 0, x: 20 }}
+                        initial={{ opacity: 0, x: 10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.3 + (index * 0.1) }}
-                        className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        className="flex items-center justify-between p-1.5 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
-                        <div className={clsx("w-10 h-10 rounded-full flex items-center justify-center text-white shadow-sm flex-shrink-0", item.bg)}>
-                            <item.icon size={18} />
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                        <div className="flex items-center gap-2 min-w-0">
+                            <div className={clsx("w-1.5 h-1.5 rounded-full shrink-0", item.bg)} />
+                            <span className="text-xs font-medium text-gray-600 dark:text-gray-400 truncate">
                                 {item.label}
                             </span>
-                            <div className="flex items-baseline gap-2">
-                                <span className="text-lg font-bold text-gray-800 dark:text-white">
-                                    {item.value}
-                                </span>
-                                <span className={clsx("text-xs font-medium", item.color)}>
-                                    {item.percentage.toFixed(1)}%
-                                </span>
-                            </div>
+                        </div>
+                        <div className="flex items-center gap-1.5 ml-2 shrink-0">
+                            <span className="text-xs font-bold text-gray-800 dark:text-white">
+                                {item.value}
+                            </span>
+                            <span className={clsx("text-[10px] font-semibold px-1 py-0.5 rounded bg-opacity-10 dark:bg-opacity-20", item.color.replace('text-', 'bg-'), item.color)}>
+                                {item.percentage.toFixed(0)}%
+                            </span>
                         </div>
                     </motion.div>
                 ))}
