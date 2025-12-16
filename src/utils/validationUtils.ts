@@ -30,13 +30,25 @@ export // Helper to check if string contains potential hardcoded text
         if (/^[a-zA-Z0-9_\-\/\.]+$/.test(str)) return false;
 
         // Exclude SQL
-        if (/^(SELECT|INSERT INTO|CREATE TABLE|UPDATE|DELETE FROM|DROP TABLE|ALTER TABLE)/i.test(str)) return false;
+        if (/^(SELECT|INSERT INTO|CREATE TABLE|UPDATE|DELETE FROM|DROP TABLE|ALTER TABLE|VALUES)/i.test(str)) return false;
+
+        // Exclude SQL definitions/fragments
+        if (/\b(VARCHAR|PRIMARY KEY|AUTOINCREMENT|CURRENT_TIMESTAMP|NOT NULL)\b/i.test(str)) return false;
 
         // Exclude Logs/Tech prefixes
         if (/^(notify status|subscribe:|error:|warning:|info:|debug:)/i.test(str)) return false;
 
         // Exclude date formats
         if (/^[ymdYMDHhmsS\/\-:\sT\.]+$/.test(str)) return false;
+
+        // Exclude string format specifiers (e.g. %.1f, %d, %s)
+        if (/^%[\d\.]*[sdf]/.test(str)) return false;
+
+        // Exclude Kotlin/Java format strings with units (e.g. %.1fM km, %.1f km)
+        if (/^%[\d\.]*[sdf][a-zA-Z\s]*$/.test(str)) return false;
+
+        // Exclude Kotlin string templates starting with $
+        if (str.startsWith('$')) return false;
 
         return true;
     };
@@ -215,6 +227,9 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
             const lineEnd = content.indexOf('\n', index);
             const lineContent = content.substring(lineStart, lineEnd !== -1 ? lineEnd : content.length);
 
+            // Ignore comments
+            if (lineContent.trim().startsWith('//')) continue;
+
             if (/(console|BizMOBLogger)\.(log|debug|info|warn|error)|(\.log\()/.test(lineContent)) continue;
 
             const absoluteIndex = index + 1;
@@ -261,8 +276,14 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
             const lineEnd = content.indexOf('\n', index);
             const lineContent = content.substring(lineStart, lineEnd !== -1 ? lineEnd : content.length);
 
+            // Ignore comments
+            if (lineContent.trim().startsWith('//')) continue;
+
             // Ignore Logs
-            if (/(Log\.[civdw]|Logger\.|System\.out\.|Timber\.|BizMOBLogger\.)|(\.log\()/.test(lineContent)) continue;
+            if (/(Log\.[civdw]|Logger\.|System\.out\.|Timber\.|BizMOBLogger\.|println\()|(\.log\()/.test(lineContent)) continue;
+
+            // Ignore HTTP Headers
+            if (/(\.addHeader\(|\.header\()/.test(lineContent)) continue;
 
             // Ignore Annotations (lines starting with @, or string inside @Annotation(...))
             if (lineContent.trim().startsWith('@')) continue;
@@ -290,6 +311,9 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
             const lineStart = content.lastIndexOf('\n', index) + 1;
             const lineEnd = content.indexOf('\n', index);
             const lineContent = content.substring(lineStart, lineEnd !== -1 ? lineEnd : content.length);
+
+            // Ignore comments
+            if (lineContent.trim().startsWith('//')) continue;
 
             // Ignore NSLocalizedString (Swift/ObjC)
             if (/NSLocalizedString/.test(lineContent)) continue;
@@ -363,6 +387,9 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
                 const lineStart = content.lastIndexOf('\n', index) + 1;
                 const lineEnd = content.indexOf('\n', index);
                 const lineContent = content.substring(lineStart, lineEnd !== -1 ? lineEnd : content.length);
+
+                // Ignore comments
+                if (lineContent.trim().startsWith('//')) continue;
 
                 if (/(console|BizMOBLogger)\.(log|debug|info|warn|error)/.test(lineContent)) continue;
 

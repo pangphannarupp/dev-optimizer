@@ -2,7 +2,7 @@
 import { saveAs } from 'file-saver';
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import JSZip from 'jszip';
-import { Upload, FileText, CheckCircle, AlertTriangle, AlertCircle, RefreshCw, Layers, Eye, EyeOff, Download, X, Code, List, FileSpreadsheet } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertTriangle, AlertCircle, RefreshCw, Layers, Eye, EyeOff, Download, X, Code, List, FileSpreadsheet, Search } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { clsx } from 'clsx';
 import * as XLSX from 'xlsx';
@@ -30,6 +30,21 @@ export function ValidateTranslation() {
     const [selectedResult, setSelectedResult] = useState<FileValidationResult | null>(null);
     const [viewMode, setViewMode] = useState<'list' | 'code'>('list');
     const [highlightedLine, setHighlightedLine] = useState<number | null>(null);
+    const [progress, setProgress] = useState(0);
+    const [processingFile, setProcessingFile] = useState<string>('');
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // TEMP: Mock data for scroll testing
+    // useEffect(() => {
+    //     const mockFiles = Array.from({ length: 50 }, (_, i) => ({
+    //         path: `src/mock/file_${i}.ts`,
+    //         isValid: i % 2 === 0,
+    //         type: 'ts' as const,
+    //         details: i % 2 !== 0 ? [{ line: 10, text: 'Hello', message: 'Untranslated' }] : undefined
+    //     }));
+    //     setResults(mockFiles);
+    //     setIgnoredPaths(new Set());
+    // }, []);
 
     // Ref for the code view container to scroll
     const codeViewRef = useRef<HTMLDivElement>(null);
@@ -79,8 +94,12 @@ export function ValidateTranslation() {
         if (showInvalidOnly) {
             filtered = filtered.filter(r => !r.isValid);
         }
+        if (searchQuery) {
+            const query = searchQuery.toLowerCase();
+            filtered = filtered.filter(r => r.path.toLowerCase().includes(query));
+        }
         return filtered;
-    }, [results, ignoredPaths, hideIgnored, showInvalidOnly]);
+    }, [results, ignoredPaths, hideIgnored, showInvalidOnly, searchQuery]);
 
     const processFile = async (file: File, keepIgnored = false) => {
         setIsAnalyzing(true);
@@ -97,10 +116,35 @@ export function ValidateTranslation() {
             const contents = await zip.loadAsync(file);
             const validationResults: FileValidationResult[] = [];
 
-            for (const [relativePath, zipEntry] of Object.entries(contents.files)) {
-                if (zipEntry.dir || relativePath.includes('node_modules') || relativePath.includes('.git') || relativePath.includes('dist') || relativePath.includes('build/') || relativePath.includes('.gradle') || relativePath.includes('.idea')) {
-                    continue;
+            const entries = Object.entries(contents.files).filter(([relativePath, zipEntry]) => {
+                const pathParts = relativePath.split('/');
+                const fileName = pathParts[pathParts.length - 1];
+
+                // Ignore directories, hidden files, and system folders
+                if (zipEntry.dir) return false;
+
+                if (relativePath.includes('__MACOSX') ||
+                    relativePath.includes('node_modules') ||
+                    relativePath.includes('.git') ||
+                    fileName.startsWith('.')) {
+                    return false;
                 }
+
+                return true;
+            });
+
+            const totalFiles = entries.length;
+            let processedCount = 0;
+
+            for (const [relativePath, zipEntry] of entries) {
+                processedCount++;
+                const currentProgress = (processedCount / totalFiles) * 100;
+
+                setProgress(currentProgress);
+                setProcessingFile(relativePath);
+
+                // Small delay to allow UI to update
+                await new Promise(resolve => setTimeout(resolve, 1));
 
                 const lowerPath = relativePath.toLowerCase();
                 let type: FileValidationResult['type'] = 'other';
@@ -137,6 +181,8 @@ export function ValidateTranslation() {
             console.error("Failed to unzip or analyze", error);
         } finally {
             setIsAnalyzing(false);
+            setProgress(0);
+            setProcessingFile('');
         }
     };
 
@@ -317,16 +363,17 @@ export function ValidateTranslation() {
             {results.length === 0 && (
                 <div
                     className={clsx(
-                        "relative border-2 border-dashed rounded-xl p-12 transition-all text-center cursor-pointer mb-8 bg-white dark:bg-gray-800",
-                        isDragging
+                        "relative border-2 border-dashed rounded-xl p-12 transition-all text-center mb-8 bg-white dark:bg-gray-800 flex flex-col items-center justify-center min-h-[400px]",
+                        isDragging && !isAnalyzing
                             ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                            : "border-gray-200 dark:border-gray-700 hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                            : "border-gray-200 dark:border-gray-700",
+                        !isAnalyzing && "cursor-pointer hover:border-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700/50"
                     )}
-                    onDragEnter={handleDrag}
-                    onDragOver={handleDrag}
-                    onDragLeave={handleDrag}
-                    onDrop={handleDrop}
-                    onClick={() => document.getElementById('file-upload')?.click()}
+                    onDragEnter={!isAnalyzing ? handleDrag : undefined}
+                    onDragOver={!isAnalyzing ? handleDrag : undefined}
+                    onDragLeave={!isAnalyzing ? handleDrag : undefined}
+                    onDrop={!isAnalyzing ? handleDrop : undefined}
+                    onClick={() => !isAnalyzing && document.getElementById('file-upload')?.click()}
                 >
                     <input
                         type="file"
@@ -334,28 +381,76 @@ export function ValidateTranslation() {
                         className="hidden"
                         accept=".zip"
                         onChange={handleFileSelect}
+                        disabled={isAnalyzing}
                     />
 
-                    <div className="flex flex-col items-center gap-4">
-                        <div className="w-20 h-20 bg-blue-50 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400">
-                            {isAnalyzing ? <RefreshCw className="animate-spin" size={40} /> : <Upload size={40} />}
+                    {isAnalyzing ? (
+                        <div className="flex flex-col items-center animate-in fade-in duration-500">
+                            <div className="relative w-32 h-32 mb-8">
+                                <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                                    <circle
+                                        className="text-gray-100 dark:text-gray-700 stroke-current"
+                                        strokeWidth="8"
+                                        cx="50"
+                                        cy="50"
+                                        r="40"
+                                        fill="transparent"
+                                    ></circle>
+                                    <circle
+                                        className="text-blue-500 progress-ring__circle stroke-current transition-all duration-300 ease-out"
+                                        strokeWidth="8"
+                                        strokeLinecap="round"
+                                        cx="50"
+                                        cy="50"
+                                        r="40"
+                                        fill="transparent"
+                                        strokeDasharray="251.2"
+                                        strokeDashoffset={251.2 - (251.2 * progress) / 100}
+                                    ></circle>
+                                </svg>
+                                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                                    <span className="text-3xl font-bold text-slate-700 dark:text-white">
+                                        {Math.round(progress)}%
+                                    </span>
+                                </div>
+                            </div>
+
+                            <h3 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">
+                                {t('validation.analyzing', 'Analyzing codebase...')}
+                            </h3>
+
+                            <div className="w-full max-w-2xl text-center mt-2 px-4">
+                                <p
+                                    className="text-xs font-mono text-slate-500 dark:text-gray-400 truncate animate-pulse leading-relaxed"
+                                    style={{ direction: 'rtl' }}
+                                    title={processingFile}
+                                >
+                                    {processingFile} &lrm;
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <p className="text-xl font-semibold text-slate-700 dark:text-gray-200">
-                                {isAnalyzing ? t('validation.analyzing') : t('validation.dragDrop')}
-                            </p>
-                            <p className="text-base text-slate-500 dark:text-gray-400 mt-2">
-                                {t('validation.browse')}
-                            </p>
+                    ) : (
+                        <div className="flex flex-col items-center gap-4">
+                            <div className="w-20 h-20 bg-blue-50 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400">
+                                <Upload size={40} />
+                            </div>
+                            <div>
+                                <p className="text-xl font-semibold text-slate-700 dark:text-gray-200">
+                                    {t('validation.dragDrop')}
+                                </p>
+                                <p className="text-base text-slate-500 dark:text-gray-400 mt-2">
+                                    {t('validation.browse')}
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             )}
 
             {results.length > 0 && (
-                <div className="flex-1 flex flex-col gap-6 overflow-hidden">
+                <div className="flex-1 flex flex-col gap-6 h-full overflow-hidden">
                     {/* Stats & Actions Header */}
-                    <div className="flex flex-wrap items-center justify-between gap-4">
+                    <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
                         <DonutChart
                             items={[
                                 { id: 'valid', value: stats.valid, color: 'text-green-500', bg: 'bg-green-500', icon: CheckCircle, label: t('validation.valid') },
@@ -365,8 +460,20 @@ export function ValidateTranslation() {
                             centerSubLabel={t('validation.total')}
                         />
 
+                        <div className="flex flex-wrap items-center gap-3 bg-white dark:bg-gray-800 p-2 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 w-full lg:w-auto">
+                            <div className="relative group grow lg:grow-0">
+                                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
+                                <input
+                                    type="text"
+                                    placeholder={t('validation.searchFiles', 'Search files...')}
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="pl-9 pr-3 py-1.5 text-sm bg-slate-50 dark:bg-gray-900 border-none rounded-lg w-full lg:w-56 focus:ring-2 focus:ring-blue-500/50 transition-all placeholder:text-slate-400 text-slate-700 dark:text-gray-200"
+                                />
+                            </div>
 
-                        <div className="flex items-center gap-3 bg-white dark:bg-gray-800 p-2 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                            <div className="hidden sm:block w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1"></div>
+
                             <label className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-gray-300 cursor-pointer select-none hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors">
                                 <input
                                     type="checkbox"
@@ -377,7 +484,7 @@ export function ValidateTranslation() {
                                 {t('validation.showInvalidOnly')}
                             </label>
 
-                            <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1"></div>
+                            <div className="hidden sm:block w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1"></div>
 
                             <label className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-gray-300 cursor-pointer select-none hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors">
                                 <input
@@ -389,46 +496,46 @@ export function ValidateTranslation() {
                                 {t('validation.hideIgnored')}
                             </label>
 
-                            <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1"></div>
+                            <div className="hidden sm:block w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1"></div>
 
-                            <button
-                                onClick={handleExportExcel}
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 rounded-lg transition-all active:scale-95"
-                            >
-                                <FileSpreadsheet size={16} />
-                                {t('validation.exportExcel')}
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={handleExportExcel}
+                                    className="p-2 text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 rounded-lg transition-all active:scale-95"
+                                    title={t('validation.exportExcel')}
+                                >
+                                    <FileSpreadsheet size={18} />
+                                </button>
 
+                                <button
+                                    onClick={handleExportCsv}
+                                    className="p-2 text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-lg transition-all active:scale-95"
+                                    title={t('validation.exportCsv')}
+                                >
+                                    <Download size={18} />
+                                </button>
 
+                                <button
+                                    onClick={handleReAnalyze}
+                                    disabled={isAnalyzing}
+                                    className="p-2 text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-all active:scale-95 disabled:opacity-50"
+                                    title={t('validation.reAnalyze')}
+                                >
+                                    <RefreshCw size={18} className={clsx(isAnalyzing && "animate-spin")} />
+                                </button>
 
-                            <button
-                                onClick={handleExportCsv}
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-lg transition-all active:scale-95"
-                            >
-                                <Download size={16} />
-                                {t('validation.exportCsv')}
-                            </button>
-
-                            <button
-                                onClick={handleReAnalyze}
-                                disabled={isAnalyzing}
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 rounded-lg transition-all active:scale-95 disabled:opacity-50"
-                            >
-                                <RefreshCw size={16} className={clsx(isAnalyzing && "animate-spin")} />
-                                {t('validation.reAnalyze')}
-                            </button>
-
-                            <button
-                                onClick={handleUploadNew}
-                                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 rounded-lg transition-all active:scale-95"
-                            >
-                                <Upload size={16} />
-                                {t('validation.uploadNew')}
-                            </button>
+                                <button
+                                    onClick={handleUploadNew}
+                                    className="p-2 text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 rounded-lg transition-all active:scale-95"
+                                    title={t('validation.uploadNew')}
+                                >
+                                    <Upload size={18} />
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div className="flex-1 overflow-y-auto bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 min-h-0">
                         <table className="w-full text-left table-fixed">
                             <thead className="bg-gray-50/50 dark:bg-gray-900/50 sticky top-0 z-10 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
                                 <tr>

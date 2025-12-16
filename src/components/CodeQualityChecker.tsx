@@ -102,10 +102,16 @@ export const CodeQualityChecker: React.FC = () => {
             const extractedFiles: ProjectFile[] = [];
 
             // Get all valid entries first to calculate total
+            // Get all valid entries first to calculate total
             const entries = Object.keys(zip.files).filter(filename => {
-                return !zip.files[filename].dir &&
-                    !filename.includes('__MACOSX') &&
-                    !filename.startsWith('.');
+                const pathParts = filename.split('/');
+                const ignoredDirs = new Set(['.git', '.gradle', 'node_modules', 'dist', 'build', '.idea', '__pycache__', '.DS_Store']);
+
+                if (zip.files[filename].dir || pathParts.some(part => ignoredDirs.has(part))) {
+                    return false;
+                }
+
+                return !filename.includes('__MACOSX') && !filename.startsWith('.');
             });
 
             const totalFiles = entries.length;
@@ -355,8 +361,12 @@ export const CodeQualityChecker: React.FC = () => {
                                 {t('codeQuality.analyzing', 'Analyzing codebase...')}
                             </p>
                             {currentFile && (
-                                <p className="text-sm text-gray-500 dark:text-gray-400 font-mono animate-pulse truncate w-full px-4">
-                                    {currentFile}
+                                <p
+                                    className="text-xs text-gray-500 dark:text-gray-400 font-mono animate-pulse truncate w-full px-4 leading-relaxed"
+                                    style={{ direction: 'rtl' }}
+                                    title={currentFile}
+                                >
+                                    {currentFile} &lrm;
                                 </p>
                             )}
                         </div>

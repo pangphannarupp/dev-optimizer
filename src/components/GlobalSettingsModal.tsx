@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { X, Moon, Sun, Monitor, Type, Info, Globe, ChevronRight, ArrowLeft, History } from 'lucide-react';
+import { X, Moon, Sun, Monitor, Type, Info, Globe, ChevronRight, ArrowLeft, History, ChevronDown, ChevronUp } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import { version } from '../../package.json';
 import { releaseNotes } from '../data/releaseNotes';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface GlobalSettingsModalProps {
     isOpen: boolean;
@@ -30,6 +31,7 @@ export const GlobalSettingsModal: React.FC<GlobalSettingsModalProps> = ({ isOpen
     const { theme, setTheme, fontSize, setFontSize } = useTheme();
     const { t, i18n } = useTranslation();
     const [view, setView] = useState<'settings' | 'release-notes'>('settings');
+    const [expandedVersion, setExpandedVersion] = useState<string | null>(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -37,9 +39,20 @@ export const GlobalSettingsModal: React.FC<GlobalSettingsModalProps> = ({ isOpen
         }
     }, [isOpen]);
 
+    useEffect(() => {
+        // Auto-expand the latest version (first in the list) when release notes view is active
+        if (view === 'release-notes' && releaseNotes.length > 0) {
+            setExpandedVersion(releaseNotes[0].version);
+        }
+    }, [view]);
+
     if (!isOpen) return null;
 
     const handleBack = () => setView('settings');
+
+    const toggleExpand = (version: string) => {
+        setExpandedVersion(expandedVersion === version ? null : version);
+    };
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm">
@@ -193,28 +206,57 @@ export const GlobalSettingsModal: React.FC<GlobalSettingsModalProps> = ({ isOpen
                     ) : (
                         // Release Notes View
                         <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-200">
-                            {releaseNotes.map((note, index) => (
-                                <div key={note.version} className="relative pl-6 pb-6 border-l-2 border-gray-200 dark:border-gray-700 last:pb-0 last:border-0">
-                                    <div className={`absolute top-0 left-[-7px] w-3 h-3 rounded-full border-2 ${index === 0 ? 'bg-blue-600 border-blue-600' : 'bg-gray-200 border-gray-300 dark:bg-gray-700 dark:border-gray-600'}`} />
-                                    <div className="flex flex-col gap-1 mb-2">
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-lg font-bold text-gray-900 dark:text-white">v{note.version}</span>
-                                            {index === 0 && (
-                                                <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs px-2 py-0.5 rounded-full font-medium">{t('settings.latest')}</span>
+                            {releaseNotes.map((note, index) => {
+                                const isExpanded = expandedVersion === note.version;
+                                return (
+                                    <div key={note.version} className="relative pl-6 pb-2 border-l-2 border-gray-200 dark:border-gray-700 last:pb-0 last:border-0">
+                                        <div className={`absolute top-2 left-[-7px] w-3 h-3 rounded-full border-2 ${index === 0 ? 'bg-blue-600 border-blue-600' : 'bg-gray-200 border-gray-300 dark:bg-gray-700 dark:border-gray-600'}`} />
+
+                                        <button
+                                            onClick={() => toggleExpand(note.version)}
+                                            className="w-full flex items-start justify-between group text-left"
+                                        >
+                                            <div className="flex flex-col gap-1 mb-2">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">v{note.version}</span>
+                                                    {index === 0 && (
+                                                        <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs px-2 py-0.5 rounded-full font-medium">{t('settings.latest')}</span>
+                                                    )}
+                                                </div>
+                                                <span className="text-xs text-gray-500 dark:text-gray-400">{note.date}</span>
+                                            </div>
+                                            <div className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                                {isExpanded ? (
+                                                    <ChevronUp size={16} className="text-gray-400" />
+                                                ) : (
+                                                    <ChevronDown size={16} className="text-gray-400" />
+                                                )}
+                                            </div>
+                                        </button>
+
+                                        <AnimatePresence>
+                                            {isExpanded && (
+                                                <motion.div
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: 'auto', opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    transition={{ duration: 0.2 }}
+                                                    className="overflow-hidden"
+                                                >
+                                                    <ul className="space-y-2 pb-4">
+                                                        {note.changes.map((change, i) => (
+                                                            <li key={i} className="text-sm text-gray-600 dark:text-gray-300 flex gap-2">
+                                                                <span className="block mt-1.5 w-1 h-1 bg-gray-400 rounded-full flex-shrink-0" />
+                                                                {change}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </motion.div>
                                             )}
-                                        </div>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400">{note.date}</span>
+                                        </AnimatePresence>
                                     </div>
-                                    <ul className="space-y-2">
-                                        {note.changes.map((change, i) => (
-                                            <li key={i} className="text-sm text-gray-600 dark:text-gray-300 flex gap-2">
-                                                <span className="block mt-1.5 w-1 h-1 bg-gray-400 rounded-full flex-shrink-0" />
-                                                {change}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            ))}
+                                );
+                            })}
                             {releaseNotes.length === 0 && (
                                 <div className="text-center py-10 text-gray-500 dark:text-gray-400">
                                     {t('settings.noReleaseNotes')}

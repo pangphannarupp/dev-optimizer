@@ -4,7 +4,7 @@ import { DropZone } from './DropZone';
 import * as Diff from 'diff';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import { FileDiff, FolderArchive, RefreshCw, Layers, Check, X, File as FileIcon, Download, ArrowRight, ChevronDown } from 'lucide-react';
+import { FileDiff, FolderArchive, RefreshCw, Layers, Check, X, File as FileIcon, Download, ArrowRight, ChevronDown, Search } from 'lucide-react';
 import { clsx } from 'clsx';
 import { DonutChart } from './DonutChart';
 import { createArchive, IArchive, ArchiveEntry } from '../utils/ArchiveHandler';
@@ -36,6 +36,7 @@ export const SourceComparator: React.FC = () => {
     const [selectedZipFile, setSelectedZipFile] = useState<string | null>(null);
     const [zipFileContentDiff, setZipFileContentDiff] = useState<Diff.Change[] | null>(null);
     const [mergeSelections, setMergeSelections] = useState<Record<string, 'A' | 'B'>>({});
+    const [searchQuery, setSearchQuery] = useState('');
 
     const detectType = (file: File): FileType => {
         const name = file.name.toLowerCase();
@@ -299,6 +300,12 @@ export const SourceComparator: React.FC = () => {
 
 
 
+    const filteredZipDiffs = React.useMemo(() => {
+        if (!zipDiffs) return null;
+        if (!searchQuery) return zipDiffs;
+        return zipDiffs.filter(d => d.path.toLowerCase().includes(searchQuery.toLowerCase()));
+    }, [zipDiffs, searchQuery]);
+
     const renderZipDiffs = () => {
         if (!zipDiffs) return null;
 
@@ -311,28 +318,42 @@ export const SourceComparator: React.FC = () => {
         const total = zipDiffs.length;
 
         return (
-            <div className="flex flex-col gap-6 h-full">
+            <div className="flex flex-col gap-6 flex-1 min-h-0">
                 {/* Stats Chart */}
-                <DonutChart
-                    items={[
-                        { id: 'modified', value: stats.modified, color: 'text-yellow-500', bg: 'bg-yellow-500', icon: RefreshCw, label: t('sourceCompare.modifiedCount') },
-                        { id: 'added', value: stats.added, color: 'text-green-500', bg: 'bg-green-500', icon: Layers, label: t('sourceCompare.addedCount') },
-                        { id: 'deleted', value: stats.deleted, color: 'text-red-500', bg: 'bg-red-500', icon: X, label: t('sourceCompare.deletedCount') },
-                        { id: 'identical', value: stats.identical, color: 'text-gray-300 dark:text-gray-600', bg: 'bg-gray-300 dark:bg-gray-600', icon: Check, label: t('sourceCompare.identicalCount') },
-                    ]}
-                    total={total}
-                    centerSubLabel={t('sourceCompare.files')}
-                />
+                <div className="h-32 shrink-0">
+                    <DonutChart
+                        items={[
+                            { id: 'modified', value: stats.modified, color: 'text-yellow-500', bg: 'bg-yellow-500', icon: RefreshCw, label: t('sourceCompare.modifiedCount') },
+                            { id: 'added', value: stats.added, color: 'text-green-500', bg: 'bg-green-500', icon: Layers, label: t('sourceCompare.addedCount') },
+                            { id: 'deleted', value: stats.deleted, color: 'text-red-500', bg: 'bg-red-500', icon: X, label: t('sourceCompare.deletedCount') },
+                            { id: 'identical', value: stats.identical, color: 'text-gray-300 dark:text-gray-600', bg: 'bg-gray-300 dark:bg-gray-600', icon: Check, label: t('sourceCompare.identicalCount') },
+                        ]}
+                        total={total}
+                        centerSubLabel={t('sourceCompare.files')}
+                    />
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 min-h-0">
                     {/* File List */}
-                    <div className="col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
-                        <div className="p-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 font-medium text-sm flex justify-between items-center">
-                            <span>{t('sourceCompare.files')}</span>
-                            <span className="text-gray-500 dark:text-gray-400 text-xs">{t('sourceCompare.totalFiles')}: {total}</span>
+                    <div className="col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col max-h-[600px]">
+                        <div className="p-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 font-medium text-sm flex flex-col gap-2">
+                            <div className="flex justify-between items-center">
+                                <span>{t('sourceCompare.files')}</span>
+                                <span className="text-gray-500 dark:text-gray-400 text-xs">{t('sourceCompare.totalFiles')}: {total}</span>
+                            </div>
+                            <div className="relative">
+                                <Search className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
+                                <input
+                                    type="text"
+                                    placeholder={t('sourceCompare.searchPlaceholder')}
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-full pl-8 pr-3 py-1.5 text-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 text-gray-900 dark:text-white"
+                                />
+                            </div>
                         </div>
                         <div className="flex-1 overflow-y-auto p-2">
-                            {zipDiffs.map((d) => (
+                            {filteredZipDiffs?.map((d) => (
                                 <div
                                     key={d.path}
                                     onClick={() => handleZipFileClick(d)}
@@ -370,7 +391,7 @@ export const SourceComparator: React.FC = () => {
                     </div>
 
                     {/* Diff Viewer */}
-                    <div className="col-span-1 md:col-span-2 flex flex-col h-full gap-4">
+                    <div className="col-span-1 md:col-span-2 flex flex-col h-full gap-4 max-h-[600px]">
                         {selectedZipFile && zipFileContentDiff ? (
                             <>
                                 <div className="p-2 font-medium text-sm text-gray-600 dark:text-gray-400 flex justify-between items-center bg-gray-50 dark:bg-gray-800 rounded">

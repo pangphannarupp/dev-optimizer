@@ -44,7 +44,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({ items, total, centerLabe
     }, [items, total]);
 
     return (
-        <div className="flex flex-row items-center justify-between gap-4 w-full h-full">
+        <div className="flex flex-row items-center gap-8 h-full">
             {/* Donut Chart */}
             <div className="relative w-24 h-24 flex-shrink-0">
                 <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
@@ -102,7 +102,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({ items, total, centerLabe
             </div>
 
             {/* Legend */}
-            <div className="flex-1 flex flex-col gap-1.5 min-w-0">
+            <div className="flex flex-col gap-1.5 min-w-[200px]">
                 {data.map((item, index) => (
                     <motion.div
                         key={item.id}
@@ -111,17 +111,17 @@ export const DonutChart: React.FC<DonutChartProps> = ({ items, total, centerLabe
                         transition={{ delay: 0.3 + (index * 0.1) }}
                         className="flex items-center justify-between p-1.5 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
-                        <div className="flex items-center gap-2 min-w-0">
+                        <div className="flex items-center gap-2">
                             <div className={clsx("w-1.5 h-1.5 rounded-full shrink-0", item.bg)} />
-                            <span className="text-xs font-medium text-gray-600 dark:text-gray-400 truncate">
+                            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
                                 {item.label}
                             </span>
                         </div>
-                        <div className="flex items-center gap-1.5 ml-2 shrink-0">
-                            <span className="text-xs font-bold text-gray-800 dark:text-white">
+                        <div className="flex items-center gap-3 ml-4">
+                            <span className="text-xs font-bold text-gray-800 dark:text-white min-w-[20px] text-right">
                                 {item.value}
                             </span>
-                            <span className={clsx("text-[10px] font-semibold px-1 py-0.5 rounded bg-opacity-10 dark:bg-opacity-20", item.color.replace('text-', 'bg-'), item.color)}>
+                            <span className={clsx("text-[10px] font-semibold px-1.5 py-0.5 rounded bg-opacity-10 dark:bg-opacity-20 min-w-[40px] text-center", item.color.replace('text-', 'bg-'), item.color)}>
                                 {item.percentage.toFixed(0)}%
                             </span>
                         </div>

@@ -9,7 +9,7 @@ setTimeout(() => {
       <App />
     </React.StrictMode>,
   )
-}, 2500)
+}, 300)
 
 // Use contextBridge - only in Electron environment
 if (window.ipcRenderer) {

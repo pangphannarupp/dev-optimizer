@@ -12,6 +12,8 @@ import { GlobalSettingsModal } from './components/GlobalSettingsModal';
 import { SvgToDrawableConverter } from './components/SvgToDrawableConverter';
 import { ImageToBase64 } from './components/ImageToBase64';
 import { JSONFormatter } from './components/JSONFormatter';
+import { JsonToCodeConverter } from './components/JsonToCodeConverter';
+import { MockDataGenerator } from './components/MockDataGenerator';
 import { CsvToJsonConverter } from './components/CsvToJsonConverter';
 import { JWTDecoder } from './components/JWTDecoder';
 import { EncryptionTool } from './components/EncryptionTool';
@@ -31,6 +33,7 @@ import RegexTester from './components/RegexTester';
 import { CssGenerator } from './components/CssGenerator';
 import { DownloadScreen } from './components/DownloadScreen';
 import { CodeQualityChecker } from './components/CodeQualityChecker';
+import { MarkdownEditor } from './components/MarkdownEditor';
 
 
 import { Sidebar } from './components/Sidebar';
@@ -43,6 +46,8 @@ import { useTranslation } from 'react-i18next';
 import { HomeMenu } from './components/HomeMenu';
 import { ToolId } from './config/tools';
 import { WhatsNewSnackbar } from './components/WhatsNewSnackbar';
+
+import { BackgroundWave } from './components/BackgroundWave';
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState<ToolId | 'home'>('home');
@@ -147,7 +152,8 @@ function AppContent() {
   }, [images]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex transition-colors">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex transition-colors relative isolate">
+      <BackgroundWave />
       {activeTab !== 'home' && (
         <Sidebar
           activeTab={activeTab}
@@ -158,7 +164,7 @@ function AppContent() {
         />
       )}
 
-      <div className="flex-1 flex flex-col h-screen overflow-hidden">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden relative z-10">
         {/* Mobile Header - Hide on Home */}
         {activeTab !== 'home' && (
           <div className="md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
@@ -327,6 +333,17 @@ function AppContent() {
               >
                 <JSONFormatter />
               </motion.main>
+            ) : activeTab === 'json-to-code' ? (
+              <motion.main
+                key="json-to-code"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="p-6 h-full overflow-y-auto"
+              >
+                <JsonToCodeConverter />
+              </motion.main>
             ) : activeTab === 'csv-json' ? (
               <motion.main
                 key="csv-json"
@@ -403,6 +420,17 @@ function AppContent() {
                 className="h-full overflow-y-auto"
               >
                 <AppStoreValidator />
+              </motion.main>
+            ) : activeTab === 'mock-data' ? (
+              <motion.main
+                key="mock-data"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <MockDataGenerator />
               </motion.main>
             ) : activeTab === 'lottie-player' ? (
               <motion.main
@@ -535,6 +563,17 @@ function AppContent() {
                 className="h-full overflow-y-auto"
               >
                 <CodeQualityChecker />
+              </motion.main>
+            ) : activeTab === 'markdown-editor' ? (
+              <motion.main
+                key="markdown-editor"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="h-full overflow-y-auto"
+              >
+                <MarkdownEditor />
               </motion.main>
             ) : (
               <motion.main

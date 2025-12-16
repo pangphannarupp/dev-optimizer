@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, Sparkles, ArrowRight } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import packageJson from '../../package.json';
 import { releaseNotes } from '../data/releaseNotes';
@@ -68,13 +68,13 @@ export function WhatsNewSnackbar({ onClose }: WhatsNewSnackbarProps) {
                                     {currentNote}
                                 </p>
 
-                                <button
+                                {/* <button
                                     onClick={handleClose}
                                     className="bg-white text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-lg font-medium text-sm flex items-center gap-2 transition-colors shadow-sm"
                                 >
                                     {t('common.ok', 'OK')}
                                     <ArrowRight size={14} />
-                                </button>
+                                </button> */}
                             </div>
                             <button
                                 onClick={handleClose}

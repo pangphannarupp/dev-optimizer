@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Settings, Download, Star } from 'lucide-react';
+import { Search, Settings, Download, Star, Bug } from 'lucide-react';
 import { useTools, ToolId } from '../config/tools';
 import { useFavorites } from '../hooks/useFavorites';
 import AppLogo from '../assets/icon.png';
@@ -69,9 +69,16 @@ export function HomeMenu({ onNavigate, onSettingsClick }: HomeMenuProps) {
     };
 
     return (
-        <div className="h-full flex flex-col bg-gray-50 dark:bg-gray-900 overflow-y-auto relative">
+        <div className="h-full flex flex-col overflow-y-auto relative">
             {/* Header Controls */}
             <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+                <button
+                    onClick={() => window.open('https://log-management-4cm5.onrender.com/', '_blank')}
+                    className="p-3 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+                    title="Log Runtime"
+                >
+                    <Bug className="w-6 h-6" />
+                </button>
                 <button
                     onClick={() => onNavigate('download')}
                     className="p-3 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"

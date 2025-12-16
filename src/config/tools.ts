@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import {
     Image as ImageIcon, Layers, Sparkles, QrCode, FileCode, Code, Key, Lock, Hash,
     FileUp, Split, Film, Link, ScanLine, Palette, Zap, Clock, Monitor,
-    Smartphone, KeyRound, CheckCircle
+    Smartphone, KeyRound, CheckCircle, Database
 } from 'lucide-react';
 
 export type ToolId =
@@ -10,8 +10,8 @@ export type ToolId =
     | 'store-validator' | 'js-minifier' | 'curl-converter' | 'unix-timestamp'
     | 'density-converter' | 'regex-tester' | 'css-generator' | 'screenshot-framer'
     | 'totp-generator' | 'deeplink-generator' | 'qr' | 'svg-drawable' | 'base64'
-    | 'json' | 'csv-json' | 'validate-translation' | 'jwt' | 'encryption' | 'sha'
-    | 'download' | 'editor' | 'code-quality';
+    | 'json' | 'json-to-code' | 'csv-json' | 'validate-translation' | 'jwt' | 'encryption' | 'sha'
+    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor';
 
 export interface Tool {
     id: ToolId;
@@ -42,6 +42,7 @@ export const useTools = () => {
         { id: 'qr', icon: QrCode, label: t('app.qrTab'), description: 'Generate QR codes' },
         { id: 'svg-drawable', icon: FileCode, label: t('app.svgTab'), description: 'Convert SVG to Android Drawable' },
         { id: 'base64', icon: FileCode, label: t('app.base64Tab'), description: 'Image to Base64 converter' },
+        { id: 'json-to-code', icon: FileCode, label: t('jsonToCode.title'), description: t('jsonToCode.description') },
         { id: 'json', icon: Code, label: t('app.jsonTab'), description: 'Format and validate JSON' },
         { id: 'csv-json', icon: FileCode, label: t('app.csvJsonTab'), description: 'Convert CSV to JSON' },
         { id: 'validate-translation', icon: FileUp, label: t('app.validateTranslation', 'Validate Translation'), description: 'Check translation files' },
@@ -49,6 +50,8 @@ export const useTools = () => {
         { id: 'encryption', icon: Lock, label: t('app.encryptionTab'), description: 'Encrypt/Decrypt text' },
         { id: 'sha', icon: Hash, label: t('app.shaTab'), description: 'Generate SHA hashes' },
         { id: 'code-quality', icon: CheckCircle, label: t('codeQuality.title', 'Code Quality Checker'), description: t('codeQuality.description') },
+        { id: 'mock-data', icon: Database, label: t('mockData.title'), description: t('mockData.description') },
+        { id: 'markdown-editor', icon: FileCode, label: t('markdownEditor.title', 'Markdown Editor'), description: t('markdownEditor.description', 'Edit and Preview Markdown') },
         // { id: 'download', icon: Download, label: t('app.downloadTab', 'Download App'), description: 'Get the mobile app' },
     ];
 

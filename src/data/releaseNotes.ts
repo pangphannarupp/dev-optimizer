@@ -6,6 +6,27 @@ export interface ReleaseNote {
 
 export const releaseNotes: ReleaseNote[] = [
     {
+        version: '1.1.3',
+        date: '2025-12-16',
+        changes: [
+            'Add new feature "Markdown Editor"',
+            'Improve feature "Validate Translation"',
+            'Improve feature "Source Comparison"',
+            'Improve feature "Code Quality Checker"',
+            'Improve UI'
+        ]
+    },
+    {
+        version: '1.1.2',
+        date: '2025-12-16',
+        changes: [
+            'Add new feature "JSON to Code"',
+            'Add new feature "Mock Data Generator"',
+            'Improve feature "TOTP Generator"',
+            'Improve feature "Source Comparison"',
+        ]
+    },
+    {
         version: '1.1.1',
         date: '2025-12-15',
         changes: [

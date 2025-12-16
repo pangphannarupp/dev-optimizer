@@ -408,6 +408,12 @@
         "minify": "Minify",
         "format": "Format"
     },
+    "jsonToCode": {
+        "title": "JSON to Code",
+        "description": "Generate TypeScript, Kotlin, Swift, or Dart models from JSON",
+        "inputJson": "Input JSON",
+        "loadExample": "Load Example"
+    },
     "jwtDecoder": {
         "title": "JWT Decoder",
         "description": "Decode and inspect JWT tokens",
@@ -556,7 +562,29 @@
         "downloadIdentical": "Identical Only",
         "downloadIdenticalDesc": "Only unchanged files",
         "comparisonResult": "Comparison Result",
-        "sizeDiff": "Size Diff"
+        "sizeDiff": "Size Diff",
+        "searchPlaceholder": "Search files..."
+    },
+    "mockData": {
+        "title": "Mock Data Generator",
+        "description": "Generate random JSON data for testing.",
+        "configTitle": "Configuration",
+        "addField": "Add Field",
+        "rowCount": "Rows to Generate",
+        "generate": "Generate Data",
+        "preview": "Data Preview",
+        "noData": "No data generated. Click 'Generate Data' to start.",
+        "types": {
+            "uuid": "UUID",
+            "name": "Full Name",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "email": "Email",
+            "boolean": "Boolean",
+            "number": "Number",
+            "date": "Date",
+            "custom": "Custom List"
+        }
     },
     "storeValidator": {
         "title": "App Store Validator",
@@ -1068,5 +1096,12 @@
                 "suggestion": "Use Future.wait([]) for parallel execution if possible"
             }
         }
+    },
+    "markdownEditor": {
+        "title": "Markdown Editor",
+        "description": "Edit and Preview Markdown content with Github Flavored style.",
+        "editor": "Editor",
+        "preview": "Preview",
+        "placeholder": "Type markdown here..."
     }
 }
