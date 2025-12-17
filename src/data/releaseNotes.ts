@@ -6,6 +6,14 @@ export interface ReleaseNote {
 
 export const releaseNotes: ReleaseNote[] = [
     {
+        version: '1.1.5',
+        date: '2025-12-17',
+        changes: [
+            'Improve performance',
+            'Improve UI'
+        ]
+    },
+    {
         version: '1.1.4',
         date: '2025-12-17',
         changes: [

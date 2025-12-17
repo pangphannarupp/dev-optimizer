@@ -327,34 +327,40 @@ export const CodeQualityChecker: React.FC = () => {
                         exit={{ opacity: 0 }}
                         className="absolute inset-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50 flex flex-col items-center justify-center gap-6"
                     >
-                        <div className="relative">
-                            <svg className="w-24 h-24 transform -rotate-90">
-                                <circle
-                                    className="text-gray-200 dark:text-gray-700"
-                                    strokeWidth="8"
-                                    stroke="currentColor"
-                                    fill="transparent"
-                                    r="40"
-                                    cx="48"
-                                    cy="48"
-                                />
-                                <circle
-                                    className="text-blue-600 transition-all duration-300 ease-linear"
-                                    strokeWidth="8"
-                                    strokeDasharray={251.2}
-                                    strokeDashoffset={251.2 - (251.2 * progress) / 100}
-                                    strokeLinecap="round"
-                                    stroke="currentColor"
-                                    fill="transparent"
-                                    r="40"
-                                    cx="48"
-                                    cy="48"
-                                />
-                            </svg>
-                            <div className="absolute inset-0 flex items-center justify-center flex-col">
-                                <span className="text-xl font-bold text-gray-900 dark:text-white">{progress}%</span>
-                            </div>
-                        </div>
+                        <svg className="w-24 h-24 overflow-visible">
+                            <circle
+                                className="text-gray-200 dark:text-gray-700"
+                                strokeWidth="8"
+                                stroke="currentColor"
+                                fill="transparent"
+                                r="36"
+                                cx="48"
+                                cy="48"
+                            />
+                            <circle
+                                className="text-blue-600 transition-all duration-300 ease-linear"
+                                strokeWidth="8"
+                                strokeDasharray={226.2}
+                                strokeDashoffset={226.2 - (226.2 * progress) / 100}
+                                strokeLinecap="round"
+                                stroke="currentColor"
+                                fill="transparent"
+                                r="36"
+                                cx="48"
+                                cy="48"
+                                transform="rotate(-90 48 48)"
+                            />
+                            <text
+                                x="48"
+                                y="48"
+                                textAnchor="middle"
+                                dominantBaseline="central"
+                                className="text-xl font-bold text-gray-900 dark:text-white"
+                                fill="currentColor"
+                            >
+                                {progress}%
+                            </text>
+                        </svg>
 
                         <div className="flex flex-col items-center gap-2 max-w-sm text-center">
                             <p className="font-semibold text-lg text-gray-800 dark:text-gray-100">

@@ -222,6 +222,22 @@ export const RULES: Record<SupportedLanguage, CodeQualityRule[]> = {
             pattern: /([a-zA-Z0-9_]+)\s*&&\s*\1\.[a-zA-Z0-9_]+/,
             suggestion: 'Use optional chaining (e.g., foo?.bar).'
         },
+        // --- NEW Formatting & Cleanliness Rules ---
+        {
+            id: 'no-multiple-empty-lines',
+            message: 'Avoid multiple empty lines',
+            severity: 'info',
+            pattern: /(\n\s*){3,}/g,
+            suggestion: 'Remove extra empty lines.',
+            global: true
+        },
+        {
+            id: 'no-commented-code',
+            message: 'Avoid leaving commented-out code',
+            severity: 'info',
+            pattern: /\/\/\s*(const|let|var|function|class|import|export)\b/,
+            suggestion: 'Remove code instead of commenting it out.'
+        },
         // --- NEW TypeScript ESLint Rules ---
         {
             id: 'ban-ts-comment',
@@ -600,6 +616,22 @@ export const RULES: Record<SupportedLanguage, CodeQualityRule[]> = {
             pattern: /\{\{\s*this\./,
             suggestion: 'Template variables are automatically unscoped.'
         },
+        // --- NEW Formatting & Cleanliness Rules ---
+        {
+            id: 'no-multiple-empty-lines',
+            message: 'Avoid multiple empty lines',
+            severity: 'info',
+            pattern: /(\n\s*){3,}/g,
+            suggestion: 'Remove extra empty lines.',
+            global: true
+        },
+        {
+            id: 'no-commented-code',
+            message: 'Avoid leaving commented-out code',
+            severity: 'info',
+            pattern: /\/\/\s*(const|let|var|function|class|import|export)\b/,
+            suggestion: 'Remove code instead of commenting it out.'
+        },
         {
             id: 'complex-template-logic',
             message: 'Avoid complex logic (array methods) in templates',
@@ -828,6 +860,22 @@ export const RULES: Record<SupportedLanguage, CodeQualityRule[]> = {
             severity: 'info',
             pattern: /\?\.let\s*\{\s*it\s*\}/,
             suggestion: 'Remove .let { it }'
+        },
+        // --- NEW Formatting & Cleanliness Rules ---
+        {
+            id: 'no-multiple-empty-lines',
+            message: 'Avoid multiple empty lines',
+            severity: 'info',
+            pattern: /(\n\s*){3,}/g,
+            suggestion: 'Remove extra empty lines.',
+            global: true
+        },
+        {
+            id: 'no-commented-code',
+            message: 'Avoid leaving commented-out code',
+            severity: 'info',
+            pattern: /\/\/\s*(val|var|fun|class|interface|import|package)\b/,
+            suggestion: 'Remove code instead of commenting it out.'
         }
     ],
     'android-java': [
@@ -1101,6 +1149,22 @@ export const RULES: Record<SupportedLanguage, CodeQualityRule[]> = {
             severity: 'info',
             pattern: /\.size\.(width|height)/,
             suggestion: 'Use .width or .height directly on CGRect.'
+        },
+        // --- NEW Formatting & Cleanliness Rules ---
+        {
+            id: 'no-multiple-empty-lines',
+            message: 'Avoid multiple empty lines',
+            severity: 'info',
+            pattern: /(\n\s*){3,}/g,
+            suggestion: 'Remove extra empty lines.',
+            global: true
+        },
+        {
+            id: 'no-commented-code',
+            message: 'Avoid leaving commented-out code',
+            severity: 'info',
+            pattern: /\/\/\s*(let|var|func|class|struct|enum|import)\b/,
+            suggestion: 'Remove code instead of commenting it out.'
         }
     ],
     'ios-objc': [
@@ -1287,6 +1351,22 @@ export const RULES: Record<SupportedLanguage, CodeQualityRule[]> = {
             severity: 'info',
             pattern: /\{\s*return\s+[^;]+;\s*\}/,
             suggestion: 'Use => syntax.'
+        },
+        // --- NEW Formatting & Cleanliness Rules ---
+        {
+            id: 'no-multiple-empty-lines',
+            message: 'Avoid multiple empty lines',
+            severity: 'info',
+            pattern: /(\n\s*){3,}/g,
+            suggestion: 'Remove extra empty lines.',
+            global: true
+        },
+        {
+            id: 'no-commented-code',
+            message: 'Avoid leaving commented-out code',
+            severity: 'info',
+            pattern: /\/\/\s*(var|final|const|void|class|import)\b/,
+            suggestion: 'Remove code instead of commenting it out.'
         }
     ]
 };
@@ -1392,7 +1472,7 @@ export const analyzeCode = (code: string, language: SupportedLanguage): QualityI
                 }
 
                 // Ignore commented out lines for most rules
-                if (contentToCheck.trim().startsWith('//') && rule.id !== 'todo-comment') {
+                if (contentToCheck.trim().startsWith('//') && rule.id !== 'todo-comment' && rule.id !== 'no-commented-code') {
                     return;
                 }
 

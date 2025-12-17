@@ -49,6 +49,7 @@ const CssGenerator = lazy(() => import('./components/CssGenerator').then(module 
 const DownloadScreen = lazy(() => import('./components/DownloadScreen').then(module => ({ default: module.DownloadScreen })));
 const CodeQualityChecker = lazy(() => import('./components/CodeQualityChecker').then(module => ({ default: module.CodeQualityChecker })));
 const MarkdownEditor = lazy(() => import('./components/MarkdownEditor').then(module => ({ default: module.MarkdownEditor })));
+const DeveloperGuide = lazy(() => import('./components/DeveloperGuide').then(module => ({ default: module.DeveloperGuide })));
 
 
 function AppContent() {
@@ -580,7 +581,19 @@ function AppContent() {
                   transition={{ duration: 0.2 }}
                   className="h-full overflow-y-auto"
                 >
+
                   <MarkdownEditor />
+                </motion.main>
+              ) : activeTab === 'developer-guide' ? (
+                <motion.main
+                  key="developer-guide"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <DeveloperGuide />
                 </motion.main>
               ) : (
                 <motion.main

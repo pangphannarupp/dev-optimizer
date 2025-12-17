@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import {
     Image as ImageIcon, Layers, Sparkles, QrCode, FileCode, Code, Key, Lock, Hash,
     FileUp, Split, Film, Link, ScanLine, Palette, Zap, Clock, Monitor,
-    Smartphone, KeyRound, CheckCircle, Database
+    Smartphone, KeyRound, CheckCircle, Database, Book
 } from 'lucide-react';
 
 export type ToolId =
@@ -11,7 +11,7 @@ export type ToolId =
     | 'density-converter' | 'regex-tester' | 'css-generator' | 'screenshot-framer'
     | 'totp-generator' | 'deeplink-generator' | 'qr' | 'svg-drawable' | 'base64'
     | 'json' | 'json-to-code' | 'csv-json' | 'validate-translation' | 'jwt' | 'encryption' | 'sha'
-    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor';
+    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide';
 
 export interface Tool {
     id: ToolId;
@@ -52,6 +52,7 @@ export const useTools = () => {
         { id: 'code-quality', icon: CheckCircle, label: t('codeQuality.title', 'Code Quality Checker'), description: t('codeQuality.description') },
         { id: 'mock-data', icon: Database, label: t('mockData.title'), description: t('mockData.description') },
         { id: 'markdown-editor', icon: FileCode, label: t('markdownEditor.title', 'Markdown Editor'), description: t('markdownEditor.description', 'Edit and Preview Markdown') },
+        { id: 'developer-guide', icon: Book, label: t('developerGuide.title', 'Developer Guide'), description: t('developerGuide.description', 'Generate documentation from code') },
         // { id: 'download', icon: Download, label: t('app.downloadTab', 'Download App'), description: 'Get the mobile app' },
     ];
 
