@@ -221,6 +221,103 @@ export const RULES: Record<SupportedLanguage, CodeQualityRule[]> = {
             severity: 'info',
             pattern: /([a-zA-Z0-9_]+)\s*&&\s*\1\.[a-zA-Z0-9_]+/,
             suggestion: 'Use optional chaining (e.g., foo?.bar).'
+        },
+        // --- NEW TypeScript ESLint Rules ---
+        {
+            id: 'ban-ts-comment',
+            message: 'Avoid @ts-ignore or @ts-nocheck',
+            severity: 'warning',
+            pattern: /@ts-(ignore|nocheck)/,
+            suggestion: 'Fix the underlying type error instead of suppressing it.',
+            url: 'https://typescript-eslint.io/rules/ban-ts-comment/'
+        },
+        {
+            id: 'ban-types',
+            message: 'Avoid using wrapper types (String, Number, Boolean, Object)',
+            severity: 'error',
+            pattern: /:\s*(String|Number|Boolean|Object|Symbol)\b/,
+            suggestion: 'Use lowercase primitives (string, number, boolean, object, symbol).',
+            url: 'https://typescript-eslint.io/rules/ban-types/'
+        },
+        {
+            id: 'consistent-type-assertions',
+            message: 'Use "as Type" assertions instead of angle brackets',
+            severity: 'warning',
+            pattern: /<[a-zA-Z0-9_]+>[a-zA-Z0-9_]+/,
+            suggestion: 'Use "value as Type" syntax for consistency with JSX.',
+            url: 'https://typescript-eslint.io/rules/consistent-type-assertions/'
+        },
+        {
+            id: 'no-empty-interface',
+            message: 'Avoid empty interfaces',
+            severity: 'warning',
+            pattern: /interface\s+[a-zA-Z0-9_]+\s*\{\s*\}/,
+            suggestion: 'Remove empty interface or use a type alias if intended.',
+            url: 'https://typescript-eslint.io/rules/no-empty-interface/'
+        },
+        {
+            id: 'no-inferrable-types',
+            message: 'Avoid explicit type for inferrable values',
+            severity: 'info',
+            pattern: /\b(const|let|var)\s+[a-zA-Z0-9_]+\s*:\s*(string|number|boolean)\s*=\s*/,
+            suggestion: 'Remove type annotation; TS authenticates the type.',
+            url: 'https://typescript-eslint.io/rules/no-inferrable-types/'
+        },
+        {
+            id: 'no-namespace',
+            message: 'Avoid "namespace" or "module"',
+            severity: 'error',
+            pattern: /\b(namespace|module)\s+[a-zA-Z0-9_]+\s*\{/,
+            suggestion: 'Use ES Modules (import/export) instead.',
+            url: 'https://typescript-eslint.io/rules/no-namespace/'
+        },
+        {
+            id: 'no-require-imports',
+            message: 'Avoid "require()" imports',
+            severity: 'error',
+            pattern: /require\s*\(/,
+            suggestion: 'Use ES6 "import" syntax.',
+            url: 'https://typescript-eslint.io/rules/no-require-imports/'
+        },
+        {
+            id: 'no-this-alias',
+            message: 'Avoid aliasing "this"',
+            severity: 'warning',
+            pattern: /const\s+(self|that|_this)\s*=\s*this/,
+            suggestion: 'Use arrow functions to preserve "this" context.',
+            url: 'https://typescript-eslint.io/rules/no-this-alias/'
+        },
+        {
+            id: 'no-unnecessary-type-constraint',
+            message: 'Avoid "extends any" or "extends unknown"',
+            severity: 'warning',
+            pattern: /<\s*[a-zA-Z0-9_]+\s+extends\s+(any|unknown)\s*>/,
+            suggestion: 'Remove the constraint as it is redundant.',
+            url: 'https://typescript-eslint.io/rules/no-unnecessary-type-constraint/'
+        },
+        {
+            id: 'triple-slash-reference',
+            message: 'Avoid triple-slash references',
+            severity: 'warning',
+            pattern: /\/\/\/\s*<reference/,
+            suggestion: 'Use import statements instead.',
+            url: 'https://typescript-eslint.io/rules/triple-slash-reference/'
+        },
+        {
+            id: 'no-confusing-non-null-assertion',
+            message: 'Avoid confusing non-null assertion usage',
+            severity: 'warning',
+            pattern: /!\s*==/,
+            suggestion: 'Wrap the assertion in parentheses if intended, or check logic.',
+            url: 'https://typescript-eslint.io/rules/no-confusing-non-null-assertion/'
+        },
+        {
+            id: 'array-type',
+            message: 'Prefer "T[]" for simple array types',
+            severity: 'info',
+            pattern: /:\s*Array<[a-zA-Z0-9_]+>\b/,
+            suggestion: 'Use short syntax: Type[]',
+            url: 'https://typescript-eslint.io/rules/array-type/'
         }
     ],
     'react-native': [
@@ -502,6 +599,27 @@ export const RULES: Record<SupportedLanguage, CodeQualityRule[]> = {
             severity: 'warning',
             pattern: /\{\{\s*this\./,
             suggestion: 'Template variables are automatically unscoped.'
+        },
+        {
+            id: 'complex-template-logic',
+            message: 'Avoid complex logic (array methods) in templates',
+            severity: 'error',
+            pattern: /\{\{[^}]*\.(find|filter|reduce|map|some|every|includes|slice|splice|join|sort|reverse|split|replace)\s*\(.*\}\}/,
+            suggestion: 'Move this logic to a computed property.'
+        },
+        {
+            id: 'no-template-ternary',
+            message: 'Avoid ternary operators in templates',
+            severity: 'warning',
+            pattern: /\{\{[^}]*\?[^}]*:[^}]*\}\}/,
+            suggestion: 'Use a computed property or v-if.'
+        },
+        {
+            id: 'no-template-logical',
+            message: 'Avoid logical operators (&&, ||) in templates',
+            severity: 'warning',
+            pattern: /\{\{[^}]*(&&|\|\|)[^}]*\}\}/,
+            suggestion: 'Use a computed property.'
         },
         {
             id: 'no-http',

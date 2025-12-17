@@ -1,40 +1,7 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, lazy, Suspense } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { v4 as uuidv4 } from 'uuid';
-import { DropZone } from './components/DropZone';
-import { ImageItem, ProcessedImage } from './components/ImageItem';
-import { SettingsPanel } from './components/SettingsPanel';
-import { IconGenerator } from './components/IconGenerator';
-import { ImageEnhancer } from './components/ImageEnhancer';
-import { ImageEditor } from './components/ImageEditor';
-import { QRGenerator } from './components/QRGenerator';
-import { GlobalSettingsModal } from './components/GlobalSettingsModal';
-import { SvgToDrawableConverter } from './components/SvgToDrawableConverter';
-import { ImageToBase64 } from './components/ImageToBase64';
-import { JSONFormatter } from './components/JSONFormatter';
-import { JsonToCodeConverter } from './components/JsonToCodeConverter';
-import { MockDataGenerator } from './components/MockDataGenerator';
-import { CsvToJsonConverter } from './components/CsvToJsonConverter';
-import { JWTDecoder } from './components/JWTDecoder';
-import { EncryptionTool } from './components/EncryptionTool';
-import { SHAGenerator } from './components/SHAGenerator';
-import { ValidateTranslation } from './components/ValidateTranslation';
-import { SourceComparator } from './components/SourceComparator';
-import { AppStoreValidator } from './components/AppStoreValidator';
-import { LottiePlayer } from './components/LottiePlayer';
-import { JsMinifier } from './components/JsMinifier';
-import { DeeplinkGenerator } from './components/DeeplinkGenerator';
-import CurlConverter from './components/CurlConverter';
-import UnixTimestampConverter from './components/UnixTimestampConverter';
-import DensityConverter from './components/DensityConverter';
-import { ScreenshotFramer } from './components/ScreenshotFramer';
-import { TotpGenerator } from './components/TotpGenerator';
-import RegexTester from './components/RegexTester';
-import { CssGenerator } from './components/CssGenerator';
-import { DownloadScreen } from './components/DownloadScreen';
-import { CodeQualityChecker } from './components/CodeQualityChecker';
-import { MarkdownEditor } from './components/MarkdownEditor';
-
+import { ProcessedImage } from './components/ImageItem'; // Keep type import
 
 import { Sidebar } from './components/Sidebar';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -46,8 +13,43 @@ import { useTranslation } from 'react-i18next';
 import { HomeMenu } from './components/HomeMenu';
 import { ToolId } from './config/tools';
 import { WhatsNewSnackbar } from './components/WhatsNewSnackbar';
-
 import { BackgroundWave } from './components/BackgroundWave';
+import { GlobalSettingsModal } from './components/GlobalSettingsModal';
+
+// Lazy load tool components
+const DropZone = lazy(() => import('./components/DropZone').then(module => ({ default: module.DropZone })));
+const ImageItem = lazy(() => import('./components/ImageItem').then(module => ({ default: module.ImageItem })));
+const SettingsPanel = lazy(() => import('./components/SettingsPanel').then(module => ({ default: module.SettingsPanel })));
+const IconGenerator = lazy(() => import('./components/IconGenerator').then(module => ({ default: module.IconGenerator })));
+const ImageEnhancer = lazy(() => import('./components/ImageEnhancer').then(module => ({ default: module.ImageEnhancer })));
+const ImageEditor = lazy(() => import('./components/ImageEditor').then(module => ({ default: module.ImageEditor })));
+const QRGenerator = lazy(() => import('./components/QRGenerator').then(module => ({ default: module.QRGenerator })));
+const SvgToDrawableConverter = lazy(() => import('./components/SvgToDrawableConverter').then(module => ({ default: module.SvgToDrawableConverter })));
+const ImageToBase64 = lazy(() => import('./components/ImageToBase64').then(module => ({ default: module.ImageToBase64 })));
+const JSONFormatter = lazy(() => import('./components/JSONFormatter').then(module => ({ default: module.JSONFormatter })));
+const JsonToCodeConverter = lazy(() => import('./components/JsonToCodeConverter').then(module => ({ default: module.JsonToCodeConverter })));
+const MockDataGenerator = lazy(() => import('./components/MockDataGenerator').then(module => ({ default: module.MockDataGenerator })));
+const CsvToJsonConverter = lazy(() => import('./components/CsvToJsonConverter').then(module => ({ default: module.CsvToJsonConverter })));
+const JWTDecoder = lazy(() => import('./components/JWTDecoder').then(module => ({ default: module.JWTDecoder })));
+const EncryptionTool = lazy(() => import('./components/EncryptionTool').then(module => ({ default: module.EncryptionTool })));
+const SHAGenerator = lazy(() => import('./components/SHAGenerator').then(module => ({ default: module.SHAGenerator })));
+const ValidateTranslation = lazy(() => import('./components/ValidateTranslation').then(module => ({ default: module.ValidateTranslation })));
+const SourceComparator = lazy(() => import('./components/SourceComparator').then(module => ({ default: module.SourceComparator })));
+const AppStoreValidator = lazy(() => import('./components/AppStoreValidator').then(module => ({ default: module.AppStoreValidator })));
+const LottiePlayer = lazy(() => import('./components/LottiePlayer').then(module => ({ default: module.LottiePlayer })));
+const JsMinifier = lazy(() => import('./components/JsMinifier').then(module => ({ default: module.JsMinifier })));
+const DeeplinkGenerator = lazy(() => import('./components/DeeplinkGenerator').then(module => ({ default: module.DeeplinkGenerator })));
+const CurlConverter = lazy(() => import('./components/CurlConverter')); // Default export
+const UnixTimestampConverter = lazy(() => import('./components/UnixTimestampConverter')); // Default export
+const DensityConverter = lazy(() => import('./components/DensityConverter')); // Default export
+const ScreenshotFramer = lazy(() => import('./components/ScreenshotFramer').then(module => ({ default: module.ScreenshotFramer })));
+const TotpGenerator = lazy(() => import('./components/TotpGenerator').then(module => ({ default: module.TotpGenerator })));
+const RegexTester = lazy(() => import('./components/RegexTester')); // Default export
+const CssGenerator = lazy(() => import('./components/CssGenerator').then(module => ({ default: module.CssGenerator })));
+const DownloadScreen = lazy(() => import('./components/DownloadScreen').then(module => ({ default: module.DownloadScreen })));
+const CodeQualityChecker = lazy(() => import('./components/CodeQualityChecker').then(module => ({ default: module.CodeQualityChecker })));
+const MarkdownEditor = lazy(() => import('./components/MarkdownEditor').then(module => ({ default: module.MarkdownEditor })));
+
 
 function AppContent() {
   const [activeTab, setActiveTab] = useState<ToolId | 'home'>('home');
@@ -99,7 +101,7 @@ function AppContent() {
       return {
         ...img,
         status: 'error',
-        error: 'Failed to process'
+        error: 'Failed to process image'
       };
     }
   };
@@ -182,412 +184,418 @@ function AppContent() {
           </div>
         )}
         <div className="flex-1 h-full overflow-hidden flex flex-col relative">
-          <AnimatePresence mode="wait">
-            {activeTab === 'home' ? (
-              <motion.main
-                key="home"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-hidden"
-              >
-                <HomeMenu
-                  onNavigate={(id) => {
-                    setActiveTab(id);
-                    setIsSidebarOpen(false);
-                  }}
-                  onSettingsClick={() => setIsSettingsOpen(true)}
-                />
-              </motion.main>
-            ) : activeTab === 'optimizer' ? (
-              <motion.div
-                key="optimizer"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <SettingsPanel
-                  defaultFormat={defaultFormat}
-                  defaultQuality={defaultQuality}
-                  onFormatChange={setDefaultFormat}
-                  onQualityChange={setDefaultQuality}
-                />
+          <Suspense fallback={
+            <div className="h-full w-full flex items-center justify-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+            </div>
+          }>
+            <AnimatePresence mode="wait">
+              {activeTab === 'home' ? (
+                <motion.main
+                  key="home"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-hidden"
+                >
+                  <HomeMenu
+                    onNavigate={(id) => {
+                      setActiveTab(id);
+                      setIsSidebarOpen(false);
+                    }}
+                    onSettingsClick={() => setIsSettingsOpen(true)}
+                  />
+                </motion.main>
+              ) : activeTab === 'optimizer' ? (
+                <motion.div
+                  key="optimizer"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <SettingsPanel
+                    defaultFormat={defaultFormat}
+                    defaultQuality={defaultQuality}
+                    onFormatChange={setDefaultFormat}
+                    onQualityChange={setDefaultQuality}
+                  />
 
-                <main className="p-6 max-w-5xl mx-auto w-full flex flex-col gap-6">
-                  <DropZone onFilesDropped={handleFilesDropped} />
+                  <main className="p-6 max-w-5xl mx-auto w-full flex flex-col gap-6">
+                    <DropZone onFilesDropped={handleFilesDropped} />
 
-                  {images.length > 0 && (
-                    <div className="flex flex-col gap-4">
-                      <div className="flex items-center justify-between">
-                        <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{t('app.queue')} ({images.length})</h2>
-                        <div className="flex gap-3">
-                          <button
-                            onClick={handleClearAll}
-                            className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                            disabled={isProcessingAll}
-                          >
-                            <Trash2 size={18} />
-                            {t('app.clearAll')}
-                          </button>
-                          <button
-                            onClick={handleProcessAll}
-                            disabled={isProcessingAll || !images.some(i => i.status === 'pending')}
-                            className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
-                          >
-                            {isProcessingAll ? (
-                              <>
-                                {t('app.processing')}
-                              </>
-                            ) : (
-                              <>
-                                <Play size={18} />
-                                {t('app.processAll')}
-                              </>
-                            )}
-                          </button>
+                    {images.length > 0 && (
+                      <div className="flex flex-col gap-4">
+                        <div className="flex items-center justify-between">
+                          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{t('app.queue')} ({images.length})</h2>
+                          <div className="flex gap-3">
+                            <button
+                              onClick={handleClearAll}
+                              className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                              disabled={isProcessingAll}
+                            >
+                              <Trash2 size={18} />
+                              {t('app.clearAll')}
+                            </button>
+                            <button
+                              onClick={handleProcessAll}
+                              disabled={isProcessingAll || !images.some(i => i.status === 'pending')}
+                              className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+                            >
+                              {isProcessingAll ? (
+                                <>
+                                  {t('app.processing')}
+                                </>
+                              ) : (
+                                <>
+                                  <Play size={18} />
+                                  {t('app.processAll')}
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-3">
+                          {images.map(img => (
+                            <ImageItem
+                              key={img.id}
+                              item={img}
+                              onRemove={handleRemove}
+                              onUpdate={handleUpdate}
+                              onProcess={handleProcess}
+                              onDownload={handleDownload}
+                            />
+                          ))}
                         </div>
                       </div>
-
-                      <div className="flex flex-col gap-3">
-                        {images.map(img => (
-                          <ImageItem
-                            key={img.id}
-                            item={img}
-                            onRemove={handleRemove}
-                            onUpdate={handleUpdate}
-                            onProcess={handleProcess}
-                            onDownload={handleDownload}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </main>
-              </motion.div>
-            ) : activeTab === 'generator' ? (
-              <motion.main
-                key="generator"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="p-6 h-full overflow-y-auto"
-              >
-                <IconGenerator />
-              </motion.main>
-            ) : activeTab === 'enhancer' ? (
-              <motion.main
-                key="enhancer"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="p-6 h-full overflow-y-auto"
-              >
-                <ImageEnhancer />
-              </motion.main>
-            ) : activeTab === 'editor' ? (
-              <motion.main
-                key="editor"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="p-6 h-full overflow-y-auto"
-              >
-                <ImageEditor />
-              </motion.main>
-            ) : activeTab === 'qr' ? (
-              <motion.main
-                key="qr"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="p-6 h-full overflow-y-auto"
-              >
-                <QRGenerator />
-              </motion.main>
-            ) : activeTab === 'svg-drawable' ? (
-              <motion.main
-                key="svg-drawable"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="p-6 h-full overflow-y-auto"
-              >
-                <SvgToDrawableConverter />
-              </motion.main>
-            ) : activeTab === 'json' ? (
-              <motion.main
-                key="json"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="p-6 h-full overflow-y-auto"
-              >
-                <JSONFormatter />
-              </motion.main>
-            ) : activeTab === 'json-to-code' ? (
-              <motion.main
-                key="json-to-code"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="p-6 h-full overflow-y-auto"
-              >
-                <JsonToCodeConverter />
-              </motion.main>
-            ) : activeTab === 'csv-json' ? (
-              <motion.main
-                key="csv-json"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="p-6 h-full overflow-y-auto"
-              >
-                <CsvToJsonConverter />
-              </motion.main>
-            ) : activeTab === 'jwt' ? (
-              <motion.main
-                key="jwt"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="p-6 h-full overflow-y-auto"
-              >
-                <JWTDecoder />
-              </motion.main>
-            ) : activeTab === 'encryption' ? (
-              <motion.main
-                key="encryption"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="p-6 h-full overflow-y-auto"
-              >
-                <EncryptionTool />
-              </motion.main>
-            ) : activeTab === 'sha' ? (
-              <motion.main
-                key="sha"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="p-6 h-full overflow-y-auto"
-              >
-                <SHAGenerator />
-              </motion.main>
-            ) : activeTab === 'validate-translation' ? (
-              <motion.main
-                key="validate-translation"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <ValidateTranslation />
-              </motion.main>
-            ) : activeTab === 'source-compare' ? (
-              <motion.main
-                key="source-compare"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <SourceComparator />
-              </motion.main>
-            ) : activeTab === 'store-validator' ? (
-              <motion.main
-                key="store-validator"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <AppStoreValidator />
-              </motion.main>
-            ) : activeTab === 'mock-data' ? (
-              <motion.main
-                key="mock-data"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <MockDataGenerator />
-              </motion.main>
-            ) : activeTab === 'lottie-player' ? (
-              <motion.main
-                key="lottie-player"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <LottiePlayer />
-              </motion.main>
-            ) : activeTab === 'js-minifier' ? (
-              <motion.main
-                key="js-minifier"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <JsMinifier />
-              </motion.main>
-            ) : activeTab === 'deeplink-generator' ? (
-              <motion.main
-                key="deeplink-generator"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <DeeplinkGenerator />
-              </motion.main>
-            ) : activeTab === 'download' ? (
-              <motion.main
-                key="download"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="p-6 h-full overflow-y-auto"
-              >
-                <DownloadScreen />
-              </motion.main>
-            ) : activeTab === 'curl-converter' ? (
-              <motion.main
-                key="curl-converter"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <CurlConverter />
-              </motion.main>
-            ) : activeTab === 'css-generator' ? (
-              <motion.main
-                key="css-generator"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <CssGenerator />
-              </motion.main>
-            ) : activeTab === 'unix-timestamp' ? (
-              <motion.main
-                key="unix-timestamp"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <UnixTimestampConverter />
-              </motion.main>
-            ) : activeTab === 'density-converter' ? (
-              <motion.main
-                key="density-converter"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <DensityConverter />
-              </motion.main>
-            ) : activeTab === 'regex-tester' ? (
-              <motion.main
-                key="regex-tester"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <RegexTester />
-              </motion.main>
-            ) : activeTab === 'screenshot-framer' ? (
-              <motion.main
-                key="screenshot-framer"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <ScreenshotFramer />
-              </motion.main>
-            ) : activeTab === 'totp-generator' ? (
-              <motion.main
-                key="totp-generator"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <TotpGenerator />
-              </motion.main>
-            ) : activeTab === 'code-quality' ? (
-              <motion.main
-                key="code-quality"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <CodeQualityChecker />
-              </motion.main>
-            ) : activeTab === 'markdown-editor' ? (
-              <motion.main
-                key="markdown-editor"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="h-full overflow-y-auto"
-              >
-                <MarkdownEditor />
-              </motion.main>
-            ) : (
-              <motion.main
-                key="base64"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="p-6 h-full overflow-y-auto"
-              >
-                <ImageToBase64 />
-              </motion.main>
-            )}
-          </AnimatePresence>
+                    )}
+                  </main>
+                </motion.div>
+              ) : activeTab === 'generator' ? (
+                <motion.main
+                  key="generator"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-6 h-full overflow-y-auto"
+                >
+                  <IconGenerator />
+                </motion.main>
+              ) : activeTab === 'enhancer' ? (
+                <motion.main
+                  key="enhancer"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-6 h-full overflow-y-auto"
+                >
+                  <ImageEnhancer />
+                </motion.main>
+              ) : activeTab === 'editor' ? (
+                <motion.main
+                  key="editor"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-6 h-full overflow-y-auto"
+                >
+                  <ImageEditor />
+                </motion.main>
+              ) : activeTab === 'qr' ? (
+                <motion.main
+                  key="qr"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-6 h-full overflow-y-auto"
+                >
+                  <QRGenerator />
+                </motion.main>
+              ) : activeTab === 'svg-drawable' ? (
+                <motion.main
+                  key="svg-drawable"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-6 h-full overflow-y-auto"
+                >
+                  <SvgToDrawableConverter />
+                </motion.main>
+              ) : activeTab === 'json' ? (
+                <motion.main
+                  key="json"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-6 h-full overflow-y-auto"
+                >
+                  <JSONFormatter />
+                </motion.main>
+              ) : activeTab === 'json-to-code' ? (
+                <motion.main
+                  key="json-to-code"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-6 h-full overflow-y-auto"
+                >
+                  <JsonToCodeConverter />
+                </motion.main>
+              ) : activeTab === 'csv-json' ? (
+                <motion.main
+                  key="csv-json"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-6 h-full overflow-y-auto"
+                >
+                  <CsvToJsonConverter />
+                </motion.main>
+              ) : activeTab === 'jwt' ? (
+                <motion.main
+                  key="jwt"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-6 h-full overflow-y-auto"
+                >
+                  <JWTDecoder />
+                </motion.main>
+              ) : activeTab === 'encryption' ? (
+                <motion.main
+                  key="encryption"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-6 h-full overflow-y-auto"
+                >
+                  <EncryptionTool />
+                </motion.main>
+              ) : activeTab === 'sha' ? (
+                <motion.main
+                  key="sha"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-6 h-full overflow-y-auto"
+                >
+                  <SHAGenerator />
+                </motion.main>
+              ) : activeTab === 'validate-translation' ? (
+                <motion.main
+                  key="validate-translation"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <ValidateTranslation />
+                </motion.main>
+              ) : activeTab === 'source-compare' ? (
+                <motion.main
+                  key="source-compare"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <SourceComparator />
+                </motion.main>
+              ) : activeTab === 'store-validator' ? (
+                <motion.main
+                  key="store-validator"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <AppStoreValidator />
+                </motion.main>
+              ) : activeTab === 'mock-data' ? (
+                <motion.main
+                  key="mock-data"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <MockDataGenerator />
+                </motion.main>
+              ) : activeTab === 'lottie-player' ? (
+                <motion.main
+                  key="lottie-player"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <LottiePlayer />
+                </motion.main>
+              ) : activeTab === 'js-minifier' ? (
+                <motion.main
+                  key="js-minifier"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <JsMinifier />
+                </motion.main>
+              ) : activeTab === 'deeplink-generator' ? (
+                <motion.main
+                  key="deeplink-generator"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <DeeplinkGenerator />
+                </motion.main>
+              ) : activeTab === 'download' ? (
+                <motion.main
+                  key="download"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-6 h-full overflow-y-auto"
+                >
+                  <DownloadScreen />
+                </motion.main>
+              ) : activeTab === 'curl-converter' ? (
+                <motion.main
+                  key="curl-converter"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <CurlConverter />
+                </motion.main>
+              ) : activeTab === 'css-generator' ? (
+                <motion.main
+                  key="css-generator"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <CssGenerator />
+                </motion.main>
+              ) : activeTab === 'unix-timestamp' ? (
+                <motion.main
+                  key="unix-timestamp"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <UnixTimestampConverter />
+                </motion.main>
+              ) : activeTab === 'density-converter' ? (
+                <motion.main
+                  key="density-converter"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <DensityConverter />
+                </motion.main>
+              ) : activeTab === 'regex-tester' ? (
+                <motion.main
+                  key="regex-tester"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <RegexTester />
+                </motion.main>
+              ) : activeTab === 'screenshot-framer' ? (
+                <motion.main
+                  key="screenshot-framer"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <ScreenshotFramer />
+                </motion.main>
+              ) : activeTab === 'totp-generator' ? (
+                <motion.main
+                  key="totp-generator"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <TotpGenerator />
+                </motion.main>
+              ) : activeTab === 'code-quality' ? (
+                <motion.main
+                  key="code-quality"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <CodeQualityChecker />
+                </motion.main>
+              ) : activeTab === 'markdown-editor' ? (
+                <motion.main
+                  key="markdown-editor"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full overflow-y-auto"
+                >
+                  <MarkdownEditor />
+                </motion.main>
+              ) : (
+                <motion.main
+                  key="base64"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.2 }}
+                  className="p-6 h-full overflow-y-auto"
+                >
+                  <ImageToBase64 />
+                </motion.main>
+              )}
+            </AnimatePresence>
+          </Suspense>
         </div>
       </div>
 

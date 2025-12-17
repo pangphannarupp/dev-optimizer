@@ -40,6 +40,16 @@ export default defineConfig({
     commonjsOptions: {
       transformMixedEsModules: true,
     },
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'utils-vendor': ['uuid', 'file-saver', 'jszip'],
+          'ui-vendor': ['lucide-react', 'react-syntax-highlighter', 'react-markdown'],
+          'framer-vendor': ['framer-motion'],
+        },
+      },
+    },
   },
   esbuild: {
     supported: {

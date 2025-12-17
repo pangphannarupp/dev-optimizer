@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { FileJson, Download, AlertCircle, CheckCircle, Smartphone, Apple, ArrowRightLeft, Upload, FileSpreadsheet, Loader2, X, Table, Network } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { FileJson, Download, AlertCircle, CheckCircle, Smartphone, Apple, ArrowRightLeft, Upload, FileSpreadsheet, Loader2, X, Table, Network, Search, Eye, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { DropZone } from './DropZone';
 import JSZip from 'jszip';
@@ -60,6 +60,20 @@ export function CsvToJsonConverter() {
     const [generatedCsv, setGeneratedCsv] = useState<string | null>(null);
     const [exportData, setExportData] = useState<any[][] | null>(null);
 
+    // Progress State
+    const [processingProgress, setProcessingProgress] = useState(0);
+    const [processingFile, setProcessingFile] = useState<string>('');
+
+    // Search and Detail Popup State
+    const [searchQuery, setSearchQuery] = useState('');
+    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+    const [selectedRow, setSelectedRow] = useState<any[] | null>(null);
+    const [showDetailModal, setShowDetailModal] = useState(false);
+
+    // Sort State
+    const [sortConfig, setSortConfig] = useState<{ key: number | null, direction: 'asc' | 'desc' }>({ key: null, direction: 'asc' });
+    const [isSorting, setIsSorting] = useState(false);
+
     const resetState = () => {
         setError(null);
         setSuccess(null);
@@ -82,12 +96,30 @@ export function CsvToJsonConverter() {
         setPendingRows(null);
         setPendingKeyIndex(-1);
         setPendingHeaderRowIndex(-1);
+        setProcessingProgress(0);
+        setProcessingFile('');
+        setSearchQuery('');
+        setDebouncedSearchQuery('');
+        setSelectedRow(null);
+        setShowDetailModal(false);
+        setSortConfig({ key: null, direction: 'asc' });
     };
 
     const handleModeChange = (newMode: Mode) => {
         setMode(newMode);
         resetState();
     };
+
+    // Debounce Search
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearchQuery(searchQuery);
+        }, 300);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [searchQuery]);
 
     // --- Import (CSV/Excel -> Code) Logic ---
 
@@ -424,7 +456,14 @@ export function CsvToJsonConverter() {
         try {
             const parsedFiles: { language: string, data: { [key: string]: string } }[] = [];
 
-            for (const file of files) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                setProcessingFile(file.name);
+                setProcessingProgress(Math.round((i / files.length) * 100));
+
+                // Allow UI to render
+                await new Promise(resolve => setTimeout(resolve, 50));
+
                 const text = await file.text();
                 let data: { [key: string]: string } = {};
                 let language = file.name.split('.')[0]; // Default language from filename
@@ -454,6 +493,9 @@ export function CsvToJsonConverter() {
 
                 parsedFiles.push({ language, data });
             }
+
+            setProcessingProgress(100);
+            await new Promise(resolve => setTimeout(resolve, 200)); // Show 100% briefly
 
             if (parsedFiles.length === 0) {
                 throw new Error(t('csvToJson.csvEmpty')); // Reuse generic empty error or new one
@@ -620,6 +662,20 @@ export function CsvToJsonConverter() {
                             <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
                         </div>
                         <p className="mt-4 text-gray-600 dark:text-gray-300 font-medium animate-pulse">{t('csvToJson.processing')}</p>
+                        {processingFile && (
+                            <div className="mt-4 w-64 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                    <span className="truncate max-w-[150px] font-medium">{processingFile}</span>
+                                    <span className="font-mono">{processingProgress}%</span>
+                                </div>
+                                <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700 overflow-hidden">
+                                    <div
+                                        className="bg-blue-600 h-2 rounded-full transition-all duration-300 ease-out"
+                                        style={{ width: `${processingProgress}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
@@ -793,6 +849,145 @@ export function CsvToJsonConverter() {
                             <Download size={20} />
                             {t('csvToJson.downloadAll')}
                         </button>
+                    </div>
+                )}
+
+                {/* Export Mode Table Preview */}
+                {mode === 'export' && exportData && exportData.length > 0 && (
+                    <div className="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden relative">
+                        {isSorting && (
+                            <div className="absolute inset-0 bg-white/50 dark:bg-gray-800/50 z-20 flex items-center justify-center backdrop-blur-sm">
+                                <div className="bg-white dark:bg-gray-900 p-3 rounded-full shadow-lg flex items-center gap-2">
+                                    <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+                                    <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{t('common.sorting', 'Sorting...')}</span>
+                                </div>
+                            </div>
+                        )}
+                        <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 flex flex-col sm:flex-row justify-between items-center gap-4">
+                            <div className="flex items-center gap-4">
+                                <h3 className="font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+                                    <Table size={18} className="text-blue-500" />
+                                    {t('csvToJson.previewData', 'Data Preview')}
+                                </h3>
+                                <div className="relative">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                                    <input
+                                        type="text"
+                                        placeholder={t('csvToJson.searchPlaceholder', 'Search...')}
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="pl-9 pr-4 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none w-48 transition-all focus:w-64"
+                                    />
+                                </div>
+                            </div>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                                {t('csvToJson.totalRows', 'Total Rows')}: {exportData.length - 1}
+                            </span>
+                        </div>
+                        <div className="overflow-x-auto max-h-[500px]">
+                            <table className="w-full text-sm text-left">
+                                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky top-0 z-10">
+                                    <tr>
+                                        {exportData[0].map((header: string, index: number) => (
+                                            <th
+                                                key={index}
+                                                className="px-6 py-3 whitespace-nowrap font-semibold border-b border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors select-none group"
+                                                onClick={() => {
+                                                    setIsSorting(true);
+                                                    // Use setTimeout to allow UI to render loading state before heavy sort
+                                                    setTimeout(() => {
+                                                        let direction: 'asc' | 'desc' = 'asc';
+                                                        if (sortConfig.key === index && sortConfig.direction === 'asc') {
+                                                            direction = 'desc';
+                                                        }
+                                                        setSortConfig({ key: index, direction });
+                                                        setIsSorting(false);
+                                                    }, 10);
+                                                }}
+                                            >
+                                                <div className="flex items-center gap-2">
+                                                    {header}
+                                                    <span className="text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300">
+                                                        {sortConfig.key === index ? (
+                                                            sortConfig.direction === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
+                                                        ) : (
+                                                            <ArrowUpDown size={14} className="opacity-0 group-hover:opacity-50" />
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                                    {exportData.slice(1)
+                                        .filter(row => {
+                                            if (!debouncedSearchQuery) return true;
+                                            const query = debouncedSearchQuery.toLowerCase();
+                                            return row.some((cell: any) => String(cell).toLowerCase().includes(query));
+                                        })
+                                        .sort((a, b) => {
+                                            if (sortConfig.key === null) return 0;
+                                            const aValue = String(a[sortConfig.key] || '').toLowerCase();
+                                            const bValue = String(b[sortConfig.key] || '').toLowerCase();
+                                            if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+                                            if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+                                            return 0;
+                                        })
+                                        .map((row, rowIndex) => (
+                                            <tr
+                                                key={rowIndex}
+                                                onClick={() => {
+                                                    setSelectedRow(row);
+                                                    setShowDetailModal(true);
+                                                }}
+                                                className="bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700/50 transition-colors cursor-pointer group"
+                                            >
+                                                {row.map((cell: any, cellIndex: number) => (
+                                                    <td key={cellIndex} className="px-6 py-3 whitespace-nowrap text-gray-600 dark:text-gray-300 border-r border-gray-100 dark:border-gray-700 last:border-r-0 max-w-[300px] truncate relative" title={String(cell)}>
+                                                        {String(cell)}
+                                                    </td>
+                                                ))}
+                                            </tr>
+                                        ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
+
+                {/* Detail Modal */}
+                {showDetailModal && selectedRow && exportData && (
+                    <div className="absolute inset-0 bg-white/95 dark:bg-gray-900/95 z-50 flex flex-col items-center justify-center p-6 animate-in fade-in zoom-in-95 duration-200">
+                        <div className="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 flex flex-col max-h-[80vh]">
+                            <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+                                <h3 className="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2">
+                                    <Eye size={20} className="text-blue-500" />
+                                    {t('csvToJson.rowDetails', 'Row Details')}
+                                </h3>
+                                <button onClick={() => setShowDetailModal(false)} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                                    <X size={24} />
+                                </button>
+                            </div>
+                            <div className="overflow-y-auto p-6 space-y-4">
+                                {exportData[0].map((header: string, index: number) => (
+                                    <div key={index} className="flex flex-col gap-1">
+                                        <span className="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">{header}</span>
+                                        <div className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg text-sm text-gray-800 dark:text-gray-200 break-words whitespace-pre-wrap font-mono">
+                                            {String(selectedRow[index])}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 rounded-b-xl flex justify-end">
+                                <button
+                                    onClick={() => setShowDetailModal(false)}
+                                    className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                >
+                                    {t('common.close', 'Close')}
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 )}
 

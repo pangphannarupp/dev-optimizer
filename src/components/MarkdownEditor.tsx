@@ -254,14 +254,16 @@ export function MarkdownEditor() {
                             color: THEMES[currentTheme].color
                         }}
                     >
-                        <div className="markdown-body bg-transparent transition-colors duration-200"
+                        <div className="markdown-body transition-colors duration-200"
                             style={{
+                                backgroundColor: 'transparent',
                                 color: THEMES[currentTheme].color,
                                 '--color-fg-default': THEMES[currentTheme].color,
                                 '--color-canvas-default': 'transparent',
                                 '--color-canvas-subtle': THEMES[currentTheme].codeBg,
                                 '--color-border-default': THEMES[currentTheme].borderColor,
                                 '--color-border-muted': THEMES[currentTheme].borderColor,
+                                fontFamily: 'inherit'
                             } as React.CSSProperties}
                         >
                             <ReactMarkdown
