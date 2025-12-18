@@ -2,17 +2,18 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Settings, Download, Star, Bug } from 'lucide-react';
-import { useTools, ToolId } from '../config/tools';
+import { useNavigate } from 'react-router-dom';
+import { useTools } from '../config/tools';
 import { useFavorites } from '../hooks/useFavorites';
 import AppLogo from '../assets/icon.png';
 
 interface HomeMenuProps {
-    onNavigate: (id: ToolId) => void;
     onSettingsClick: () => void;
 }
 
-export function HomeMenu({ onNavigate, onSettingsClick }: HomeMenuProps) {
+export function HomeMenu({ onSettingsClick }: HomeMenuProps) {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const tools = useTools();
     const { toggleFavorite, isFavorite } = useFavorites();
     const [searchQuery, setSearchQuery] = useState('');
@@ -37,7 +38,7 @@ export function HomeMenu({ onNavigate, onSettingsClick }: HomeMenuProps) {
                 className="relative group h-full"
             >
                 <button
-                    onClick={() => onNavigate(tool.id)}
+                    onClick={() => navigate('/' + tool.id)}
                     className="w-full h-full flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-lg hover:border-blue-100 dark:hover:border-blue-900/30 transition-all text-center"
                 >
                     <div className="w-16 h-16 mb-4 flex items-center justify-center bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-2xl group-hover:bg-blue-100 dark:group-hover:bg-blue-900/40 transition-colors">
@@ -80,7 +81,7 @@ export function HomeMenu({ onNavigate, onSettingsClick }: HomeMenuProps) {
                     <Bug className="w-6 h-6" />
                 </button>
                 <button
-                    onClick={() => onNavigate('download')}
+                    onClick={() => navigate('/download')}
                     className="p-3 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
                     title={t('app.downloadTab', 'Download App')}
                 >

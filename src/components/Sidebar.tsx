@@ -6,22 +6,25 @@ import AppLogo from '../assets/icon.png';
 import { useState, useMemo } from 'react';
 import { useTools, ToolId } from '../config/tools';
 import { useFavorites } from '../hooks/useFavorites';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export type TabType = ToolId | 'home';
 
 interface SidebarProps {
-    activeTab: TabType;
-    onTabChange: (tab: TabType) => void;
     onSettingsClick: () => void;
     isOpen: boolean;
     onClose: () => void;
 }
 
-export function Sidebar({ activeTab, onTabChange, onSettingsClick, isOpen, onClose }: SidebarProps) {
+export function Sidebar({ onSettingsClick, isOpen, onClose }: SidebarProps) {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+    const location = useLocation();
     const [searchQuery, setSearchQuery] = useState('');
     const toolList = useTools();
     const { favorites, toggleFavorite, isFavorite } = useFavorites();
+
+    const activeTab = location.pathname === '/' ? 'home' : location.pathname.substring(1) as TabType;
 
     const handleToggleFavorite = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
@@ -45,11 +48,12 @@ export function Sidebar({ activeTab, onTabChange, onSettingsClick, isOpen, onClo
         const isFav = isFavorite(item.id);
         const isActive = activeTab === item.id;
 
+
         return (
             <motion.button
                 key={item.id}
                 onClick={() => {
-                    onTabChange(item.id);
+                    navigate('/' + item.id);
                     onClose();
                 }}
                 whileHover={{ scale: 1.02, x: 4 }}
@@ -120,7 +124,7 @@ export function Sidebar({ activeTab, onTabChange, onSettingsClick, isOpen, onClo
                         <motion.button
                             key="home"
                             onClick={() => {
-                                onTabChange('home');
+                                navigate('/');
                                 onClose();
                             }}
                             whileHover={{ scale: 1.02, x: 4 }}

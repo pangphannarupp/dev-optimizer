@@ -1,4 +1,5 @@
 import { useState, useCallback, lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { v4 as uuidv4 } from 'uuid';
 import { ProcessedImage } from './components/ImageItem'; // Keep type import
@@ -11,7 +12,6 @@ import './i18n';
 import { useTranslation } from 'react-i18next';
 
 import { HomeMenu } from './components/HomeMenu';
-import { ToolId } from './config/tools';
 import { WhatsNewSnackbar } from './components/WhatsNewSnackbar';
 import { BackgroundWave } from './components/BackgroundWave';
 import { GlobalSettingsModal } from './components/GlobalSettingsModal';
@@ -53,14 +53,17 @@ const DeveloperGuide = lazy(() => import('./components/DeveloperGuide').then(mod
 
 
 function AppContent() {
-  const [activeTab, setActiveTab] = useState<ToolId | 'home'>('home');
+  const location = useLocation();
+  // Simple check for home page vs tools
+  const isHome = location.pathname === '/';
+
   const [images, setImages] = useState<ProcessedImage[]>([]);
   const [defaultFormat, setDefaultFormat] = useState<'image/jpeg' | 'image/png' | 'image/webp'>('image/webp');
   const [defaultQuality, setDefaultQuality] = useState(0.8);
   const [isProcessingAll, setIsProcessingAll] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleFilesDropped = useCallback((files: File[]) => {
     const newImages: ProcessedImage[] = files.map(file => ({
@@ -155,12 +158,10 @@ function AppContent() {
   }, [images]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex transition-colors relative isolate">
+    <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 flex transition-colors relative isolate ${i18n.language === 'km' ? 'font-khmer' : ''}`}>
       <BackgroundWave />
-      {activeTab !== 'home' && (
+      {!isHome && (
         <Sidebar
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
           onSettingsClick={() => setIsSettingsOpen(true)}
           isOpen={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
@@ -169,7 +170,7 @@ function AppContent() {
 
       <div className="flex-1 flex flex-col h-screen overflow-hidden relative z-10">
         {/* Mobile Header - Hide on Home */}
-        {activeTab !== 'home' && (
+        {!isHome && (
           <div className="md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
             <h1 className="text-lg font-bold text-gray-800 dark:text-white">{t('app.title')}</h1>
             <button
@@ -191,422 +192,449 @@ function AppContent() {
             </div>
           }>
             <AnimatePresence mode="wait">
-              {activeTab === 'home' ? (
-                <motion.main
-                  key="home"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-hidden"
-                >
-                  <HomeMenu
-                    onNavigate={(id) => {
-                      setActiveTab(id);
-                      setIsSidebarOpen(false);
-                    }}
-                    onSettingsClick={() => setIsSettingsOpen(true)}
-                  />
-                </motion.main>
-              ) : activeTab === 'optimizer' ? (
-                <motion.div
-                  key="optimizer"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <SettingsPanel
-                    defaultFormat={defaultFormat}
-                    defaultQuality={defaultQuality}
-                    onFormatChange={setDefaultFormat}
-                    onQualityChange={setDefaultQuality}
-                  />
+              <Routes location={location} key={location.pathname}>
+                <Route path="/" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-hidden"
+                  >
+                    <HomeMenu onSettingsClick={() => setIsSettingsOpen(true)} />
+                  </motion.main>
+                } />
 
-                  <main className="p-6 max-w-5xl mx-auto w-full flex flex-col gap-6">
-                    <DropZone onFilesDropped={handleFilesDropped} />
+                <Route path="/optimizer" element={
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <SettingsPanel
+                      defaultFormat={defaultFormat}
+                      defaultQuality={defaultQuality}
+                      onFormatChange={setDefaultFormat}
+                      onQualityChange={setDefaultQuality}
+                    />
 
-                    {images.length > 0 && (
-                      <div className="flex flex-col gap-4">
-                        <div className="flex items-center justify-between">
-                          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{t('app.queue')} ({images.length})</h2>
-                          <div className="flex gap-3">
-                            <button
-                              onClick={handleClearAll}
-                              className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                              disabled={isProcessingAll}
-                            >
-                              <Trash2 size={18} />
-                              {t('app.clearAll')}
-                            </button>
-                            <button
-                              onClick={handleProcessAll}
-                              disabled={isProcessingAll || !images.some(i => i.status === 'pending')}
-                              className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
-                            >
-                              {isProcessingAll ? (
-                                <>
-                                  {t('app.processing')}
-                                </>
-                              ) : (
-                                <>
-                                  <Play size={18} />
-                                  {t('app.processAll')}
-                                </>
-                              )}
-                            </button>
+                    <main className="p-6 max-w-5xl mx-auto w-full flex flex-col gap-6">
+                      <DropZone onFilesDropped={handleFilesDropped} />
+
+                      {images.length > 0 && (
+                        <div className="flex flex-col gap-4">
+                          <div className="flex items-center justify-between">
+                            <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{t('app.queue')} ({images.length})</h2>
+                            <div className="flex gap-3">
+                              <button
+                                onClick={handleClearAll}
+                                className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                                disabled={isProcessingAll}
+                              >
+                                <Trash2 size={18} />
+                                {t('app.clearAll')}
+                              </button>
+                              <button
+                                onClick={handleProcessAll}
+                                disabled={isProcessingAll || !images.some(i => i.status === 'pending')}
+                                className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+                              >
+                                {isProcessingAll ? (
+                                  <>
+                                    {t('app.processing')}
+                                  </>
+                                ) : (
+                                  <>
+                                    <Play size={18} />
+                                    {t('app.processAll')}
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col gap-3">
+                            {images.map(img => (
+                              <ImageItem
+                                key={img.id}
+                                item={img}
+                                onRemove={handleRemove}
+                                onUpdate={handleUpdate}
+                                onProcess={handleProcess}
+                                onDownload={handleDownload}
+                              />
+                            ))}
                           </div>
                         </div>
+                      )}
+                    </main>
+                  </motion.div>
+                } />
 
-                        <div className="flex flex-col gap-3">
-                          {images.map(img => (
-                            <ImageItem
-                              key={img.id}
-                              item={img}
-                              onRemove={handleRemove}
-                              onUpdate={handleUpdate}
-                              onProcess={handleProcess}
-                              onDownload={handleDownload}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </main>
-                </motion.div>
-              ) : activeTab === 'generator' ? (
-                <motion.main
-                  key="generator"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-6 h-full overflow-y-auto"
-                >
-                  <IconGenerator />
-                </motion.main>
-              ) : activeTab === 'enhancer' ? (
-                <motion.main
-                  key="enhancer"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-6 h-full overflow-y-auto"
-                >
-                  <ImageEnhancer />
-                </motion.main>
-              ) : activeTab === 'editor' ? (
-                <motion.main
-                  key="editor"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-6 h-full overflow-y-auto"
-                >
-                  <ImageEditor />
-                </motion.main>
-              ) : activeTab === 'qr' ? (
-                <motion.main
-                  key="qr"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-6 h-full overflow-y-auto"
-                >
-                  <QRGenerator />
-                </motion.main>
-              ) : activeTab === 'svg-drawable' ? (
-                <motion.main
-                  key="svg-drawable"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-6 h-full overflow-y-auto"
-                >
-                  <SvgToDrawableConverter />
-                </motion.main>
-              ) : activeTab === 'json' ? (
-                <motion.main
-                  key="json"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-6 h-full overflow-y-auto"
-                >
-                  <JSONFormatter />
-                </motion.main>
-              ) : activeTab === 'json-to-code' ? (
-                <motion.main
-                  key="json-to-code"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-6 h-full overflow-y-auto"
-                >
-                  <JsonToCodeConverter />
-                </motion.main>
-              ) : activeTab === 'csv-json' ? (
-                <motion.main
-                  key="csv-json"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-6 h-full overflow-y-auto"
-                >
-                  <CsvToJsonConverter />
-                </motion.main>
-              ) : activeTab === 'jwt' ? (
-                <motion.main
-                  key="jwt"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-6 h-full overflow-y-auto"
-                >
-                  <JWTDecoder />
-                </motion.main>
-              ) : activeTab === 'encryption' ? (
-                <motion.main
-                  key="encryption"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-6 h-full overflow-y-auto"
-                >
-                  <EncryptionTool />
-                </motion.main>
-              ) : activeTab === 'sha' ? (
-                <motion.main
-                  key="sha"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-6 h-full overflow-y-auto"
-                >
-                  <SHAGenerator />
-                </motion.main>
-              ) : activeTab === 'validate-translation' ? (
-                <motion.main
-                  key="validate-translation"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <ValidateTranslation />
-                </motion.main>
-              ) : activeTab === 'source-compare' ? (
-                <motion.main
-                  key="source-compare"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <SourceComparator />
-                </motion.main>
-              ) : activeTab === 'store-validator' ? (
-                <motion.main
-                  key="store-validator"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <AppStoreValidator />
-                </motion.main>
-              ) : activeTab === 'mock-data' ? (
-                <motion.main
-                  key="mock-data"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <MockDataGenerator />
-                </motion.main>
-              ) : activeTab === 'lottie-player' ? (
-                <motion.main
-                  key="lottie-player"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <LottiePlayer />
-                </motion.main>
-              ) : activeTab === 'js-minifier' ? (
-                <motion.main
-                  key="js-minifier"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <JsMinifier />
-                </motion.main>
-              ) : activeTab === 'deeplink-generator' ? (
-                <motion.main
-                  key="deeplink-generator"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <DeeplinkGenerator />
-                </motion.main>
-              ) : activeTab === 'download' ? (
-                <motion.main
-                  key="download"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-6 h-full overflow-y-auto"
-                >
-                  <DownloadScreen />
-                </motion.main>
-              ) : activeTab === 'curl-converter' ? (
-                <motion.main
-                  key="curl-converter"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <CurlConverter />
-                </motion.main>
-              ) : activeTab === 'css-generator' ? (
-                <motion.main
-                  key="css-generator"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <CssGenerator />
-                </motion.main>
-              ) : activeTab === 'unix-timestamp' ? (
-                <motion.main
-                  key="unix-timestamp"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <UnixTimestampConverter />
-                </motion.main>
-              ) : activeTab === 'density-converter' ? (
-                <motion.main
-                  key="density-converter"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <DensityConverter />
-                </motion.main>
-              ) : activeTab === 'regex-tester' ? (
-                <motion.main
-                  key="regex-tester"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <RegexTester />
-                </motion.main>
-              ) : activeTab === 'screenshot-framer' ? (
-                <motion.main
-                  key="screenshot-framer"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <ScreenshotFramer />
-                </motion.main>
-              ) : activeTab === 'totp-generator' ? (
-                <motion.main
-                  key="totp-generator"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <TotpGenerator />
-                </motion.main>
-              ) : activeTab === 'code-quality' ? (
-                <motion.main
-                  key="code-quality"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <CodeQualityChecker />
-                </motion.main>
-              ) : activeTab === 'markdown-editor' ? (
-                <motion.main
-                  key="markdown-editor"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
+                <Route path="/generator" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-6 h-full overflow-y-auto"
+                  >
+                    <IconGenerator />
+                  </motion.main>
+                } />
 
-                  <MarkdownEditor />
-                </motion.main>
-              ) : activeTab === 'developer-guide' ? (
-                <motion.main
-                  key="developer-guide"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="h-full overflow-y-auto"
-                >
-                  <DeveloperGuide />
-                </motion.main>
-              ) : (
-                <motion.main
-                  key="base64"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.2 }}
-                  className="p-6 h-full overflow-y-auto"
-                >
-                  <ImageToBase64 />
-                </motion.main>
-              )}
+                <Route path="/enhancer" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-6 h-full overflow-y-auto"
+                  >
+                    <ImageEnhancer />
+                  </motion.main>
+                } />
+
+                <Route path="/editor" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-6 h-full overflow-y-auto"
+                  >
+                    <ImageEditor />
+                  </motion.main>
+                } />
+
+                <Route path="/qr" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-6 h-full overflow-y-auto"
+                  >
+                    <QRGenerator />
+                  </motion.main>
+                } />
+
+                <Route path="/svg-drawable" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-6 h-full overflow-y-auto"
+                  >
+                    <SvgToDrawableConverter />
+                  </motion.main>
+                } />
+
+                <Route path="/json" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-6 h-full overflow-y-auto"
+                  >
+                    <JSONFormatter />
+                  </motion.main>
+                } />
+
+                <Route path="/json-to-code" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-6 h-full overflow-y-auto"
+                  >
+                    <JsonToCodeConverter />
+                  </motion.main>
+                } />
+
+                <Route path="/csv-json" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-6 h-full overflow-y-auto"
+                  >
+                    <CsvToJsonConverter />
+                  </motion.main>
+                } />
+
+                <Route path="/jwt" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-6 h-full overflow-y-auto"
+                  >
+                    <JWTDecoder />
+                  </motion.main>
+                } />
+
+                <Route path="/encryption" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-6 h-full overflow-y-auto"
+                  >
+                    <EncryptionTool />
+                  </motion.main>
+                } />
+
+                <Route path="/sha" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-6 h-full overflow-y-auto"
+                  >
+                    <SHAGenerator />
+                  </motion.main>
+                } />
+
+                <Route path="/validate-translation" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <ValidateTranslation />
+                  </motion.main>
+                } />
+
+                <Route path="/source-compare" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <SourceComparator />
+                  </motion.main>
+                } />
+
+                <Route path="/store-validator" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <AppStoreValidator />
+                  </motion.main>
+                } />
+
+                <Route path="/mock-data" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <MockDataGenerator />
+                  </motion.main>
+                } />
+
+                <Route path="/lottie-player" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <LottiePlayer />
+                  </motion.main>
+                } />
+
+                <Route path="/js-minifier" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <JsMinifier />
+                  </motion.main>
+                } />
+
+                <Route path="/deeplink-generator" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <DeeplinkGenerator />
+                  </motion.main>
+                } />
+
+                <Route path="/download" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-6 h-full overflow-y-auto"
+                  >
+                    <DownloadScreen />
+                  </motion.main>
+                } />
+
+                <Route path="/curl-converter" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <CurlConverter />
+                  </motion.main>
+                } />
+
+                <Route path="/css-generator" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <CssGenerator />
+                  </motion.main>
+                } />
+
+                <Route path="/unix-timestamp" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <UnixTimestampConverter />
+                  </motion.main>
+                } />
+
+                <Route path="/density-converter" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <DensityConverter />
+                  </motion.main>
+                } />
+
+                <Route path="/regex-tester" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <RegexTester />
+                  </motion.main>
+                } />
+
+                <Route path="/screenshot-framer" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <ScreenshotFramer />
+                  </motion.main>
+                } />
+
+                <Route path="/totp-generator" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <TotpGenerator />
+                  </motion.main>
+                } />
+
+                <Route path="/code-quality" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <CodeQualityChecker />
+                  </motion.main>
+                } />
+
+                <Route path="/markdown-editor" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <MarkdownEditor />
+                  </motion.main>
+                } />
+
+                <Route path="/developer-guide" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <DeveloperGuide />
+                  </motion.main>
+                } />
+
+                <Route path="/base64" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="p-6 h-full overflow-y-auto"
+                  >
+                    <ImageToBase64 />
+                  </motion.main>
+                } />
+
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
             </AnimatePresence>
           </Suspense>
         </div>
@@ -621,7 +649,9 @@ function AppContent() {
 function App() {
   return (
     <ThemeProvider>
-      <AppContent />
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
     </ThemeProvider>
   );
 }
