@@ -11,7 +11,7 @@ export type ToolId =
     | 'density-converter' | 'regex-tester' | 'css-generator' | 'screenshot-framer'
     | 'totp-generator' | 'deeplink-generator' | 'qr' | 'svg-drawable' | 'base64'
     | 'json' | 'json-to-code' | 'csv-json' | 'validate-translation' | 'jwt' | 'encryption' | 'sha'
-    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide';
+    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground';
 
 export interface Tool {
     id: ToolId;
@@ -54,6 +54,7 @@ export const useTools = () => {
         { id: 'markdown-editor', icon: FileCode, label: t('markdownEditor.title', 'Markdown Editor'), description: t('markdownEditor.description', 'Edit and Preview Markdown') },
         { id: 'developer-guide', icon: Book, label: t('developerGuide.title', 'Developer Guide'), description: t('developerGuide.description', 'Generate documentation from code') },
         // { id: 'download', icon: Download, label: t('app.downloadTab', 'Download App'), description: 'Get the mobile app' },
+        { id: 'code-playground', icon: Code, label: t('codePlayground.title', 'Code Playground'), description: t('codePlayground.description', 'Write and run code (Kotlin, Swift, Flutter, Web)') },
     ];
 
     return tools;

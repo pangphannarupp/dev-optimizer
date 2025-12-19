@@ -1103,5 +1103,17 @@
         "editor": "Editor",
         "preview": "Preview",
         "placeholder": "Type markdown here..."
+    },
+    "codePlayground": {
+        "title": "Code Playground",
+        "description": "Write, run, and test code for Android, iOS, Flutter, and Web.",
+        "web": "Web (HTML/JS)",
+        "android": "Android (Kotlin)",
+        "ios": "iOS (Swift)",
+        "flutter": "Flutter (Dart)",
+        "java": "Java",
+        "refresh": "Refresh",
+        "code": "Code",
+        "preview": "Preview"
     }
 }

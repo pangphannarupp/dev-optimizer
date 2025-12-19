@@ -50,6 +50,7 @@ const DownloadScreen = lazy(() => import('./components/DownloadScreen').then(mod
 const CodeQualityChecker = lazy(() => import('./components/CodeQualityChecker').then(module => ({ default: module.CodeQualityChecker })));
 const MarkdownEditor = lazy(() => import('./components/MarkdownEditor').then(module => ({ default: module.MarkdownEditor })));
 const DeveloperGuide = lazy(() => import('./components/DeveloperGuide').then(module => ({ default: module.DeveloperGuide })));
+const CodePlayground = lazy(() => import('./components/CodePlayground').then(module => ({ default: module.CodePlayground })));
 
 
 function AppContent() {
@@ -618,6 +619,18 @@ function AppContent() {
                     className="h-full overflow-y-auto"
                   >
                     <DeveloperGuide />
+                  </motion.main>
+                } />
+
+                <Route path="/code-playground" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <CodePlayground />
                   </motion.main>
                 } />
 
