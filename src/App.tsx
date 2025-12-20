@@ -1,4 +1,4 @@
-import { useState, useCallback, lazy, Suspense } from 'react';
+import { useState, useCallback, lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,8 +6,9 @@ import { ProcessedImage } from './components/ImageItem'; // Keep type import
 
 import { Sidebar } from './components/Sidebar';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { TutorialProvider, useTutorial } from './contexts/TutorialContext'; // [NEW]
 import { processImage, createDownloadUrl } from './utils/imageProcessor';
-import { Play, Trash2 } from 'lucide-react';
+import { Play, Trash2 } from 'lucide-react'; // [MODIFY] Added HelpCircle
 import './i18n';
 import { useTranslation } from 'react-i18next';
 
@@ -15,6 +16,8 @@ import { HomeMenu } from './components/HomeMenu';
 import { WhatsNewSnackbar } from './components/WhatsNewSnackbar';
 import { BackgroundWave } from './components/BackgroundWave';
 import { GlobalSettingsModal } from './components/GlobalSettingsModal';
+import { TutorialOverlay } from './components/TutorialOverlay'; // [NEW]
+import { welcomeTutorial } from './data/AppTutorials'; // [NEW]
 
 // Lazy load tool components
 const DropZone = lazy(() => import('./components/DropZone').then(module => ({ default: module.DropZone })));
@@ -51,6 +54,10 @@ const CodeQualityChecker = lazy(() => import('./components/CodeQualityChecker').
 const MarkdownEditor = lazy(() => import('./components/MarkdownEditor').then(module => ({ default: module.MarkdownEditor })));
 const DeveloperGuide = lazy(() => import('./components/DeveloperGuide').then(module => ({ default: module.DeveloperGuide })));
 const CodePlayground = lazy(() => import('./components/CodePlayground').then(module => ({ default: module.CodePlayground })));
+const DsaTutorial = lazy(() => import('./components/DsaTutorial').then(module => ({ default: module.DsaTutorial })));
+const ProgrammingTutorial = lazy(() => import('./components/ProgrammingTutorial').then(module => ({ default: module.ProgrammingTutorial })));
+const ScreenAudioMaker = lazy(() => import('./components/ScreenAudioMaker').then(module => ({ default: module.ScreenAudioMaker })));
+const CvGenerator = lazy(() => import('./components/CvGenerator').then(module => ({ default: module.CvGenerator })));
 
 
 function AppContent() {
@@ -65,6 +72,13 @@ function AppContent() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { t, i18n } = useTranslation();
+
+  // [NEW] Tutorial integration
+  const { registerTutorial } = useTutorial();
+
+  useEffect(() => {
+    registerTutorial(welcomeTutorial);
+  }, [registerTutorial]);
 
   const handleFilesDropped = useCallback((files: File[]) => {
     const newImages: ProcessedImage[] = files.map(file => ({
@@ -186,6 +200,7 @@ function AppContent() {
             </button>
           </div>
         )}
+
         <div className="flex-1 h-full overflow-hidden flex flex-col relative">
           <Suspense fallback={
             <div className="h-full w-full flex items-center justify-center">
@@ -634,6 +649,54 @@ function AppContent() {
                   </motion.main>
                 } />
 
+                <Route path="/dsa-tutorial" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto p-0"
+                  >
+                    <DsaTutorial />
+                  </motion.main>
+                } />
+
+                <Route path="/programming-tutorial" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto p-0"
+                  >
+                    <ProgrammingTutorial />
+                  </motion.main>
+                } />
+
+                <Route path="/screen-audio-maker" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <ScreenAudioMaker />
+                  </motion.main>
+                } />
+
+                <Route path="/cv-generator" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <CvGenerator />
+                  </motion.main>
+                } />
+
                 <Route path="/base64" element={
                   <motion.main
                     initial={{ opacity: 0, y: 20 }}
@@ -655,6 +718,7 @@ function AppContent() {
 
       <GlobalSettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
       <WhatsNewSnackbar />
+      <TutorialOverlay />
     </div >
   );
 }
@@ -662,9 +726,11 @@ function AppContent() {
 function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
-        <AppContent />
-      </BrowserRouter>
+      <TutorialProvider>
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </TutorialProvider>
     </ThemeProvider>
   );
 }

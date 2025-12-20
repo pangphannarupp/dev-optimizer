@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import {
     Image as ImageIcon, Layers, Sparkles, QrCode, FileCode, Code, Key, Lock, Hash,
     FileUp, Split, Film, Link, ScanLine, Palette, Zap, Clock, Monitor,
-    Smartphone, KeyRound, CheckCircle, Database, Book
+    Smartphone, KeyRound, CheckCircle, Database, Book, Binary, Terminal, Mic, FileText
 } from 'lucide-react';
 
 export type ToolId =
@@ -11,13 +11,15 @@ export type ToolId =
     | 'density-converter' | 'regex-tester' | 'css-generator' | 'screenshot-framer'
     | 'totp-generator' | 'deeplink-generator' | 'qr' | 'svg-drawable' | 'base64'
     | 'json' | 'json-to-code' | 'csv-json' | 'validate-translation' | 'jwt' | 'encryption' | 'sha'
-    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground';
+    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground' | 'dsa-tutorial' | 'programming-tutorial' | 'screen-audio-maker' | 'cv-generator';
 
 export interface Tool {
     id: ToolId;
     icon: any;
     label: string;
     description?: string;
+    path?: string;
+    category?: string;
 }
 
 export const useTools = () => {
@@ -55,6 +57,10 @@ export const useTools = () => {
         { id: 'developer-guide', icon: Book, label: t('developerGuide.title', 'Developer Guide'), description: t('developerGuide.description', 'Generate documentation from code') },
         // { id: 'download', icon: Download, label: t('app.downloadTab', 'Download App'), description: 'Get the mobile app' },
         { id: 'code-playground', icon: Code, label: t('codePlayground.title', 'Code Playground'), description: t('codePlayground.description', 'Write and run code (Kotlin, Swift, Flutter, Web)') },
+        { id: 'dsa-tutorial', icon: Binary, label: t('dsa.title', 'DSA Tutorial'), description: t('dsa.description', 'Learn Data Structures & Algorithms') },
+        { id: 'programming-tutorial', icon: Terminal, label: 'Programming Tutorial', description: 'Learn Android, iOS, Web & More' },
+        { id: 'screen-audio-maker', icon: Mic, label: 'Screen Audio Maker', description: 'Convert text to speech' },
+        { id: 'cv-generator', icon: FileText, label: 'CV Generator', description: 'Create professionals resumes and export to PDF/Word' },
     ];
 
     return tools;

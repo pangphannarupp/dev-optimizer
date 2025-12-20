@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Settings, Download, Star, Bug } from 'lucide-react';
+import { Search, Settings, Download, Star, Bug, HelpCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTools } from '../config/tools';
 import { useFavorites } from '../hooks/useFavorites';
 import AppLogo from '../assets/icon.png';
+import { useTutorial } from '../contexts/TutorialContext';
+import { welcomeTutorial } from '../data/AppTutorials';
 
 interface HomeMenuProps {
     onSettingsClick: () => void;
@@ -17,6 +19,7 @@ export function HomeMenu({ onSettingsClick }: HomeMenuProps) {
     const tools = useTools();
     const { toggleFavorite, isFavorite } = useFavorites();
     const [searchQuery, setSearchQuery] = useState('');
+    const { startTutorial } = useTutorial();
 
     const filteredTools = tools.filter(tool =>
         tool.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -74,6 +77,13 @@ export function HomeMenu({ onSettingsClick }: HomeMenuProps) {
             {/* Header Controls */}
             <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
                 <button
+                    onClick={() => startTutorial(welcomeTutorial.id)}
+                    className="p-3 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
+                    title={t('common.help', 'Help & Tutorial')}
+                >
+                    <HelpCircle className="w-6 h-6" />
+                </button>
+                <button
                     onClick={() => window.open('https://log-management-4cm5.onrender.com/', '_blank')}
                     className="p-3 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
                     title="Log Runtime"
@@ -88,6 +98,7 @@ export function HomeMenu({ onSettingsClick }: HomeMenuProps) {
                     <Download className="w-6 h-6" />
                 </button>
                 <button
+                    id="home-settings-btn"
                     onClick={onSettingsClick}
                     className="p-3 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
                     title={t('app.settings')}
@@ -99,6 +110,7 @@ export function HomeMenu({ onSettingsClick }: HomeMenuProps) {
             {/* Header */}
             <div className="flex flex-col items-center pt-16 pb-12 px-6 text-center">
                 <img
+                    id="app-logo"
                     src={AppLogo}
                     alt="App Logo"
                     className="w-24 h-24 rounded-2xl shadow-xl mb-6 hover:scale-105 transition-transform duration-300"
@@ -111,11 +123,12 @@ export function HomeMenu({ onSettingsClick }: HomeMenuProps) {
                 </p>
 
                 {/* Search Bar */}
-                <div className="relative w-full max-w-xl">
+                <div id="home-search-bar" className="relative w-full max-w-xl">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                         <Search className="h-5 w-5 text-gray-400" />
                     </div>
                     <input
+                        id="home-search-input"
                         type="text"
                         className="block w-full pl-11 pr-4 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl text-lg text-gray-900 dark:text-white shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                         placeholder={t('common.search', 'Search tools...')}
