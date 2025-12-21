@@ -20,6 +20,13 @@ export default defineConfig({
     !process.env.IS_WEB_BUILD && electron({
       main: {
         entry: 'electron/main.ts',
+        vite: {
+          build: {
+            rollupOptions: {
+              external: ['ffmpeg-static', 'ytdl-core', 'ytpl', '@distube/ytdl-core', 'fluent-ffmpeg', 'youtube-dl-exec'],
+            },
+          },
+        },
       },
       preload: {
         input: 'electron/preload.ts',

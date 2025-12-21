@@ -58,6 +58,7 @@ const DsaTutorial = lazy(() => import('./components/DsaTutorial').then(module =>
 const ProgrammingTutorial = lazy(() => import('./components/ProgrammingTutorial').then(module => ({ default: module.ProgrammingTutorial })));
 const ScreenAudioMaker = lazy(() => import('./components/ScreenAudioMaker').then(module => ({ default: module.ScreenAudioMaker })));
 const CvGenerator = lazy(() => import('./components/CvGenerator').then(module => ({ default: module.CvGenerator })));
+const YoutubeDownloader = lazy(() => import('./components/YoutubeDownloader').then(module => ({ default: module.YoutubeDownloader })));
 
 
 function AppContent() {
@@ -694,6 +695,18 @@ function AppContent() {
                     className="h-full overflow-y-auto"
                   >
                     <CvGenerator />
+                  </motion.main>
+                } />
+
+                <Route path="/youtube-downloader" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto p-6"
+                  >
+                    <YoutubeDownloader />
                   </motion.main>
                 } />
 

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import {
     Image as ImageIcon, Layers, Sparkles, QrCode, FileCode, Code, Key, Lock, Hash,
     FileUp, Split, Film, Link, ScanLine, Palette, Zap, Clock, Monitor,
-    Smartphone, KeyRound, CheckCircle, Database, Book, Binary, Terminal, Mic, FileText
+    Smartphone, KeyRound, CheckCircle, Database, Book, Binary, Terminal, Mic, FileText, Download
 } from 'lucide-react';
 
 export type ToolId =
@@ -11,7 +11,7 @@ export type ToolId =
     | 'density-converter' | 'regex-tester' | 'css-generator' | 'screenshot-framer'
     | 'totp-generator' | 'deeplink-generator' | 'qr' | 'svg-drawable' | 'base64'
     | 'json' | 'json-to-code' | 'csv-json' | 'validate-translation' | 'jwt' | 'encryption' | 'sha'
-    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground' | 'dsa-tutorial' | 'programming-tutorial' | 'screen-audio-maker' | 'cv-generator';
+    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground' | 'dsa-tutorial' | 'programming-tutorial' | 'screen-audio-maker' | 'cv-generator' | 'youtube-downloader';
 
 export interface Tool {
     id: ToolId;
@@ -61,6 +61,7 @@ export const useTools = () => {
         { id: 'programming-tutorial', icon: Terminal, label: 'Programming Tutorial', description: 'Learn Android, iOS, Web & More' },
         { id: 'screen-audio-maker', icon: Mic, label: 'Screen Audio Maker', description: 'Convert text to speech' },
         { id: 'cv-generator', icon: FileText, label: 'CV Generator', description: 'Create professionals resumes and export to PDF/Word' },
+        { id: 'youtube-downloader', icon: Download, label: 'YouTube Downloader', description: 'Download videos and playlists' },
     ];
 
     return tools;
