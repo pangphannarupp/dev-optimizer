@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { progLanguages, progTopics, ProgTopic, ProgLanguage, ProgDifficulty } from '../data/ProgrammingData';
 import { ProgrammingVisualizer } from './ProgrammingVisualizer';
 import { ChevronRight, ArrowLeft, BookOpen, Code, Search, Menu, X, Smartphone, Globe, Terminal, Box, Atom, FileJson, Palette, FileCode } from 'lucide-react';
@@ -8,16 +9,24 @@ import { clsx } from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const ProgrammingTutorial: React.FC = () => {
+    const { t } = useTranslation();
     const [selectedLanguage, setSelectedLanguage] = useState<ProgLanguage | null>(null);
     const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-    // Get topics for selected language
+    // Get topics for selected language with translations
     const languageTopics = useMemo(() => {
         if (!selectedLanguage) return [];
-        return progTopics.filter(t => t.language === selectedLanguage);
-    }, [selectedLanguage]);
+        return progTopics
+            .filter(t => t.language === selectedLanguage)
+            .map(topic => ({
+                ...topic,
+                title: t(topic.title),
+                description: t(topic.description),
+                content: t(topic.content)
+            }));
+    }, [selectedLanguage, t]);
 
     // Handle initial topic selection when language changes
     React.useEffect(() => {
@@ -27,8 +36,8 @@ export const ProgrammingTutorial: React.FC = () => {
     }, [selectedLanguage, languageTopics, selectedTopicId]);
 
     const selectedTopic = useMemo(() =>
-        progTopics.find(t => t.id === selectedTopicId),
-        [selectedTopicId]);
+        languageTopics.find(t => t.id === selectedTopicId),
+        [languageTopics, selectedTopicId]);
 
     const filteredTopics = useMemo(() =>
         languageTopics.filter(t =>
@@ -82,10 +91,10 @@ export const ProgrammingTutorial: React.FC = () => {
                 <div className="max-w-6xl mx-auto">
                     <div className="text-center mb-12">
                         <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 mb-4">
-                            Programming Tutorials
+                            {t('tutorial.progTitle')}
                         </h1>
                         <p className="text-xl text-gray-600 dark:text-gray-400">
-                            Choose a technology to start learning
+                            {t('tutorial.progSubtitle')}
                         </p>
                     </div>
 
@@ -142,7 +151,7 @@ export const ProgrammingTutorial: React.FC = () => {
                                 className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white mb-4 transition-colors"
                             >
                                 <ArrowLeft size={16} />
-                                Back to Languages
+                                {t('tutorial.backToLanguages')}
                             </button>
 
                             <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -152,7 +161,7 @@ export const ProgrammingTutorial: React.FC = () => {
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
                                 <input
                                     type="text"
-                                    placeholder="Search topics..."
+                                    placeholder={t('tutorial.searchTopics')}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     className="w-full pl-9 pr-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
@@ -225,7 +234,7 @@ export const ProgrammingTutorial: React.FC = () => {
                                 <div className="mb-8">
                                     <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
                                         <Box size={20} className="text-gray-400" />
-                                        Visual Guide
+                                        {t('tutorial.visualGuide')}
                                     </h3>
                                     <ProgrammingVisualizer visualizerId={selectedTopic.visualizerId} />
                                 </div>
@@ -235,7 +244,7 @@ export const ProgrammingTutorial: React.FC = () => {
                             <div className="mb-8 max-w-none">
                                 <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
                                     <BookOpen size={20} className="text-gray-400" />
-                                    Guide
+                                    {t('tutorial.guide')}
                                 </h3>
                                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 whitespace-pre-wrap leading-relaxed text-gray-800 dark:text-gray-200">
                                     {selectedTopic.content}
@@ -247,7 +256,7 @@ export const ProgrammingTutorial: React.FC = () => {
                                 <div className="mb-8">
                                     <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
                                         <Code size={20} className="text-gray-400" />
-                                        Example
+                                        {t('tutorial.example')}
                                     </h3>
                                     <div className="rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-800">
                                         <div className="bg-gray-100 dark:bg-gray-900 px-4 py-2 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
@@ -266,7 +275,7 @@ export const ProgrammingTutorial: React.FC = () => {
                         </motion.div>
                     ) : (
                         <div className="text-center py-20 text-gray-500">
-                            Select a topic to start learning
+                            {t('tutorial.selectTopic')}
                         </div>
                     )}
                 </div>

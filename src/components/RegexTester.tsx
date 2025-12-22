@@ -3,14 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { ScanSearch, HelpCircle, X, Copy, Check, ExternalLink } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const FLAGS = [
-    { key: 'g', label: 'Global', desc: 'Don\'t return after first match' },
-    { key: 'i', label: 'Insensitive', desc: 'Case insensitive match' },
-    { key: 'm', label: 'Multiline', desc: '^ and $ match start/end of line' },
-    { key: 's', label: 'Single Line', desc: 'Dot matches newline' },
-    { key: 'u', label: 'Unicode', desc: 'Enable Unicode support' },
-    { key: 'y', label: 'Sticky', desc: 'Anchor to this.lastIndex' },
-];
+// FLAGS moved inside component or mapped there
+const FLAGS_KEYS = ['g', 'i', 'm', 's', 'u', 'y'];
 
 const GUIDE_DATA = {
     anchors: [
@@ -212,7 +206,7 @@ const RegexGuideModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                                 className="flex items-center justify-center gap-2 w-full p-3 mt-4 text-xs font-medium text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/10 hover:bg-purple-100 dark:hover:bg-purple-900/20 rounded-lg transition-colors border border-purple-100 dark:border-purple-800/50"
                             >
                                 <ExternalLink size={14} />
-                                View Full MDN Documentation
+                                {t('regexTester.guide.viewDocs', 'View Full MDN Documentation')}
                             </a>
                         </div>
                     </div>
@@ -228,6 +222,12 @@ const RegexTester: React.FC = () => {
     const [flags, setFlags] = useState<string[]>(['g']);
     const [testString, setTestString] = useState('');
     const [showGuide, setShowGuide] = useState(false);
+
+    const translatedFlags = useMemo(() => FLAGS_KEYS.map(key => ({
+        key,
+        label: t(`regexTester.flags.${key}.label`),
+        desc: t(`regexTester.flags.${key}.desc`)
+    })), [t]);
 
     const toggleFlag = (flag: string) => {
         setFlags(prev =>
@@ -328,7 +328,7 @@ const RegexTester: React.FC = () => {
                         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
 
                         <div className="mt-4 flex flex-wrap gap-2">
-                            {FLAGS.map(flag => (
+                            {translatedFlags.map(flag => (
                                 <button
                                     key={flag.key}
                                     onClick={() => toggleFlag(flag.key)}

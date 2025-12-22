@@ -35,12 +35,25 @@ export const progTopics: ProgTopic[] = [
     // ANDROID
     // =========================================================================
     {
-        id: 'android-basic-kotlinsyntax',
-        title: 'Kotlin Syntax Basics',
+        id: 'android-basic-intro',
+        title: 'content.prog.android-basic-intro.title',
         language: 'android',
         difficulty: 'Basic',
-        description: 'Variables, Functions, and Null Safety.',
-        content: 'Kotlin is concise and null-safe by default. `val` is immutable, `var` is mutable.',
+        description: 'content.prog.android-basic-intro.description',
+        content: 'content.prog.android-basic-intro.content',
+        codeExample: `
+fun main() {
+    println("Hello, Android Developer!")
+}
+        `
+    },
+    {
+        id: 'android-basic-kotlinsyntax',
+        title: 'content.prog.android-basic-kotlinsyntax.title',
+        language: 'android',
+        difficulty: 'Basic',
+        description: 'content.prog.android-basic-kotlinsyntax.description',
+        content: 'content.prog.android-basic-kotlinsyntax.content',
         codeExample: `
 val name: String = "Android" // Immutable
 var age: Int = 10           // Mutable
@@ -48,12 +61,59 @@ val nullable: String? = null // Nullable type
         `
     },
     {
-        id: 'android-basic-activity',
-        title: 'Activity Lifecycle',
+        id: 'android-basic-control-flow',
+        title: 'content.prog.android-basic-control-flow.title',
         language: 'android',
         difficulty: 'Basic',
-        description: 'Understanding how activities are created, started, paused, and destroyed.',
-        content: 'The Activity class provides a core set of six callbacks: onCreate(), onStart(), onResume(), onPause(), onStop(), and onDestroy().',
+        description: 'content.prog.android-basic-control-flow.description',
+        content: 'content.prog.android-basic-control-flow.content',
+        codeExample: `
+val max = if (a > b) a else b
+
+when (x) {
+    1 -> print("x == 1")
+    2 -> print("x == 2")
+    else -> print("x is neither 1 nor 2")
+}
+        `
+    },
+    {
+        id: 'android-basic-collections',
+        title: 'content.prog.android-basic-collections.title',
+        language: 'android',
+        difficulty: 'Basic',
+        description: 'content.prog.android-basic-collections.description',
+        content: 'content.prog.android-basic-collections.content',
+        codeExample: `
+val numbers = listOf(1, 2, 3) // Immutable
+val mutableNumbers = mutableListOf(1, 2, 3) // Mutable
+mutableNumbers.add(4)
+        `
+    },
+    {
+        id: 'android-basic-compose-ui',
+        title: 'content.prog.android-basic-compose-ui.title',
+        language: 'android',
+        difficulty: 'Basic',
+        description: 'content.prog.android-basic-compose-ui.description',
+        content: 'content.prog.android-basic-compose-ui.content',
+        codeExample: `
+Column {
+    Text(text = "Hello")
+    Row {
+        Text(text = "World")
+        Button(onClick = { }) { Text("Click") }
+    }
+}
+        `
+    },
+    {
+        id: 'android-basic-activity',
+        title: 'content.prog.android-basic-activity.title',
+        language: 'android',
+        difficulty: 'Basic',
+        description: 'content.prog.android-basic-activity.description',
+        content: 'content.prog.android-basic-activity.content',
         visualizerId: 'android-lifecycle',
         codeExample: `
 override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,11 +124,11 @@ override fun onCreate(savedInstanceState: Bundle?) {
     },
     {
         id: 'android-basic-layouts-xml',
-        title: 'Layouts (XML)',
+        title: 'content.prog.android-basic-layouts-xml.title',
         language: 'android',
         difficulty: 'Basic',
-        description: 'Building UI with LinearConstraint and ConstraintLayout.',
-        content: 'XML layouts define the structure of the UI. ConstraintLayout allows you to create large and complex layouts with a flat view hierarchy.',
+        description: 'content.prog.android-basic-layouts-xml.description',
+        content: 'content.prog.android-basic-layouts-xml.content',
         codeExample: `
 <androidx.constraintlayout.widget.ConstraintLayout ...>
     <TextView
@@ -80,12 +140,74 @@ override fun onCreate(savedInstanceState: Bundle?) {
         `
     },
     {
+        id: 'android-xml-linear',
+        title: 'content.prog.android-xml-linear.title',
+        language: 'android',
+        difficulty: 'Basic',
+        description: 'content.prog.android-xml-linear.description',
+        content: 'content.prog.android-xml-linear.content',
+        codeExample: `
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView android:text="Row 1" />
+    <TextView android:text="Row 2" />
+</LinearLayout>
+        `
+    },
+    {
+        id: 'android-xml-relative',
+        title: 'content.prog.android-xml-relative.title',
+        language: 'android',
+        difficulty: 'Basic',
+        description: 'content.prog.android-xml-relative.description',
+        content: 'content.prog.android-xml-relative.content',
+        codeExample: `
+<RelativeLayout ...>
+    <Button
+        android:id="@+id/btn1"
+        android:layout_centerInParent="true"
+        android:text="Center" />
+</RelativeLayout>
+        `
+    },
+    {
+        id: 'android-xml-frame',
+        title: 'content.prog.android-xml-frame.title',
+        language: 'android',
+        difficulty: 'Basic',
+        description: 'content.prog.android-xml-frame.description',
+        content: 'content.prog.android-xml-frame.content',
+        codeExample: `
+<FrameLayout ...>
+    <ImageView android:src="@drawable/bg" ... />
+    <TextView android:text="Overlay Text" ... />
+</FrameLayout>
+        `
+    },
+    {
+        id: 'android-xml-scroll',
+        title: 'content.prog.android-xml-scroll.title',
+        language: 'android',
+        difficulty: 'Basic',
+        description: 'content.prog.android-xml-scroll.description',
+        content: 'content.prog.android-xml-scroll.content',
+        codeExample: `
+<ScrollView ...>
+    <LinearLayout android:orientation="vertical" ...>
+        <!-- Many views here -->
+    </LinearLayout>
+</ScrollView>
+        `
+    },
+    {
         id: 'android-inter-compose-basic',
-        title: 'Jetpack Compose Basics',
+        title: 'content.prog.android-inter-compose-basic.title',
         language: 'android',
         difficulty: 'Intermediate',
-        description: 'Declarative UI with Kotlin.',
-        content: 'Compose is Android’s modern toolkit for building native UI.',
+        description: 'content.prog.android-inter-compose-basic.description',
+        content: 'content.prog.android-inter-compose-basic.content',
         codeExample: `
 @Composable
 fun Greeting(name: String) {
@@ -94,12 +216,82 @@ fun Greeting(name: String) {
         `
     },
     {
-        id: 'android-inter-state',
-        title: 'State in Compose',
+        id: 'android-compose-layouts-standard',
+        title: 'content.prog.android-compose-layouts-standard.title',
         language: 'android',
         difficulty: 'Intermediate',
-        description: 'Managing state with remember and mutableStateOf.',
-        content: 'State describes any value that can change over time. `remember` preserves state across recompositions.',
+        description: 'content.prog.android-compose-layouts-standard.description',
+        content: 'content.prog.android-compose-layouts-standard.content',
+        codeExample: `
+Column(
+    modifier = Modifier.fillMaxSize(),
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally
+) {
+    Box(Modifier.size(100.dp).background(Color.Blue))
+}
+        `
+    },
+    {
+        id: 'android-compose-scaffold',
+        title: 'content.prog.android-compose-scaffold.title',
+        language: 'android',
+        difficulty: 'Intermediate',
+        description: 'content.prog.android-compose-scaffold.description',
+        content: 'content.prog.android-compose-scaffold.content',
+        codeExample: `
+Scaffold(
+    topBar = { TopAppBar(title = { Text("My App") }) },
+    floatingActionButton = { FloatingActionButton(onClick = {}) { Icon(...) } }
+) { contentPadding ->
+    // Screen content
+}
+        `
+    },
+    {
+        id: 'android-compose-constraint',
+        title: 'content.prog.android-compose-constraint.title',
+        language: 'android',
+        difficulty: 'Intermediate',
+        description: 'content.prog.android-compose-constraint.description',
+        content: 'content.prog.android-compose-constraint.content',
+        codeExample: `
+ConstraintLayout {
+    val (button, text) = createRefs()
+    Button(
+        onClick = {},
+        modifier = Modifier.constrainAs(button) {
+            top.linkTo(parent.top, margin = 16.dp)
+        }
+    ) { Text("Button") }
+}
+        `
+    },
+    {
+        id: 'android-compose-surface',
+        title: 'content.prog.android-compose-surface.title',
+        language: 'android',
+        difficulty: 'Intermediate',
+        description: 'content.prog.android-compose-surface.description',
+        content: 'content.prog.android-compose-surface.content',
+        codeExample: `
+Surface(
+    modifier = Modifier.padding(8.dp),
+    shape = RoundedCornerShape(8.dp),
+    color = MaterialTheme.colorScheme.surface,
+    shadowElevation = 4.dp
+) {
+    Text("Content on surface")
+}
+        `
+    },
+    {
+        id: 'android-inter-state',
+        title: 'content.prog.android-inter-state.title',
+        language: 'android',
+        difficulty: 'Intermediate',
+        description: 'content.prog.android-inter-state.description',
+        content: 'content.prog.android-inter-state.content',
         codeExample: `
 @Composable
 fun Counter() {
@@ -112,11 +304,11 @@ fun Counter() {
     },
     {
         id: 'android-inter-coroutines',
-        title: 'Coroutines',
+        title: 'content.prog.android-inter-coroutines.title',
         language: 'android',
         difficulty: 'Intermediate',
-        description: 'Asynchronous programming made easy.',
-        content: 'A coroutine is a concurrency design pattern that you can use on Android to simplify code that executes asynchronously.',
+        description: 'content.prog.android-inter-coroutines.description',
+        content: 'content.prog.android-inter-coroutines.content',
         codeExample: `
 lifecycleScope.launch {
     val result = fetchData() // Suspend function
@@ -126,11 +318,11 @@ lifecycleScope.launch {
     },
     {
         id: 'android-adv-hilt',
-        title: 'Dependency Injection (Hilt)',
+        title: 'content.prog.android-adv-hilt.title',
         language: 'android',
         difficulty: 'Advanced',
-        description: 'Managing dependencies efficiently.',
-        content: 'Hilt provides a standard way to incorporate Dagger dependency injection into an Android application.',
+        description: 'content.prog.android-adv-hilt.description',
+        content: 'content.prog.android-adv-hilt.content',
         codeExample: `
 @HiltAndroidApp
 class ExampleApp : Application()
@@ -143,11 +335,11 @@ class MainActivity : AppCompatActivity() {
     },
     {
         id: 'android-adv-room',
-        title: 'Room Database',
+        title: 'content.prog.android-adv-room.title',
         language: 'android',
         difficulty: 'Advanced',
-        description: 'Local data persistence.',
-        content: 'The Room persistence library provides an abstraction layer over SQLite.',
+        description: 'content.prog.android-adv-room.description',
+        content: 'content.prog.android-adv-room.content',
         codeExample: `
 @Entity
 data class User(
@@ -161,12 +353,32 @@ data class User(
     // iOS (Swift)
     // =========================================================================
     {
-        id: 'ios-basic-swift',
-        title: 'Swift Fundamentals',
+        id: 'ios-basic-intro',
+        title: 'content.prog.ios-basic-intro.title',
         language: 'ios',
         difficulty: 'Basic',
-        description: 'Variables, Types, and Control Flow.',
-        content: 'Swift provides its own versions of all fundamental C and Objective-C types, including Int, Double, Float, Bool, and String.',
+        description: 'content.prog.ios-basic-intro.description',
+        content: 'content.prog.ios-basic-intro.content',
+        codeExample: `
+import SwiftUI
+
+@main
+struct MyApp: App {
+    var body: some Scene {
+        WindowGroup {
+            Text("Hello, iOS!")
+        }
+    }
+}
+        `
+    },
+    {
+        id: 'ios-basic-swift',
+        title: 'content.prog.ios-basic-swift.title',
+        language: 'ios',
+        difficulty: 'Basic',
+        description: 'content.prog.ios-basic-swift.description',
+        content: 'content.prog.ios-basic-swift.content',
         codeExample: `
 let implicitInteger = 70
 let implicitDouble = 70.0
@@ -175,23 +387,93 @@ let explicitDouble: Double = 70
     },
     {
         id: 'ios-basic-optionals',
-        title: 'Optionals',
+        title: 'content.prog.ios-basic-optionals.title',
         language: 'ios',
         difficulty: 'Basic',
-        description: 'Handling missing values safely.',
-        content: 'You use optionals in situations where a value may be absent.',
+        description: 'content.prog.ios-basic-optionals.description',
+        content: 'content.prog.ios-basic-optionals.content',
         codeExample: `
 var serverResponseCode: Int? = 404
 serverResponseCode = nil
         `
     },
     {
+        id: 'ios-basic-control-flow',
+        title: 'content.prog.ios-basic-control-flow.title',
+        language: 'ios',
+        difficulty: 'Basic',
+        description: 'content.prog.ios-basic-control-flow.description',
+        content: 'content.prog.ios-basic-control-flow.content',
+        codeExample: `
+let scores = [75, 43, 103, 87, 12]
+for score in scores {
+    if score > 50 {
+        print("Pass")
+    } else {
+        print("Fail")
+    }
+}
+        `
+    },
+    {
+        id: 'ios-basic-collections',
+        title: 'content.prog.ios-basic-collections.title',
+        language: 'ios',
+        difficulty: 'Basic',
+        description: 'content.prog.ios-basic-collections.description',
+        content: 'content.prog.ios-basic-collections.content',
+        codeExample: `
+var shoppingList = ["Eggs", "Milk"]
+var occupations = [
+    "Malcolm": "Captain",
+    "Kaylee": "Mechanic",
+]
+occupations["Jayne"] = "Public Relations"
+        `
+    },
+    {
+        id: 'ios-basic-functions',
+        title: 'content.prog.ios-basic-functions.title',
+        language: 'ios',
+        difficulty: 'Basic',
+        description: 'content.prog.ios-basic-functions.description',
+        content: 'content.prog.ios-basic-functions.content',
+        codeExample: `
+func greet(person: String, day: String) -> String {
+    return "Hello \(person), today is \(day)."
+}
+
+let numbers = [1, 2, 3]
+let tripled = numbers.map { $0 * 3 }
+        `
+    },
+    {
+        id: 'ios-basic-layouts',
+        title: 'content.prog.ios-basic-layouts.title',
+        language: 'ios',
+        difficulty: 'Basic',
+        description: 'content.prog.ios-basic-layouts.description',
+        content: 'content.prog.ios-basic-layouts.content',
+        codeExample: `
+ZStack {
+    Color.blue.ignoresSafeArea()
+    VStack {
+        Text("Top")
+        HStack {
+            Text("Left")
+            Text("Right")
+        }
+    }
+}
+        `
+    },
+    {
         id: 'ios-inter-swiftui-views',
-        title: 'SwiftUI Views & Modifiers',
+        title: 'content.prog.ios-inter-swiftui-views.title',
         language: 'ios',
         difficulty: 'Intermediate',
-        description: 'Building declarative UIs.',
-        content: 'SwiftUI uses a declarative syntax so you can simply state what your user interface should do.',
+        description: 'content.prog.ios-inter-swiftui-views.description',
+        content: 'content.prog.ios-inter-swiftui-views.content',
         codeExample: `
 VStack {
     Image(systemName: "globe")
@@ -203,11 +485,11 @@ VStack {
     },
     {
         id: 'ios-inter-state',
-        title: 'State & Binding',
+        title: 'content.prog.ios-inter-state.title',
         language: 'ios',
         difficulty: 'Intermediate',
-        description: 'Managing data flow in SwiftUI.',
-        content: '`@State` is a property wrapper type that can read and write a value managed by SwiftUI.',
+        description: 'content.prog.ios-inter-state.description',
+        content: 'content.prog.ios-inter-state.content',
         codeExample: `
 struct ContentView: View {
     @State private var isPlaying: Bool = false
@@ -220,12 +502,67 @@ struct ContentView: View {
         `
     },
     {
+        id: 'ios-inter-navigation',
+        title: 'content.prog.ios-inter-navigation.title',
+        language: 'ios',
+        difficulty: 'Intermediate',
+        description: 'content.prog.ios-inter-navigation.description',
+        content: 'content.prog.ios-inter-navigation.content',
+        codeExample: `
+NavigationStack {
+    List(1...10, id: \.self) { i in
+        NavigationLink("Row \(i)", value: i)
+    }
+    .navigationDestination(for: Int.self) { i in
+        Text("Detail \(i)")
+    }
+}
+        `
+    },
+    {
+        id: 'ios-inter-lists',
+        title: 'content.prog.ios-inter-lists.title',
+        language: 'ios',
+        difficulty: 'Intermediate',
+        description: 'content.prog.ios-inter-lists.description',
+        content: 'content.prog.ios-inter-lists.content',
+        codeExample: `
+let items = ["Apple", "Banana", "Cherry"]
+List(items, id: \.self) { item in
+    Text(item)
+}
+
+LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
+    ForEach(1...20, id: \.self) { i in
+        Text("Item \(i)")
+    }
+}
+        `
+    },
+    {
+        id: 'ios-inter-networking',
+        title: 'content.prog.ios-inter-networking.title',
+        language: 'ios',
+        difficulty: 'Intermediate',
+        description: 'content.prog.ios-inter-networking.description',
+        content: 'content.prog.ios-inter-networking.content',
+        codeExample: `
+struct User: Codable { let name: String }
+
+func fetchUser() async throws -> User {
+    let url = URL(string: "https://api.example.com/user")!
+    let (data, _) = try await URLSession.shared.data(from: url)
+    return try JSONDecoder().decode(User.self, from: data)
+}
+        `
+    },
+    {
         id: 'ios-adv-combine',
-        title: 'Combine Framework',
+        title: 'content.prog.ios-adv-combine.title',
         language: 'ios',
         difficulty: 'Advanced',
-        description: 'Processing values over time.',
-        content: 'Customize handling of asynchronous events by combining event-processing operators.',
+        description: 'content.prog.ios-adv-combine.description',
+        content: 'content.prog.ios-adv-combine.content',
         codeExample: `
 let publisher = [1, 2, 3].publisher
 publisher
@@ -235,16 +572,123 @@ publisher
     },
     {
         id: 'ios-adv-coredata',
-        title: 'Core Data',
+        title: 'content.prog.ios-adv-coredata.title',
         language: 'ios',
         difficulty: 'Advanced',
-        description: 'Persisting data locally.',
-        content: 'Use Core Data to save your application’s permanent data for offline use, to cache temporary data, and to add undo functionality.',
+        description: 'content.prog.ios-adv-coredata.description',
+        content: 'content.prog.ios-adv-coredata.content',
         codeExample: `
 @FetchRequest(
     sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
     animation: .default)
 private var items: FetchedResults<Item>
+        `
+    },
+    {
+        id: 'ios-adv-concurrency',
+        title: 'content.prog.ios-adv-concurrency.title',
+        language: 'ios',
+        difficulty: 'Advanced',
+        description: 'content.prog.ios-adv-concurrency.description',
+        content: 'content.prog.ios-adv-concurrency.content',
+        codeExample: `
+actor UserStore {
+    var users: [String] = []
+    func add(user: String) { users.append(user) }
+}
+
+func load() async {
+    let store = UserStore()
+    await store.add(user: "Alice")
+}
+        `
+    },
+    {
+        id: 'ios-adv-swiftdata',
+        title: 'content.prog.ios-adv-swiftdata.title',
+        language: 'ios',
+        difficulty: 'Advanced',
+        description: 'content.prog.ios-adv-swiftdata.description',
+        content: 'content.prog.ios-adv-swiftdata.content',
+        codeExample: `
+@Model
+class Item {
+    var timestamp: Date
+    init(timestamp: Date) { self.timestamp = timestamp }
+}
+
+// In View
+@Query var items: [Item]
+        `
+    },
+    {
+        id: 'ios-adv-animations',
+        title: 'content.prog.ios-adv-animations.title',
+        language: 'ios',
+        difficulty: 'Advanced',
+        description: 'content.prog.ios-adv-animations.description',
+        content: 'content.prog.ios-adv-animations.content',
+        codeExample: `
+withAnimation(.spring()) {
+    isExpanded.toggle()
+}
+
+// Matched Geometry
+Text("Title")
+    .matchedGeometryEffect(id: "title", in: namespace)
+        `
+    },
+    // =========================================================================
+    // iOS SYSTEM & HARDWARE
+    // =========================================================================
+    {
+        id: 'ios-sys-camera',
+        title: 'content.prog.ios-sys-camera.title',
+        language: 'ios',
+        difficulty: 'Advanced',
+        description: 'content.prog.ios-sys-camera.description',
+        content: 'content.prog.ios-sys-camera.content',
+        codeExample: `
+let session = AVCaptureSession()
+guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else { return }
+let input = try AVCaptureDeviceInput(device: device)
+session.addInput(input)
+session.startRunning()
+        `
+    },
+    {
+        id: 'ios-sys-location',
+        title: 'content.prog.ios-sys-location.title',
+        language: 'ios',
+        difficulty: 'Advanced',
+        description: 'content.prog.ios-sys-location.description',
+        content: 'content.prog.ios-sys-location.content',
+        codeExample: `
+class LocationManager: NSObject, CLLocationManagerDelegate {
+    let manager = CLLocationManager()
+    override init() {
+        super.init()
+        manager.delegate = self
+        manager.requestWhenInUseAuthorization()
+        manager.startUpdatingLocation()
+    }
+}
+        `
+    },
+    {
+        id: 'ios-sys-sensors',
+        title: 'content.prog.ios-sys-sensors.title',
+        language: 'ios',
+        difficulty: 'Advanced',
+        description: 'content.prog.ios-sys-sensors.description',
+        content: 'content.prog.ios-sys-sensors.content',
+        codeExample: `
+let manager = CMMotionManager()
+if manager.isAccelerometerAvailable {
+    manager.startAccelerometerUpdates(to: .main) { (data, error) in
+        print(data?.acceleration.x)
+    }
+}
         `
     },
 
@@ -253,11 +697,11 @@ private var items: FetchedResults<Item>
     // =========================================================================
     {
         id: 'react-basic-components',
-        title: 'Components & Props',
+        title: 'content.prog.react-basic-components.title',
         language: 'react',
         difficulty: 'Basic',
-        description: 'The core building blocks.',
-        content: 'Components let you split the UI into independent, reusable pieces.',
+        description: 'content.prog.react-basic-components.description',
+        content: 'content.prog.react-basic-components.content',
         codeExample: `
 function Welcome(props) {
   return <h1>Hello, {props.name}</h1>;
@@ -266,22 +710,22 @@ function Welcome(props) {
     },
     {
         id: 'react-basic-jsx',
-        title: 'JSX Syntax',
+        title: 'content.prog.react-basic-jsx.title',
         language: 'react',
         difficulty: 'Basic',
-        description: 'Writing HTML inside JavaScript.',
-        content: 'JSX is a syntax extension for JavaScript. It is recommended to use it with React to describe what the UI should look like.',
+        description: 'content.prog.react-basic-jsx.description',
+        content: 'content.prog.react-basic-jsx.content',
         codeExample: `
 const element = <h1>Hello, world!</h1>;
         `
     },
     {
         id: 'react-inter-hooks-state',
-        title: 'useState Hook',
+        title: 'content.prog.react-inter-hooks-state.title',
         language: 'react',
         difficulty: 'Intermediate',
-        description: 'Managing local component state.',
-        content: '`useState` is a Hook that lets you add React state to function components.',
+        description: 'content.prog.react-inter-hooks-state.description',
+        content: 'content.prog.react-inter-hooks-state.content',
         visualizerId: 'react-hooks',
         codeExample: `
 const [count, setCount] = useState(0);
@@ -292,11 +736,11 @@ const [count, setCount] = useState(0);
     },
     {
         id: 'react-inter-hooks-effect',
-        title: 'useEffect Hook',
+        title: 'content.prog.react-inter-hooks-effect.title',
         language: 'react',
         difficulty: 'Intermediate',
-        description: 'Performing side effects.',
-        content: 'Data fetching, subscription, or manually changing the DOM are all examples of side effects.',
+        description: 'content.prog.react-inter-hooks-effect.description',
+        content: 'content.prog.react-inter-hooks-effect.content',
         codeExample: `
 useEffect(() => {
   document.title = \`You clicked \${count} times\`;
@@ -305,11 +749,11 @@ useEffect(() => {
     },
     {
         id: 'react-adv-context',
-        title: 'Context API',
+        title: 'content.prog.react-adv-context.title',
         language: 'react',
         difficulty: 'Advanced',
-        description: 'Passing data deeply without props drilling.',
-        content: 'Context provides a way to pass data through the component tree without having to pass props down manually at every level.',
+        description: 'content.prog.react-adv-context.description',
+        content: 'content.prog.react-adv-context.content',
         codeExample: `
 const ThemeContext = React.createContext('light');
 // Provider
@@ -322,11 +766,11 @@ const theme = useContext(ThemeContext);
     },
     {
         id: 'react-adv-redux',
-        title: 'Redux Toolkit',
+        title: 'content.prog.react-adv-redux.title',
         language: 'react',
         difficulty: 'Advanced',
-        description: 'Global state management.',
-        content: 'Redux is a predictable state container for JS apps.',
+        description: 'content.prog.react-adv-redux.description',
+        content: 'content.prog.react-adv-redux.content',
         codeExample: `
 const counterSlice = createSlice({
   name: 'counter',
@@ -343,22 +787,22 @@ const counterSlice = createSlice({
     // =========================================================================
     {
         id: 'vue-basic-template',
-        title: 'Template Syntax',
+        title: 'content.prog.vue-basic-template.title',
         language: 'vue',
         difficulty: 'Basic',
-        description: 'Binding data to the DOM.',
-        content: 'Vue.js uses an HTML-based template syntax.',
+        description: 'content.prog.vue-basic-template.description',
+        content: 'content.prog.vue-basic-template.content',
         codeExample: `
 <span>Message: {{ msg }}</span>
         `
     },
     {
         id: 'vue-basic-directives',
-        title: 'Directives (v-if, v-for)',
+        title: 'content.prog.vue-basic-directives.title',
         language: 'vue',
         difficulty: 'Basic',
-        description: 'Special attributes with the v- prefix.',
-        content: 'Directives apply special reactive behavior to the rendered DOM.',
+        description: 'content.prog.vue-basic-directives.description',
+        content: 'content.prog.vue-basic-directives.content',
         codeExample: `
 <p v-if="seen">Now you see me</p>
 <li v-for="item in items">
@@ -368,11 +812,11 @@ const counterSlice = createSlice({
     },
     {
         id: 'vue-inter-composition',
-        title: 'Composition API',
+        title: 'content.prog.vue-inter-composition.title',
         language: 'vue',
         difficulty: 'Intermediate',
-        description: 'Using setup() and refs.',
-        content: 'Composition API is a set of APIs that allows us to author Vue components using imported functions instead of declaring options.',
+        description: 'content.prog.vue-inter-composition.description',
+        content: 'content.prog.vue-inter-composition.content',
         codeExample: `
 import { ref, onMounted } from 'vue'
 
@@ -385,11 +829,11 @@ setup() {
     },
     {
         id: 'vue-inter-computed',
-        title: 'Computed Properties',
+        title: 'content.prog.vue-inter-computed.title',
         language: 'vue',
         difficulty: 'Intermediate',
-        description: 'Reactive derived state.',
-        content: 'For complex logic that includes reactive data, you should use a computed property.',
+        description: 'content.prog.vue-inter-computed.description',
+        content: 'content.prog.vue-inter-computed.content',
         codeExample: `
 const publishedBooksMessage = computed(() => {
   return author.books.length > 0 ? 'Yes' : 'No'
@@ -398,11 +842,11 @@ const publishedBooksMessage = computed(() => {
     },
     {
         id: 'vue-adv-pinia',
-        title: 'State Management (Pinia)',
+        title: 'content.prog.vue-adv-pinia.title',
         language: 'vue',
         difficulty: 'Advanced',
-        description: 'The intuitive store for Vue.js.',
-        content: 'Pinia is a store library for Vue, it allows you to share a state across components/pages.',
+        description: 'content.prog.vue-adv-pinia.description',
+        content: 'content.prog.vue-adv-pinia.content',
         codeExample: `
 export const useCounterStore = defineStore('counter', {
   state: () => ({ count: 0 }),
@@ -418,11 +862,11 @@ export const useCounterStore = defineStore('counter', {
     // =========================================================================
     {
         id: 'css-basic-selectors',
-        title: 'Selectors & Specificity',
+        title: 'content.prog.css-basic-selectors.title',
         language: 'css',
         difficulty: 'Basic',
-        description: 'Targeting elements to style.',
-        content: 'CSS selectors define the pattern to select elements to which a set of CSS rules are then applied.',
+        description: 'content.prog.css-basic-selectors.description',
+        content: 'content.prog.css-basic-selectors.content',
         codeExample: `
 /* Element selector */
 p { color: red; }
@@ -436,11 +880,11 @@ p { color: red; }
     },
     {
         id: 'css-basic-boxmodel',
-        title: 'The Box Model',
+        title: 'content.prog.css-basic-boxmodel.title',
         language: 'css',
         difficulty: 'Basic',
-        description: 'Margins, Borders, and Padding.',
-        content: 'All HTML elements can be considered as boxes.',
+        description: 'content.prog.css-basic-boxmodel.description',
+        content: 'content.prog.css-basic-boxmodel.content',
         visualizerId: 'css-box-model',
         codeExample: `
 div {
@@ -453,11 +897,11 @@ div {
     },
     {
         id: 'css-inter-flexbox',
-        title: 'Flexbox',
+        title: 'content.prog.css-inter-flexbox.title',
         language: 'css',
         difficulty: 'Intermediate',
-        description: '1D layout model.',
-        content: 'The Flexible Box Layout Module makes it easier to design flexible responsive layout structures.',
+        description: 'content.prog.css-inter-flexbox.description',
+        content: 'content.prog.css-inter-flexbox.content',
         visualizerId: 'css-flexbox',
         codeExample: `
 .container {
@@ -469,11 +913,11 @@ div {
     },
     {
         id: 'css-inter-grid',
-        title: 'CSS Grid',
+        title: 'content.prog.css-inter-grid.title',
         language: 'css',
         difficulty: 'Intermediate',
-        description: '2D layout system.',
-        content: 'CSS Grid Layout excels at dividing a page into major regions or defining the relationship in terms of size, position, and layer.',
+        description: 'content.prog.css-inter-grid.description',
+        content: 'content.prog.css-inter-grid.content',
         codeExample: `
 .container {
   display: grid;
@@ -484,11 +928,11 @@ div {
     },
     {
         id: 'css-adv-animations',
-        title: 'Animations & Transitions',
+        title: 'content.prog.css-adv-animations.title',
         language: 'css',
         difficulty: 'Advanced',
-        description: 'Bringing movement to the web.',
-        content: 'CSS animations make it possible to animate transitions from one CSS style configuration to another.',
+        description: 'content.prog.css-adv-animations.description',
+        content: 'content.prog.css-adv-animations.content',
         codeExample: `
 @keyframes slidein {
   from { transform: translateX(0%); }
@@ -506,11 +950,11 @@ div {
     // =========================================================================
     {
         id: 'js-basic-vars',
-        title: 'Variables & Types',
+        title: 'content.prog.js-basic-vars.title',
         language: 'javascript',
         difficulty: 'Basic',
-        description: 'let, const, and var.',
-        content: 'Always use `const` or `let`. Avoid `var` to prevent scope issues.',
+        description: 'content.prog.js-basic-vars.description',
+        content: 'content.prog.js-basic-vars.content',
         codeExample: `
 let x = 10;
 const y = 20;
@@ -519,11 +963,11 @@ const y = 20;
     },
     {
         id: 'js-basic-functions',
-        title: 'Functions & Arrow Functions',
+        title: 'content.prog.js-basic-functions.title',
         language: 'javascript',
         difficulty: 'Basic',
-        description: 'Writing reusable blocks of code.',
-        content: 'Arrow functions provide a shorter syntax.',
+        description: 'content.prog.js-basic-functions.description',
+        content: 'content.prog.js-basic-functions.content',
         codeExample: `
 function add(a, b) {
   return a + b;
@@ -534,11 +978,11 @@ const multiply = (a, b) => a * b;
     },
     {
         id: 'js-inter-async',
-        title: 'Async/Await & Promises',
+        title: 'content.prog.js-inter-async.title',
         language: 'javascript',
         difficulty: 'Intermediate',
-        description: 'Handling asynchronous operations.',
-        content: '`async` and `await` make promises easier to write.',
+        description: 'content.prog.js-inter-async.description',
+        content: 'content.prog.js-inter-async.content',
         codeExample: `
 async function fetchData() {
   try {
@@ -553,11 +997,11 @@ async function fetchData() {
     },
     {
         id: 'js-inter-dom',
-        title: 'DOM Manipulation',
+        title: 'content.prog.js-inter-dom.title',
         language: 'javascript',
         difficulty: 'Intermediate',
-        description: 'Interacting with the webpage.',
-        content: 'The DOM (Document Object Model) is an interface for changing the content of a document.',
+        description: 'content.prog.js-inter-dom.description',
+        content: 'content.prog.js-inter-dom.content',
         codeExample: `
 const btn = document.getElementById('myBtn');
 btn.addEventListener('click', () => {
@@ -567,11 +1011,11 @@ btn.addEventListener('click', () => {
     },
     {
         id: 'js-adv-closures',
-        title: 'Closures',
+        title: 'content.prog.js-adv-closures.title',
         language: 'javascript',
         difficulty: 'Advanced',
-        description: 'Function scope and lexical environments.',
-        content: 'A closure is the combination of a function bundled together (enclosed) with references to its surrounding state (the lexical environment).',
+        description: 'content.prog.js-adv-closures.description',
+        content: 'content.prog.js-adv-closures.content',
         codeExample: `
 function makeAdder(x) {
   return function(y) {
@@ -585,11 +1029,11 @@ console.log(add5(2)); // 7
     },
     {
         id: 'js-adv-event-loop',
-        title: 'The Event Loop',
+        title: 'content.prog.js-adv-event-loop.title',
         language: 'javascript',
         difficulty: 'Advanced',
-        description: 'How JS handles concurrency.',
-        content: 'JavaScript has a runtime model based on an event loop, which is responsible for executing the code, collecting and processing events, and executing queued sub-tasks.',
+        description: 'content.prog.js-adv-event-loop.description',
+        content: 'content.prog.js-adv-event-loop.content',
         codeExample: `
 console.log('1');
 setTimeout(() => console.log('2'), 0);
@@ -605,11 +1049,11 @@ console.log('4');
     // =========================================================================
     {
         id: 'html-basic-semantic',
-        title: 'Semantic HTML',
+        title: 'content.prog.html-basic-semantic.title',
         language: 'html',
         difficulty: 'Basic',
-        description: 'Using the right tag for the job.',
-        content: 'Semantic elements clearly describe their meaning to both the browser and the developer (e.g., <header>, <article>, <footer>).',
+        description: 'content.prog.html-basic-semantic.description',
+        content: 'content.prog.html-basic-semantic.content',
         codeExample: `
 <main>
   <article>
@@ -621,11 +1065,11 @@ console.log('4');
     },
     {
         id: 'html-inter-forms',
-        title: 'Forms & Inputs',
+        title: 'content.prog.html-inter-forms.title',
         language: 'html',
         difficulty: 'Intermediate',
-        description: 'Collecting user data.',
-        content: 'HTML forms are used to collect user input.',
+        description: 'content.prog.html-inter-forms.description',
+        content: 'content.prog.html-inter-forms.content',
         codeExample: `
 <form action="/submit">
   <label for="fname">First name:</label>
@@ -636,11 +1080,11 @@ console.log('4');
     },
     {
         id: 'html-adv-canvas',
-        title: 'Canvas API',
+        title: 'content.prog.html-adv-canvas.title',
         language: 'html',
         difficulty: 'Advanced',
-        description: 'Drawing graphics on the fly.',
-        content: 'The HTML <canvas> element is used to draw graphics, on the fly, via JavaScript.',
+        description: 'content.prog.html-adv-canvas.description',
+        content: 'content.prog.html-adv-canvas.content',
         codeExample: `
 <canvas id="myCanvas"></canvas>
 <script>
@@ -658,11 +1102,11 @@ ctx.stroke();
     // =========================================================================
     {
         id: 'python-basic-syntax',
-        title: 'Syntax & Indentation',
+        title: 'content.prog.python-basic-syntax.title',
         language: 'python',
         difficulty: 'Basic',
-        description: 'Writing clean Python code.',
-        content: 'Python uses indentation to indicate a block of code.',
+        description: 'content.prog.python-basic-syntax.description',
+        content: 'content.prog.python-basic-syntax.content',
         codeExample: `
 if 5 > 2:
   print("Five is greater than two!")
@@ -670,11 +1114,11 @@ if 5 > 2:
     },
     {
         id: 'python-basic-lists',
-        title: 'Lists & Dictionaries',
+        title: 'content.prog.python-basic-lists.title',
         language: 'python',
         difficulty: 'Basic',
-        description: 'Core data structures.',
-        content: 'Lists are ordered and mutable. Dictionaries are key-value pairs.',
+        description: 'content.prog.python-basic-lists.description',
+        content: 'content.prog.python-basic-lists.content',
         codeExample: `
 mylist = ["apple", "banana"]
 mydict = {"brand": "Ford", "year": 1964}
@@ -682,11 +1126,11 @@ mydict = {"brand": "Ford", "year": 1964}
     },
     {
         id: 'python-inter-functions',
-        title: 'Functions & Modules',
+        title: 'content.prog.python-inter-functions.title',
         language: 'python',
         difficulty: 'Intermediate',
-        description: 'Reusability and organization.',
-        content: 'A function is a block of code which only runs when it is called.',
+        description: 'content.prog.python-inter-functions.description',
+        content: 'content.prog.python-inter-functions.content',
         codeExample: `
 def my_function(fname):
   print("Hello " + fname)
@@ -697,11 +1141,11 @@ print(math.pi)
     },
     {
         id: 'python-inter-classes',
-        title: 'Classes & Objects',
+        title: 'content.prog.python-inter-classes.title',
         language: 'python',
         difficulty: 'Intermediate',
-        description: 'Object-Oriented Programming (OOP).',
-        content: 'Python is an object oriented programming language.',
+        description: 'content.prog.python-inter-classes.description',
+        content: 'content.prog.python-inter-classes.content',
         codeExample: `
 class Person:
   def __init__(self, name, age):
@@ -714,11 +1158,11 @@ print(p1.name)
     },
     {
         id: 'python-adv-decorators',
-        title: 'Decorators',
+        title: 'content.prog.python-adv-decorators.title',
         language: 'python',
         difficulty: 'Advanced',
-        description: 'Modifying function behavior.',
-        content: 'Decorators are a very powerful and useful tool in Python since it allows programmers to modify the behaviour of a function or class.',
+        description: 'content.prog.python-adv-decorators.description',
+        content: 'content.prog.python-adv-decorators.content',
         codeExample: `
 def my_decorator(func):
     def wrapper():
@@ -734,11 +1178,11 @@ def say_whee():
     },
     {
         id: 'python-adv-generators',
-        title: 'Generators',
+        title: 'content.prog.python-adv-generators.title',
         language: 'python',
         difficulty: 'Advanced',
-        description: 'Iterators using yield.',
-        content: 'Generators are a simple and powerful tool for creating iterators.',
+        description: 'content.prog.python-adv-generators.description',
+        content: 'content.prog.python-adv-generators.content',
         codeExample: `
 def reverse(data):
     for index in range(len(data)-1, -1, -1):
@@ -753,22 +1197,22 @@ for char in reverse('golf'):
     // =========================================================================
     {
         id: 'android-inter-navigation',
-        title: 'Navigation Component',
+        title: 'content.prog.android-inter-navigation.title',
         language: 'android',
         difficulty: 'Intermediate',
-        description: 'Moving between screens.',
-        content: 'The Navigation component consists of three key parts: Navigation Graph, NavHost, and NavController.',
+        description: 'content.prog.android-inter-navigation.description',
+        content: 'content.prog.android-inter-navigation.content',
         codeExample: `
 navController.navigate(R.id.action_home_to_details)
         `
     },
     {
         id: 'android-inter-retrofit',
-        title: 'Networking (Retrofit)',
+        title: 'content.prog.android-inter-retrofit.title',
         language: 'android',
         difficulty: 'Intermediate',
-        description: 'Type-safe HTTP client.',
-        content: 'Retrofit turns your HTTP API into a Java interface.',
+        description: 'content.prog.android-inter-retrofit.description',
+        content: 'content.prog.android-inter-retrofit.content',
         codeExample: `
 interface ApiService {
     @GET("users/{user}/repos")
@@ -778,28 +1222,597 @@ interface ApiService {
     },
     {
         id: 'android-adv-workmanager',
-        title: 'WorkManager',
+        title: 'content.prog.android-adv-workmanager.title',
         language: 'android',
         difficulty: 'Advanced',
-        description: 'Background processing.',
-        content: 'WorkManager is the recommended solution for persistent work that needs to be guaranteed to execute.',
+        description: 'content.prog.android-adv-workmanager.description',
+        content: 'content.prog.android-adv-workmanager.content',
         codeExample: `
 val uploadWorkRequest = OneTimeWorkRequestBuilder<UploadWorker>()
         .build()
 WorkManager.getInstance(context).enqueue(uploadWorkRequest)
         `
     },
+    {
+        id: 'android-inter-lazy-layouts',
+        title: 'content.prog.android-inter-lazy-layouts.title',
+        language: 'android',
+        difficulty: 'Intermediate',
+        description: 'content.prog.android-inter-lazy-layouts.description',
+        content: 'content.prog.android-inter-lazy-layouts.content',
+        codeExample: `
+LazyColumn {
+    items(itemsList) { item ->
+        Text(text = item.name)
+    }
+}
+        `
+    },
+    {
+        id: 'android-inter-viewmodel',
+        title: 'content.prog.android-inter-viewmodel.title',
+        language: 'android',
+        difficulty: 'Intermediate',
+        description: 'content.prog.android-inter-viewmodel.description',
+        content: 'content.prog.android-inter-viewmodel.content',
+        codeExample: `
+class MyViewModel : ViewModel() {
+    private val _uiState = MutableStateFlow(UiState())
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+}
+        `
+    },
+    {
+        id: 'android-adv-flow',
+        title: 'content.prog.android-adv-flow.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-adv-flow.description',
+        content: 'content.prog.android-adv-flow.content',
+        codeExample: `
+fun simple(): Flow<Int> = flow { // flow builder
+    for (i in 1..3) {
+        delay(100) // pretend we are doing something useful here
+        emit(i) // emit next value
+    }
+}
+        `
+    },
+    {
+        id: 'android-inter-side-effects',
+        title: 'content.prog.android-inter-side-effects.title',
+        language: 'android',
+        difficulty: 'Intermediate',
+        description: 'content.prog.android-inter-side-effects.description',
+        content: 'content.prog.android-inter-side-effects.content',
+        codeExample: `
+LaunchedEffect(Unit) {
+    viewModel.loadData()
+}
+        `
+    },
+    {
+        id: 'android-adv-animations',
+        title: 'content.prog.android-adv-animations.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-adv-animations.description',
+        content: 'content.prog.android-adv-animations.content',
+        codeExample: `
+var visible by remember { mutableStateOf(true) }
+AnimatedVisibility(visible = visible) {
+    Text(text = "Hello, world!")
+}
+        `
+    },
+    {
+        id: 'android-adv-datastore',
+        title: 'content.prog.android-adv-datastore.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-adv-datastore.description',
+        content: 'content.prog.android-adv-datastore.content',
+        codeExample: `
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+        `
+    },
+    {
+        id: 'android-inter-permissions',
+        title: 'content.prog.android-inter-permissions.title',
+        language: 'android',
+        difficulty: 'Intermediate',
+        description: 'content.prog.android-inter-permissions.description',
+        content: 'content.prog.android-inter-permissions.content',
+        codeExample: `
+val launcher = rememberLauncherForActivityResult(
+    ActivityResultContracts.RequestPermission()
+) { isGranted ->
+    if (isGranted) { /* ... */ }
+}
+        `
+    },
+    {
+        id: 'android-adv-notifications',
+        title: 'content.prog.android-adv-notifications.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-adv-notifications.description',
+        content: 'content.prog.android-adv-notifications.content',
+        codeExample: `
+val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+    .setSmallIcon(R.drawable.notification_icon)
+    .setContentTitle("My notification")
+    .setContentText("Hello World!")
+    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        `
+    },
+    {
+        id: 'android-adv-testing',
+        title: 'content.prog.android-adv-testing.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-adv-testing.description',
+        content: 'content.prog.android-adv-testing.content',
+        codeExample: `
+@Test
+fun myTest() {
+    composeTestRule.setContent { MyAppTheme { MyScreen() } }
+    composeTestRule.onNodeWithText("Hello").assertIsDisplayed()
+}
+        `
+    },
+    // =========================================================================
+    // ADVANCED KOTLIN
+    // =========================================================================
+    {
+        id: 'android-kotlin-data-sealed',
+        title: 'content.prog.android-kotlin-data-sealed.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-kotlin-data-sealed.description',
+        content: 'content.prog.android-kotlin-data-sealed.content',
+        codeExample: `
+data class User(val name: String, val age: Int)
+
+sealed class UiState {
+    object Loading : UiState()
+    data class Success(val data: String) : UiState()
+    data class Error(val exception: Throwable) : UiState()
+}
+        `
+    },
+    {
+        id: 'android-kotlin-extensions',
+        title: 'content.prog.android-kotlin-extensions.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-kotlin-extensions.description',
+        content: 'content.prog.android-kotlin-extensions.content',
+        codeExample: `
+fun String.removeFirstLastChar(): String =  this.substring(1, this.length - 1)
+
+val myString = "Hello"
+val result = myString.removeFirstLastChar() // "ell"
+        `
+    },
+    {
+        id: 'android-kotlin-lambdas',
+        title: 'content.prog.android-kotlin-lambdas.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-kotlin-lambdas.description',
+        content: 'content.prog.android-kotlin-lambdas.content',
+        codeExample: `
+fun <T> List<T>.customFilter(predicate: (T) -> Boolean): List<T> {
+    val result = ArrayList<T>()
+    for (item in this) {
+        if (predicate(item)) result.add(item)
+    }
+    return result
+}
+        `
+    },
+    {
+        id: 'android-kotlin-generics',
+        title: 'content.prog.android-kotlin-generics.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-kotlin-generics.description',
+        content: 'content.prog.android-kotlin-generics.content',
+        codeExample: `
+class Box<T>(t: T) {
+    var value = t
+}
+
+val box: Box<Int> = Box(1)
+        `
+    },
+    // =========================================================================
+    // ADVANCED COMPOSE
+    // =========================================================================
+    {
+        id: 'android-compose-modifiers',
+        title: 'content.prog.android-compose-modifiers.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-compose-modifiers.description',
+        content: 'content.prog.android-compose-modifiers.content',
+        codeExample: `
+Box(
+    modifier = Modifier
+        .size(100.dp)
+        .background(Color.Red)
+        .padding(10.dp) // Padding applied *inside* the red background
+        .background(Color.Blue) // Content inside padding has blue background
+)
+        `
+    },
+    {
+        id: 'android-compose-theming',
+        title: 'content.prog.android-compose-theming.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-compose-theming.description',
+        content: 'content.prog.android-compose-theming.content',
+        codeExample: `
+MaterialTheme(
+    colorScheme = LightColorScheme,
+    typography = Typography,
+    content = content
+)
+        `
+    },
+    {
+        id: 'android-compose-gestures',
+        title: 'content.prog.android-compose-gestures.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-compose-gestures.description',
+        content: 'content.prog.android-compose-gestures.content',
+        codeExample: `
+Box(
+    modifier = Modifier.pointerInput(Unit) {
+        detectTapGestures(
+            onDoubleTap = { /* Handle double tap */ },
+            onLongPress = { /* Handle long press */ }
+        )
+    }
+)
+        `
+    },
+    {
+        id: 'android-compose-canvas',
+        title: 'content.prog.android-compose-canvas.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-compose-canvas.description',
+        content: 'content.prog.android-compose-canvas.content',
+        codeExample: `
+Canvas(modifier = Modifier.size(100.dp)) {
+    drawCircle(Color.Blue, radius = size.minDimension / 2)
+    drawLine(Color.Red, start = Offset.Zero, end = Offset(size.width, size.height))
+}
+        `
+    },
+    // =========================================================================
+    // ANDROID SYSTEM & HARDWARE
+    // =========================================================================
+    {
+        id: 'android-sys-camerax',
+        title: 'content.prog.android-sys-camerax.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-sys-camerax.description',
+        content: 'content.prog.android-sys-camerax.content',
+        codeExample: `
+val imageCapture = ImageCapture.Builder().build()
+cameraProvider.bindToLifecycle(
+    lifecycleOwner, 
+    CameraSelector.DEFAULT_BACK_CAMERA, 
+    preview, 
+    imageCapture
+)
+        `
+    },
+    {
+        id: 'android-sys-location',
+        title: 'content.prog.android-sys-location.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-sys-location.description',
+        content: 'content.prog.android-sys-location.content',
+        codeExample: `
+fusedLocationClient.lastLocation
+    .addOnSuccessListener { location : Location? ->
+        // Got last known location. In some rare situations this can be null.
+    }
+        `
+    },
+    {
+        id: 'android-sys-sensors',
+        title: 'content.prog.android-sys-sensors.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-sys-sensors.description',
+        content: 'content.prog.android-sys-sensors.content',
+        codeExample: `
+sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        `
+    },
+    {
+        id: 'android-sys-services',
+        title: 'content.prog.android-sys-services.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-sys-services.description',
+        content: 'content.prog.android-sys-services.content',
+        codeExample: `
+class MyService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Do work here
+        return START_STICKY
+    }
+}
+        `
+    },
+    // =========================================================================
+    // ARCHITECTURE PATTERNS (MASTERCLASS)
+    // =========================================================================
+    {
+        id: 'android-arch-mvvm',
+        title: 'content.prog.android-arch-mvvm.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-arch-mvvm.description',
+        content: 'content.prog.android-arch-mvvm.content',
+        codeExample: `
+class MyViewModel @Inject constructor(
+    private val repository: MyRepository
+) : ViewModel() {
+    val data = repository.getData().stateIn(viewModelScope, ...)
+}
+        `
+    },
+    {
+        id: 'android-arch-clean',
+        title: 'content.prog.android-arch-clean.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-arch-clean.description',
+        content: 'content.prog.android-arch-clean.content',
+        codeExample: `
+// Domain Layer
+class GetUserUseCase(private val repository: UserRepository) {
+    operator fun invoke(): Flow<User> = repository.getUser()
+}
+        `
+    },
+    {
+        id: 'android-arch-repository',
+        title: 'content.prog.android-arch-repository.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-arch-repository.description',
+        content: 'content.prog.android-arch-repository.content',
+        codeExample: `
+class UserRepository(
+    private val api: ApiService,
+    private val dao: UserDao
+) {
+    fun getUser() = dao.getUser() // Single source of truth
+}
+        `
+    },
+    {
+        id: 'android-arch-di',
+        title: 'content.prog.android-arch-di.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-arch-di.description',
+        content: 'content.prog.android-arch-di.content',
+        codeExample: `
+@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
+    @Provides
+    fun provideApi(): ApiService = Retrofit.Builder()...build()
+}
+        `
+    },
+    // =========================================================================
+    // FIREBASE INTEGRATION (MASTERCLASS)
+    // =========================================================================
+    {
+        id: 'android-firebase-setup',
+        title: 'content.prog.android-firebase-setup.title',
+        language: 'android',
+        difficulty: 'Intermediate',
+        description: 'content.prog.android-firebase-setup.description',
+        content: 'content.prog.android-firebase-setup.content',
+        codeExample: `
+// In build.gradle
+implementation platform('com.google.firebase:firebase-bom:32.0.0')
+implementation 'com.google.firebase:firebase-analytics-ktx'
+        `
+    },
+    {
+        id: 'android-firebase-firestore',
+        title: 'content.prog.android-firebase-firestore.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-firebase-firestore.description',
+        content: 'content.prog.android-firebase-firestore.content',
+        codeExample: `
+val db = Firebase.firestore
+val user = hashMapOf("first" to "Ada", "last" to "Lovelace")
+db.collection("users")
+    .add(user)
+    .addOnSuccessListener { documentReference ->
+        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.id)
+    }
+        `
+    },
+    {
+        id: 'android-firebase-crashlytics',
+        title: 'content.prog.android-firebase-crashlytics.title',
+        language: 'android',
+        difficulty: 'Intermediate',
+        description: 'content.prog.android-firebase-crashlytics.description',
+        content: 'content.prog.android-firebase-crashlytics.content',
+        codeExample: `
+// Force a crash to test
+throw RuntimeException("Test Crash") // Do not do this in production!
+        `
+    },
+    // =========================================================================
+    // SECURITY & ADVANCED ASYNC (MASTERCLASS)
+    // =========================================================================
+    {
+        id: 'android-sec-biometric',
+        title: 'content.prog.android-sec-biometric.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-sec-biometric.description',
+        content: 'content.prog.android-sec-biometric.content',
+        codeExample: `
+val biometricPrompt = BiometricPrompt(this, executor, callback)
+val promptInfo = BiometricPrompt.PromptInfo.Builder()
+    .setTitle("Biometric login for my app")
+    .setSubtitle("Log in using your biometric credential")
+    .setNegativeButtonText("Use account password")
+    .build()
+biometricPrompt.authenticate(promptInfo)
+        `
+    },
+    {
+        id: 'android-sec-encrypted-prefs',
+        title: 'content.prog.android-sec-encrypted-prefs.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-sec-encrypted-prefs.description',
+        content: 'content.prog.android-sec-encrypted-prefs.content',
+        codeExample: `
+val masterKey = MasterKey.Builder(context)
+    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+    .build()
+
+val sharedPreferences = EncryptedSharedPreferences.create(
+    context,
+    "secret_shared_prefs",
+    masterKey,
+    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+)
+        `
+    },
+    {
+        id: 'android-async-channels',
+        title: 'content.prog.android-async-channels.title',
+        language: 'android',
+        difficulty: 'Advanced',
+        description: 'content.prog.android-async-channels.description',
+        content: 'content.prog.android-async-channels.content',
+        codeExample: `
+// ViewModel
+private val _events = MutableSharedFlow<Event>()
+val events = _events.asSharedFlow()
+
+suspend fun sendEvent(event: Event) {
+    _events.emit(event)
+}
+        `
+    },
 
     // =========================================================================
     // iOS (ADDITIONS)
     // =========================================================================
+
+    // =========================================================================
+    // iOS MASTERCLASS (Architecture, Firebase, Security)
+    // =========================================================================
     {
-        id: 'ios-inter-uikit-interop',
-        title: 'UIKit Interoperability',
+        id: 'ios-arch-mvvm',
+        title: 'content.prog.ios-arch-mvvm.title',
+        language: 'ios',
+        difficulty: 'Advanced',
+        description: 'content.prog.ios-arch-mvvm.description',
+        content: 'content.prog.ios-arch-mvvm.content',
+        codeExample: `
+class UserViewModel: ObservableObject {
+    @Published var user: User?
+    private let repository: UserRepository
+    
+    func load() async {
+        user = await repository.getUser()
+    }
+}
+        `
+    },
+    {
+        id: 'ios-arch-clean',
+        title: 'content.prog.ios-arch-clean.title',
+        language: 'ios',
+        difficulty: 'Advanced',
+        description: 'content.prog.ios-arch-clean.description',
+        content: 'content.prog.ios-arch-clean.content',
+        codeExample: `
+protocol UserRepository {
+    func getUser() async -> User
+}
+
+struct GetUserUseCase {
+    let repo: UserRepository
+    func execute() async -> User {
+        return await repo.getUser()
+    }
+}
+        `
+    },
+    {
+        id: 'ios-firebase-setup',
+        title: 'content.prog.ios-firebase-setup.title',
         language: 'ios',
         difficulty: 'Intermediate',
-        description: 'Using UIKit in SwiftUI.',
-        content: 'UIViewRepresentable allows you to wrap a UIKit view and use it within your SwiftUI View hierarchy.',
+        description: 'content.prog.ios-firebase-setup.description',
+        content: 'content.prog.ios-firebase-setup.content',
+        codeExample: `
+import FirebaseCore
+import FirebaseFirestore
+
+// AppDelegate
+FirebaseApp.configure()
+
+let db = Firestore.firestore()
+try await db.collection("users").addDocument(data: ["name": "Alice"])
+        `
+    },
+    {
+        id: 'ios-sec-keychain',
+        title: 'content.prog.ios-sec-keychain.title',
+        language: 'ios',
+        difficulty: 'Advanced',
+        description: 'content.prog.ios-sec-keychain.description',
+        content: 'content.prog.ios-sec-keychain.content',
+        codeExample: `
+let context = LAContext()
+var error: NSError?
+
+if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+    let reason = "Log in to your account"
+    context.evaluatePolicy(...) { success, error in
+        // Handle success
+    }
+}
+        `
+    },
+    {
+        id: 'ios-inter-uikit-interop',
+        title: 'content.prog.ios-inter-uikit-interop.title',
+        language: 'ios',
+        difficulty: 'Intermediate',
+        description: 'content.prog.ios-inter-uikit-interop.description',
+        content: 'content.prog.ios-inter-uikit-interop.content',
         codeExample: `
 struct MyView: UIViewRepresentable {
     func makeUIView(context: Context) -> UILabel {
@@ -810,11 +1823,11 @@ struct MyView: UIViewRepresentable {
     },
     {
         id: 'ios-adv-testing',
-        title: 'Unit Testing',
+        title: 'content.prog.ios-adv-testing.title',
         language: 'ios',
         difficulty: 'Advanced',
-        description: 'Ensuring code quality.',
-        content: 'XCTest is the framework for writing unit tests in Swift.',
+        description: 'content.prog.ios-adv-testing.description',
+        content: 'content.prog.ios-adv-testing.content',
         codeExample: `
 func testExample() throws {
     let value = 2 + 2
@@ -828,11 +1841,11 @@ func testExample() throws {
     // =========================================================================
     {
         id: 'react-inter-router',
-        title: 'React Router',
+        title: 'content.prog.react-inter-router.title',
         language: 'react',
         difficulty: 'Intermediate',
-        description: 'Client-side routing.',
-        content: 'React Router enables "client side routing".',
+        description: 'content.prog.react-inter-router.description',
+        content: 'content.prog.react-inter-router.content',
         codeExample: `
 <BrowserRouter>
   <Routes>
@@ -844,11 +1857,11 @@ func testExample() throws {
     },
     {
         id: 'react-adv-performance',
-        title: 'Performance Optimization',
+        title: 'content.prog.react-adv-performance.title',
         language: 'react',
         difficulty: 'Advanced',
-        description: 'useMemo and useCallback.',
-        content: 'Memorization helpers to prevent unnecessary re-renders.',
+        description: 'content.prog.react-adv-performance.description',
+        content: 'content.prog.react-adv-performance.content',
         codeExample: `
 const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
 const memoizedCallback = useCallback(() => {
@@ -862,11 +1875,11 @@ const memoizedCallback = useCallback(() => {
     // =========================================================================
     {
         id: 'vue-inter-router',
-        title: 'Vue Router',
+        title: 'content.prog.vue-inter-router.title',
         language: 'vue',
         difficulty: 'Intermediate',
-        description: 'Official router for Vue.js.',
-        content: 'Vue Router seamlessly integrates with Vue.js core to make building Single Page Applications a breeze.',
+        description: 'content.prog.vue-inter-router.description',
+        content: 'content.prog.vue-inter-router.content',
         codeExample: `
 const routes = [
   { path: '/', component: Home },
@@ -876,11 +1889,11 @@ const routes = [
     },
     {
         id: 'vue-adv-slots',
-        title: 'Slots',
+        title: 'content.prog.vue-adv-slots.title',
         language: 'vue',
         difficulty: 'Advanced',
-        description: 'Content distribution API.',
-        content: 'Slots allows you to inject content into a component from a parent.',
+        description: 'content.prog.vue-adv-slots.description',
+        content: 'content.prog.vue-adv-slots.content',
         codeExample: `
 <!-- Child -->
 <div class="container">
@@ -897,11 +1910,11 @@ const routes = [
     // =========================================================================
     {
         id: 'js-basic-es6',
-        title: 'ES6+ Features',
+        title: 'content.prog.js-basic-es6.title',
         language: 'javascript',
         difficulty: 'Basic',
-        description: 'Modern JavaScript syntax.',
-        content: 'Destructuring, Spread/Rest operators, Template Literals.',
+        description: 'content.prog.js-basic-es6.description',
+        content: 'content.prog.js-basic-es6.content',
         codeExample: `
 const { name, age } = person;
 const numbers = [1, ...others];

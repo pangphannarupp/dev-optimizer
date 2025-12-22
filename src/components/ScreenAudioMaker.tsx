@@ -1,5 +1,6 @@
 
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Play, Pause, Square, Mic, Settings2, Sparkles, Download, Edit3, HelpCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -23,6 +24,7 @@ const STYLES: Record<VoiceStyle, StylePreset> = {
 };
 
 export const ScreenAudioMaker = () => {
+    const { t } = useTranslation();
     const [text, setText] = useState('');
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [isPaused, setIsPaused] = useState(false);
@@ -283,9 +285,9 @@ export const ScreenAudioMaker = () => {
                     <div>
                         <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 flex items-center gap-3">
                             <Mic className="w-8 h-8 text-blue-600 dark:text-blue-400" strokeWidth={2.5} />
-                            Screen Audio Studio
+                            {t('screenAudio.title')}
                         </h1>
-                        <p className="text-gray-500 dark:text-gray-400 mt-1 font-medium">Professional Text-to-Speech Editor</p>
+                        <p className="text-gray-500 dark:text-gray-400 mt-1 font-medium">{t('screenAudio.subtitle')}</p>
                     </div>
 
                     {/* Visualizer */}
@@ -312,9 +314,9 @@ export const ScreenAudioMaker = () => {
                             <Settings2 className="w-5 h-5" />
                         </div>
                         <div className="flex-1">
-                            <h3 className="font-bold">Khmer Voice Missing</h3>
+                            <h3 className="font-bold">{t('screenAudio.khmerMissingTitle')}</h3>
                             <p className="text-sm opacity-90">
-                                Your system does not appear to have a Khmer text-to-speech voice installed. The audio may sound incorrect.
+                                {t('screenAudio.khmerMissingText')}
                             </p>
                         </div>
                         <button
@@ -322,7 +324,7 @@ export const ScreenAudioMaker = () => {
                             className="bg-amber-200 dark:bg-amber-800 hover:bg-amber-300 dark:hover:bg-amber-700 text-amber-900 dark:text-amber-100 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-1.5"
                         >
                             <HelpCircle size={14} />
-                            Install Voice
+                            {t('screenAudio.installVoice')}
                         </button>
                     </motion.div>
                 )}
@@ -347,7 +349,7 @@ export const ScreenAudioMaker = () => {
                                 <div className="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center sticky top-0 bg-white dark:bg-gray-800 z-10">
                                     <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                                         <Download className="w-5 h-5 text-blue-500" />
-                                        Install Khmer Voice
+                                        {t('screenAudio.installModalTitle')}
                                     </h2>
                                     <button onClick={() => setShowInstallGuide(false)} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1">
                                         <X size={24} />
@@ -355,14 +357,14 @@ export const ScreenAudioMaker = () => {
                                 </div>
                                 <div className="p-6 space-y-6">
                                     <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl text-sm text-blue-800 dark:text-blue-200">
-                                        <strong>Note:</strong> High-quality voices are part of your Operating System. You can install them for free in your settings.
+                                        <strong>Note:</strong> {t('screenAudio.installModalNote')}
                                     </div>
 
                                     {/* Windows Instructions */}
                                     <div>
                                         <h3 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                                             <span className="w-6 h-6 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center text-xs">1</span>
-                                            Windows 10/11
+                                            {t('screenAudio.windows')}
                                         </h3>
                                         <ol className="list-decimal list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1 ml-2">
                                             <li>Go to <strong>Settings</strong> {'>'} <strong>Time & Language</strong>.</li>
@@ -378,7 +380,7 @@ export const ScreenAudioMaker = () => {
                                     <div>
                                         <h3 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                                             <span className="w-6 h-6 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full flex items-center justify-center text-xs">2</span>
-                                            macOS
+                                            {t('screenAudio.mac')}
                                         </h3>
                                         <ol className="list-decimal list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1 ml-2">
                                             <li>Open <strong>System Settings</strong> (or Preferences).</li>
@@ -395,7 +397,7 @@ export const ScreenAudioMaker = () => {
                                     <div>
                                         <h3 className="font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                                             <span className="w-6 h-6 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center text-xs">3</span>
-                                            Android
+                                            {t('screenAudio.android')}
                                         </h3>
                                         <ol className="list-decimal list-inside text-sm text-gray-600 dark:text-gray-400 space-y-1 ml-2">
                                             <li>Go to <strong>Settings</strong> {'>'} <strong>Accessibility</strong>.</li>
@@ -411,7 +413,7 @@ export const ScreenAudioMaker = () => {
                                         onClick={() => setShowInstallGuide(false)}
                                         className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors"
                                     >
-                                        Got it, thanks!
+                                        {t('screenAudio.gotIt')}
                                     </button>
                                 </div>
                             </motion.div>
@@ -428,12 +430,12 @@ export const ScreenAudioMaker = () => {
                         <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-200 dark:border-gray-700">
                             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                                 <Settings2 className="w-5 h-5 text-gray-500" />
-                                Voice Settings
+                                {t('screenAudio.voiceSettings')}
                             </h2>
 
                             <div className="space-y-4">
                                 <div>
-                                    <label className="text-sm text-gray-500 font-medium mb-1.5 block">Character Voice</label>
+                                    <label className="text-sm text-gray-500 font-medium mb-1.5 block">{t('screenAudio.characterVoice')}</label>
                                     <select
                                         value={selectedVoice?.name || ''}
                                         onChange={(e) => {
@@ -450,7 +452,7 @@ export const ScreenAudioMaker = () => {
 
                                 <div>
                                     <div className="flex justify-between mb-1">
-                                        <span className="text-sm text-gray-500">Speed</span>
+                                        <span className="text-sm text-gray-500">{t('screenAudio.speed')}</span>
                                         <span className="text-sm font-bold text-gray-700 dark:text-gray-300">{rate}x</span>
                                     </div>
                                     <input
@@ -465,7 +467,7 @@ export const ScreenAudioMaker = () => {
                                 </div>
                                 <div>
                                     <div className="flex justify-between mb-1">
-                                        <span className="text-sm text-gray-500">Pitch</span>
+                                        <span className="text-sm text-gray-500">{t('screenAudio.pitch')}</span>
                                         <span className="text-sm font-bold text-gray-700 dark:text-gray-300">{pitch}</span>
                                     </div>
                                     <input
@@ -485,7 +487,7 @@ export const ScreenAudioMaker = () => {
                         <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-200 dark:border-gray-700">
                             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                                 <Sparkles className="w-5 h-5 text-amber-500" />
-                                Emotive Styles
+                                {t('screenAudio.emotiveStyles')}
                             </h2>
                             <div className="grid grid-cols-2 gap-2">
                                 {(Object.keys(STYLES) as VoiceStyle[]).map(style => (
@@ -497,7 +499,7 @@ export const ScreenAudioMaker = () => {
                                             : 'bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                                             }`}
                                     >
-                                        {STYLES[style].label}
+                                        {t(`screenAudio.styles.${style}`)}
                                     </button>
                                 ))}
                             </div>
@@ -507,10 +509,10 @@ export const ScreenAudioMaker = () => {
                         <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-200 dark:border-gray-700">
                             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                                 <Download className="w-5 h-5 text-green-500" />
-                                Export Audio
+                                {t('screenAudio.exportAudio')}
                             </h2>
                             <p className="text-xs text-gray-500 mb-4">
-                                Browser limitation: To download, you must share "Tab Audio" in the popup.
+                                {t('screenAudio.exportNote')}
                             </p>
 
                             {audioBlob ? (
@@ -519,7 +521,7 @@ export const ScreenAudioMaker = () => {
                                     className="w-full py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-green-500/30 transition-all"
                                 >
                                     <Download size={18} />
-                                    Save Recording
+                                    {t('screenAudio.saveRecording')}
                                 </button>
                             ) : (
                                 <button
@@ -530,7 +532,7 @@ export const ScreenAudioMaker = () => {
                                         : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                                         } disabled:opacity-50`}
                                 >
-                                    {isRecording ? 'Recording... (Share Audio)' : 'Record to Download'}
+                                    {isRecording ? t('screenAudio.recordingState') : t('screenAudio.recordToDownload')}
                                 </button>
                             )}
                         </div>
@@ -548,7 +550,7 @@ export const ScreenAudioMaker = () => {
                                         className="flex items-center gap-2 bg-gray-900/10 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-medium text-gray-500 hover:bg-red-100 hover:text-red-500 transition-colors"
                                     >
                                         <Edit3 size={12} />
-                                        Edit Text
+                                        {t('screenAudio.editText')}
                                     </button>
                                 </div>
                             )}
@@ -576,7 +578,7 @@ export const ScreenAudioMaker = () => {
                                 onClick={() => { setText(''); setAudioBlob(null); }}
                                 className="text-sm text-gray-500 hover:text-red-500 transition-colors py-2"
                             >
-                                Clear Script
+                                {t('screenAudio.clearScript')}
                             </button>
 
                             <div className="flex-1 flex justify-center gap-4">
@@ -596,7 +598,7 @@ export const ScreenAudioMaker = () => {
                                         className="h-14 px-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 hover:scale-105 active:scale-95 transition-all flex items-center gap-3 text-lg font-bold disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                                     >
                                         <Play size={26} fill="currentColor" />
-                                        Start Reading
+                                        {t('screenAudio.startReading')}
                                     </button>
                                 ) : (
                                     <button
@@ -613,9 +615,9 @@ export const ScreenAudioMaker = () => {
                                             }`}
                                     >
                                         {isPaused ? (
-                                            <> <Play size={26} fill="currentColor" /> Resume </>
+                                            <> <Play size={26} fill="currentColor" /> {t('screenAudio.resume')} </>
                                         ) : (
-                                            <> <Pause size={26} fill="currentColor" /> Pause </>
+                                            <> <Pause size={26} fill="currentColor" /> {t('screenAudio.pause')} </>
                                         )}
                                     </button>
                                 )}

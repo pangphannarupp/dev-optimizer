@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTutorial } from '../contexts/TutorialContext';
 import { X, ChevronLeft, ChevronRight, Check } from 'lucide-react';
 
 export const TutorialOverlay: React.FC = () => {
+    const { t } = useTranslation();
     const { isActive, currentStep, nextStep, prevStep, endTutorial, currentStepIndex, activeTutorial } = useTutorial();
     const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
     const [, setWindowSize] = useState({ width: 0, height: 0 });
@@ -169,7 +171,7 @@ export const TutorialOverlay: React.FC = () => {
                             onClick={endTutorial}
                             className="text-xs font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 px-2 py-1"
                         >
-                            Skip
+                            {t('tutorial.skip')}
                         </button>
 
                         <div className="flex gap-2">
@@ -178,7 +180,7 @@ export const TutorialOverlay: React.FC = () => {
                                     onClick={prevStep}
                                     className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
                                 >
-                                    <ChevronLeft size={14} /> Back
+                                    <ChevronLeft size={14} /> {t('tutorial.back')}
                                 </button>
                             )}
                             <button
@@ -186,9 +188,9 @@ export const TutorialOverlay: React.FC = () => {
                                 className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm shadow-blue-500/30 transition-colors"
                             >
                                 {isLastStep ? (
-                                    <>Finish <Check size={14} /></>
+                                    <>{t('tutorial.finish')} <Check size={14} /></>
                                 ) : (
-                                    <>Next <ChevronRight size={14} /></>
+                                    <>{t('tutorial.next')} <ChevronRight size={14} /></>
                                 )}
                             </button>
                         </div>

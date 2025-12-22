@@ -1,14 +1,15 @@
 
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FileText, Printer, Plus, Trash2, ChevronDown, ChevronRight, User, Briefcase, GraduationCap, Code, Palette, Book, Globe, Award, BadgeCheck, Image as ImageIcon, Layout, Zap, Clock, Grid, PenTool, Rocket, Newspaper, Hexagon, Terminal, Crown, MailOpen, Building2, Share2, Shapes, LayoutGrid, Moon, AlignRight, Activity, Hammer, Cpu, Leaf, Cloud } from 'lucide-react';
+import { FileText, Printer, Plus, Trash2, ChevronDown, ChevronRight, User, Briefcase, GraduationCap, Code, Palette, Book, Globe, Award, BadgeCheck, Image as ImageIcon, Layout, Zap, Clock, Grid, PenTool, Rocket, Newspaper, Hexagon, Terminal, Crown, MailOpen, Building2, Share2, Shapes, LayoutGrid, Moon, AlignRight, Activity, Hammer, Cpu, Leaf, Cloud, Columns, Circle, Heart } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
+import { useTranslation } from 'react-i18next';
 // import { Document, Packer, Paragraph, HeadingLevel, AlignmentType, TextRun, BorderStyle } from 'docx';
 // import { saveAs } from 'file-saver';
 import { CvData, INITIAL_DATA, Experience, Education, DesignSettings, PortfolioItem, Reference, Language, Certification } from '../types/CvTypes';
-import { ModernTemplate, ClassicTemplate, MinimalTemplate, ProfessionalTemplate, CreativeTemplate, ElegantTemplate, TechTemplate, CompactTemplate, AcademicTemplate, SwissTemplate, TimelineTemplate, StartupTemplate, NewspaperTemplate, GeometricTemplate, ExecutiveTemplate, ManhattanTemplate, DeveloperTemplate, HeroTemplate, NewsletterTemplate, CorporateTemplate, InfluenceTemplate, AbstractTemplate, MosaicTemplate, NoirTemplate, RightTemplate, FluxTemplate, ImpactTemplate, GlitchTemplate, LeafTemplate, SkyTemplate } from './CvTemplates';
+import { ModernTemplate, ClassicTemplate, MinimalTemplate, ProfessionalTemplate, CreativeTemplate, ElegantTemplate, TechTemplate, CompactTemplate, AcademicTemplate, SwissTemplate, TimelineTemplate, StartupTemplate, NewspaperTemplate, GeometricTemplate, ExecutiveTemplate, ManhattanTemplate, DeveloperTemplate, HeroTemplate, NewsletterTemplate, CorporateTemplate, InfluenceTemplate, AbstractTemplate, MosaicTemplate, NoirTemplate, RightTemplate, FluxTemplate, ImpactTemplate, GlitchTemplate, LeafTemplate, SkyTemplate, MintTemplate, AzureTemplate, SandTemplate, CharcoalTemplate, RibbonTemplate, EmeraldTemplate, SlateTemplate, ArcTemplate, RoseTemplate } from './cv-templates';
 
-type TemplateType = 'modern' | 'classic' | 'minimal' | 'professional' | 'creative' | 'elegant' | 'tech' | 'compact' | 'academic' | 'swiss' | 'timeline' | 'startup' | 'newspaper' | 'geometric' | 'executive' | 'manhattan' | 'developer' | 'hero' | 'newsletter' | 'corporate' | 'influence' | 'abstract' | 'mosaic' | 'noir' | 'right' | 'flux' | 'impact' | 'glitch' | 'leaf' | 'sky';
+type TemplateType = 'modern' | 'classic' | 'minimal' | 'professional' | 'creative' | 'elegant' | 'tech' | 'compact' | 'academic' | 'swiss' | 'timeline' | 'startup' | 'newspaper' | 'geometric' | 'executive' | 'manhattan' | 'developer' | 'hero' | 'newsletter' | 'corporate' | 'influence' | 'abstract' | 'mosaic' | 'noir' | 'right' | 'flux' | 'impact' | 'glitch' | 'leaf' | 'sky' | 'mint' | 'azure' | 'sand' | 'charcoal' | 'ribbon' | 'emerald' | 'slate' | 'arc' | 'rose';
 type TemplateCategory = 'Professional' | 'Modern' | 'Creative' | 'Tech' | 'Unique';
 
 interface TemplateMeta {
@@ -57,12 +58,24 @@ const TEMPLATES: TemplateMeta[] = [
     { id: 'newsletter', icon: MailOpen, label: 'Newsletter', category: 'Unique' },
     { id: 'noir', icon: Moon, label: 'Noir', category: 'Unique' },
     { id: 'influence', icon: Share2, label: 'Influence', category: 'Unique' },
+    { id: 'charcoal', icon: Moon, label: 'Charcoal', category: 'Unique' },
+
+    // New Additions
+    { id: 'mint', icon: Layout, label: 'Mint', category: 'Modern' },
+    { id: 'azure', icon: Briefcase, label: 'Azure', category: 'Professional' },
+    { id: 'sand', icon: FileText, label: 'Sand', category: 'Professional' },
+    { id: 'ribbon', icon: Award, label: 'Ribbon', category: 'Creative' },
+    { id: 'emerald', icon: Columns, label: 'Emerald', category: 'Professional' },
+    { id: 'slate', icon: Layout, label: 'Slate', category: 'Modern' },
+    { id: 'arc', icon: Circle, label: 'Arc', category: 'Creative' },
+    { id: 'rose', icon: Heart, label: 'Rose', category: 'Unique' },
 ];
 
 const CATEGORIES: TemplateCategory[] = ['Professional', 'Modern', 'Creative', 'Tech', 'Unique'];
 
 
 export const CvGenerator = () => {
+    const { t } = useTranslation();
     const [data, setData] = useState<CvData>(INITIAL_DATA);
     const [activeTemplate, setActiveTemplate] = useState<TemplateType>('modern');
     const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -329,7 +342,7 @@ export const CvGenerator = () => {
                 >
                     <div className="flex items-center gap-3 font-semibold text-gray-900 dark:text-gray-100">
                         <User size={18} className="text-blue-500" />
-                        Personal Information
+                        {t('cv.personalInformation')}
                     </div>
                     {activeSection === 'personal' ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                 </button>
@@ -358,8 +371,8 @@ export const CvGenerator = () => {
                                 </div>
                             </div>
                             <div className="flex-1">
-                                <h3 className="font-semibold text-gray-900 dark:text-gray-100">Profile Photo</h3>
-                                <p className="text-xs text-gray-500 mb-2">Drag & drop or click to upload</p>
+                                <h3 className="font-semibold text-gray-900 dark:text-gray-100">{t('cv.profilePhoto')}</h3>
+                                <p className="text-xs text-gray-500 mb-2">{t('cv.dragDrop')}</p>
                                 <input
                                     type="file"
                                     ref={fileInputRef}
@@ -372,25 +385,25 @@ export const CvGenerator = () => {
                                         onClick={() => fileInputRef.current?.click()}
                                         className="text-xs bg-gray-900 dark:bg-gray-700 text-white px-3 py-1.5 rounded-lg hover:bg-gray-800 transition-colors"
                                     >
-                                        Choose File
+                                        {t('cv.chooseFile')}
                                     </button>
                                     {data.personal.photo && (
                                         <button
                                             onClick={() => updatePersonal('photo', '')}
                                             className="text-xs text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 px-3 py-1.5 rounded-lg transition-colors"
-                                        >Remove</button>
+                                        >{t('cv.remove')}</button>
                                     )}
                                 </div>
                             </div>
                         </div>
 
-                        <input className="input-field col-span-2" placeholder="Full Name" value={data.personal.fullName} onChange={e => updatePersonal('fullName', e.target.value)} />
-                        <input className="input-field" placeholder="Job Title" value={data.personal.role} onChange={e => updatePersonal('role', e.target.value)} />
-                        <input className="input-field" placeholder="Email" value={data.personal.email} onChange={e => updatePersonal('email', e.target.value)} />
-                        <input className="input-field" placeholder="Phone" value={data.personal.phone} onChange={e => updatePersonal('phone', e.target.value)} />
-                        <input className="input-field" placeholder="Location" value={data.personal.address} onChange={e => updatePersonal('address', e.target.value)} />
-                        <input className="input-field col-span-2" placeholder="Website / LinkedIn" value={data.personal.website} onChange={e => updatePersonal('website', e.target.value)} />
-                        <textarea className="input-field col-span-2 h-24" placeholder="Professional Summary" value={data.personal.summary} onChange={e => updatePersonal('summary', e.target.value)} />
+                        <input className="input-field col-span-2" placeholder={t('cv.fullName')} value={data.personal.fullName} onChange={e => updatePersonal('fullName', e.target.value)} />
+                        <input className="input-field" placeholder={t('cv.jobTitle')} value={data.personal.role} onChange={e => updatePersonal('role', e.target.value)} />
+                        <input className="input-field" placeholder={t('cv.email')} value={data.personal.email} onChange={e => updatePersonal('email', e.target.value)} />
+                        <input className="input-field" placeholder={t('cv.phone')} value={data.personal.phone} onChange={e => updatePersonal('phone', e.target.value)} />
+                        <input className="input-field" placeholder={t('cv.location')} value={data.personal.address} onChange={e => updatePersonal('address', e.target.value)} />
+                        <input className="input-field col-span-2" placeholder={t('cv.website')} value={data.personal.website} onChange={e => updatePersonal('website', e.target.value)} />
+                        <textarea className="input-field col-span-2 h-24" placeholder={t('cv.professionalSummary')} value={data.personal.summary} onChange={e => updatePersonal('summary', e.target.value)} />
                     </div>
                 )}
             </div>
@@ -403,7 +416,7 @@ export const CvGenerator = () => {
                 >
                     <div className="flex items-center gap-3 font-semibold text-gray-900 dark:text-gray-100">
                         <Briefcase size={18} className="text-amber-500" />
-                        Experience
+                        {t('cv.experience')}
                     </div>
                     {activeSection === 'exp' ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                 </button>
@@ -414,16 +427,16 @@ export const CvGenerator = () => {
                             <div key={exp.id} className="relative pl-4 border-l-2 border-gray-200 dark:border-gray-700">
                                 <button onClick={() => removeItem('experience', exp.id)} className="absolute right-0 top-0 text-red-500 hover:text-red-600 p-1"><Trash2 size={16} /></button>
                                 <div className="grid grid-cols-2 gap-3 pr-8">
-                                    <input className="input-field font-bold" value={exp.role} onChange={e => updateItem('experience', exp.id, 'role', e.target.value)} placeholder="Role" />
-                                    <input className="input-field" value={exp.company} onChange={e => updateItem('experience', exp.id, 'company', e.target.value)} placeholder="Company" />
-                                    <input className="input-field" value={exp.startDate} onChange={e => updateItem('experience', exp.id, 'startDate', e.target.value)} placeholder="Start Date" />
-                                    <input className="input-field" value={exp.endDate} onChange={e => updateItem('experience', exp.id, 'endDate', e.target.value)} placeholder="End Date" />
-                                    <textarea className="input-field col-span-2 h-20" value={exp.description} onChange={e => updateItem('experience', exp.id, 'description', e.target.value)} placeholder="Description" />
+                                    <input className="input-field font-bold" value={exp.role} onChange={e => updateItem('experience', exp.id, 'role', e.target.value)} placeholder={t('cv.role')} />
+                                    <input className="input-field" value={exp.company} onChange={e => updateItem('experience', exp.id, 'company', e.target.value)} placeholder={t('cv.company')} />
+                                    <input className="input-field" value={exp.startDate} onChange={e => updateItem('experience', exp.id, 'startDate', e.target.value)} placeholder={t('cv.startDate')} />
+                                    <input className="input-field" value={exp.endDate} onChange={e => updateItem('experience', exp.id, 'endDate', e.target.value)} placeholder={t('cv.endDate')} />
+                                    <textarea className="input-field col-span-2 h-20" value={exp.description} onChange={e => updateItem('experience', exp.id, 'description', e.target.value)} placeholder={t('cv.description')} />
                                 </div>
                             </div>
                         ))}
                         <button onClick={addExperience} className="w-full py-2 flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-blue-500 transition-colors">
-                            <Plus size={16} /> Add Position
+                            <Plus size={16} /> {t('cv.addPosition')}
                         </button>
                     </div>
                 )}
@@ -437,7 +450,7 @@ export const CvGenerator = () => {
                 >
                     <div className="flex items-center gap-3 font-semibold text-gray-900 dark:text-gray-100">
                         <GraduationCap size={18} className="text-green-500" />
-                        Education
+                        {t('cv.education')}
                     </div>
                     {activeSection === 'edu' ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                 </button>
@@ -448,14 +461,14 @@ export const CvGenerator = () => {
                             <div key={edu.id} className="relative pl-4 border-l-2 border-gray-200 dark:border-gray-700">
                                 <button onClick={() => removeItem('education', edu.id)} className="absolute right-0 top-0 text-red-500 hover:text-red-600 p-1"><Trash2 size={16} /></button>
                                 <div className="grid grid-cols-2 gap-3 pr-8">
-                                    <input className="input-field font-bold" value={edu.school} onChange={e => updateItem('education', edu.id, 'school', e.target.value)} placeholder="School" />
-                                    <input className="input-field" value={edu.degree} onChange={e => updateItem('education', edu.id, 'degree', e.target.value)} placeholder="Degree" />
-                                    <input className="input-field" value={edu.year} onChange={e => updateItem('education', edu.id, 'year', e.target.value)} placeholder="Year" />
+                                    <input className="input-field font-bold" value={edu.school} onChange={e => updateItem('education', edu.id, 'school', e.target.value)} placeholder={t('cv.school')} />
+                                    <input className="input-field" value={edu.degree} onChange={e => updateItem('education', edu.id, 'degree', e.target.value)} placeholder={t('cv.degree')} />
+                                    <input className="input-field" value={edu.year} onChange={e => updateItem('education', edu.id, 'year', e.target.value)} placeholder={t('cv.year')} />
                                 </div>
                             </div>
                         ))}
                         <button onClick={addEducation} className="w-full py-2 flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-blue-500 transition-colors">
-                            <Plus size={16} /> Add Education
+                            <Plus size={16} /> {t('cv.addEducation')}
                         </button>
                     </div>
                 )}
@@ -469,7 +482,7 @@ export const CvGenerator = () => {
                 >
                     <div className="flex items-center gap-3 font-semibold text-gray-900 dark:text-gray-100">
                         <Globe size={18} className="text-cyan-500" />
-                        Portfolio / Projects
+                        {t('cv.portfolio')} / {t('cv.projects')}
                     </div>
                     {activeSection === 'portfolio' ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                 </button>
@@ -480,14 +493,14 @@ export const CvGenerator = () => {
                             <div key={item.id} className="relative pl-4 border-l-2 border-gray-200 dark:border-gray-700">
                                 <button onClick={() => removeItem('portfolio', item.id)} className="absolute right-0 top-0 text-red-500 hover:text-red-600 p-1"><Trash2 size={16} /></button>
                                 <div className="grid grid-cols-2 gap-3 pr-8">
-                                    <input className="input-field font-bold" value={item.name} onChange={e => updateItem('portfolio', item.id, 'name', e.target.value)} placeholder="Project Name" />
-                                    <input className="input-field" value={item.link} onChange={e => updateItem('portfolio', item.id, 'link', e.target.value)} placeholder="Link / URL" />
-                                    <textarea className="input-field col-span-2 h-16" value={item.description} onChange={e => updateItem('portfolio', item.id, 'description', e.target.value)} placeholder="Short Description" />
+                                    <input className="input-field font-bold" value={item.name} onChange={e => updateItem('portfolio', item.id, 'name', e.target.value)} placeholder={t('cv.projectName')} />
+                                    <input className="input-field" value={item.link} onChange={e => updateItem('portfolio', item.id, 'link', e.target.value)} placeholder={t('cv.link')} />
+                                    <textarea className="input-field col-span-2 h-16" value={item.description} onChange={e => updateItem('portfolio', item.id, 'description', e.target.value)} placeholder={t('cv.shortDescription')} />
                                 </div>
                             </div>
                         ))}
                         <button onClick={addPortfolio} className="w-full py-2 flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-blue-500 transition-colors">
-                            <Plus size={16} /> Add Project
+                            <Plus size={16} /> {t('cv.addProject')}
                         </button>
                     </div>
                 )}
@@ -501,7 +514,7 @@ export const CvGenerator = () => {
                 >
                     <div className="flex items-center gap-3 font-semibold text-gray-900 dark:text-gray-100">
                         <User size={18} className="text-indigo-500" />
-                        References
+                        {t('cv.references')}
                     </div>
                     {activeSection === 'refs' ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                 </button>
@@ -512,15 +525,15 @@ export const CvGenerator = () => {
                             <div key={ref.id} className="relative pl-4 border-l-2 border-gray-200 dark:border-gray-700">
                                 <button onClick={() => removeItem('references', ref.id)} className="absolute right-0 top-0 text-red-500 hover:text-red-600 p-1"><Trash2 size={16} /></button>
                                 <div className="grid grid-cols-2 gap-3 pr-8">
-                                    <input className="input-field font-bold" value={ref.name} onChange={e => updateItem('references', ref.id, 'name', e.target.value)} placeholder="Name" />
-                                    <input className="input-field" value={ref.company} onChange={e => updateItem('references', ref.id, 'company', e.target.value)} placeholder="Company" />
-                                    <input className="input-field" value={ref.phone} onChange={e => updateItem('references', ref.id, 'phone', e.target.value)} placeholder="Phone" />
-                                    <input className="input-field" value={ref.email} onChange={e => updateItem('references', ref.id, 'email', e.target.value)} placeholder="Email" />
+                                    <input className="input-field font-bold" value={ref.name} onChange={e => updateItem('references', ref.id, 'name', e.target.value)} placeholder={t('cv.name')} />
+                                    <input className="input-field" value={ref.company} onChange={e => updateItem('references', ref.id, 'company', e.target.value)} placeholder={t('cv.company')} />
+                                    <input className="input-field" value={ref.phone} onChange={e => updateItem('references', ref.id, 'phone', e.target.value)} placeholder={t('cv.phone')} />
+                                    <input className="input-field" value={ref.email} onChange={e => updateItem('references', ref.id, 'email', e.target.value)} placeholder={t('cv.email')} />
                                 </div>
                             </div>
                         ))}
                         <button onClick={addReference} className="w-full py-2 flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-blue-500 transition-colors">
-                            <Plus size={16} /> Add Reference
+                            <Plus size={16} /> {t('cv.addReference')}
                         </button>
                     </div>
                 )}
@@ -534,7 +547,7 @@ export const CvGenerator = () => {
                 >
                     <div className="flex items-center gap-3 font-semibold text-gray-900 dark:text-gray-100">
                         <Award size={18} className="text-yellow-500" />
-                        Languages & Certifications
+                        {t('cv.languages')} & {t('cv.certifications')}
                     </div>
                     {activeSection === 'extras' ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                 </button>
@@ -542,30 +555,30 @@ export const CvGenerator = () => {
                 {activeSection === 'extras' && (
                     <div className="p-5 space-y-8">
                         <div>
-                            <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-2"><Book size={14} /> Languages</h4>
+                            <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-2"><Book size={14} /> {t('cv.languages')}</h4>
                             <div className="space-y-3">
                                 {data.languages.map((lang) => (
                                     <div key={lang.id} className="flex gap-2 relative group">
-                                        <input className="input-field flex-1" value={lang.language} onChange={e => updateItem('languages', lang.id, 'language', e.target.value)} placeholder="Language" />
-                                        <input className="input-field w-1/3" value={lang.proficiency} onChange={e => updateItem('languages', lang.id, 'proficiency', e.target.value)} placeholder="Level" />
+                                        <input className="input-field flex-1" value={lang.language} onChange={e => updateItem('languages', lang.id, 'language', e.target.value)} placeholder={t('cv.languages').slice(0, -1)} />
+                                        <input className="input-field w-1/3" value={lang.proficiency} onChange={e => updateItem('languages', lang.id, 'proficiency', e.target.value)} placeholder={t('cv.level')} />
                                         <button onClick={() => removeItem('languages', lang.id)} className="text-red-500 hover:bg-red-50 p-2 rounded"><Trash2 size={16} /></button>
                                     </div>
                                 ))}
-                                <button onClick={addLanguage} className="text-sm text-blue-500 hover:underline flex items-center gap-1"><Plus size={14} /> Add Language</button>
+                                <button onClick={addLanguage} className="text-sm text-blue-500 hover:underline flex items-center gap-1"><Plus size={14} /> {t('cv.addLanguage')}</button>
                             </div>
                         </div>
 
                         <div>
-                            <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-2"><BadgeCheck size={14} /> Certifications</h4>
+                            <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-2"><BadgeCheck size={14} /> {t('cv.certifications')}</h4>
                             <div className="space-y-3">
                                 {data.certifications.map((cert) => (
                                     <div key={cert.id} className="flex gap-2 relative group">
-                                        <input className="input-field flex-1" value={cert.name} onChange={e => updateItem('certifications', cert.id, 'name', e.target.value)} placeholder="Certification" />
-                                        <input className="input-field w-1/4" value={cert.year} onChange={e => updateItem('certifications', cert.id, 'year', e.target.value)} placeholder="Year" />
+                                        <input className="input-field flex-1" value={cert.name} onChange={e => updateItem('certifications', cert.id, 'name', e.target.value)} placeholder={t('cv.certification')} />
+                                        <input className="input-field w-1/4" value={cert.year} onChange={e => updateItem('certifications', cert.id, 'year', e.target.value)} placeholder={t('cv.year')} />
                                         <button onClick={() => removeItem('certifications', cert.id)} className="text-red-500 hover:bg-red-50 p-2 rounded"><Trash2 size={16} /></button>
                                     </div>
                                 ))}
-                                <button onClick={addCertification} className="text-sm text-blue-500 hover:underline flex items-center gap-1"><Plus size={14} /> Add Certification</button>
+                                <button onClick={addCertification} className="text-sm text-blue-500 hover:underline flex items-center gap-1"><Plus size={14} /> {t('cv.addCertification')}</button>
                             </div>
                         </div>
                     </div>
@@ -580,7 +593,7 @@ export const CvGenerator = () => {
                 >
                     <div className="flex items-center gap-3 font-semibold text-gray-900 dark:text-gray-100">
                         <Code size={18} className="text-purple-500" />
-                        Skills
+                        {t('cv.skills')}
                     </div>
                     {activeSection === 'skills' ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                 </button>
@@ -604,7 +617,7 @@ export const CvGenerator = () => {
                 >
                     <div className="flex items-center gap-3 font-semibold text-gray-900 dark:text-gray-100">
                         <Palette size={18} className="text-pink-500" />
-                        Design & Colors
+                        {t('cv.designColors')}
                     </div>
                     {activeSection === 'design' ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                 </button>
@@ -613,7 +626,7 @@ export const CvGenerator = () => {
                         {/* Theme Color */}
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                <Palette size={14} /> Theme Color
+                                <Palette size={14} /> {t('cv.themeColor')}
                             </label>
                             <div className="space-y-3">
                                 <div className="flex flex-wrap gap-3">
@@ -650,7 +663,7 @@ export const CvGenerator = () => {
                         {/* Typography */}
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                <FileText size={14} /> Typography
+                                <FileText size={14} /> {t('cv.typography')}
                             </label>
                             <div className="grid grid-cols-1 gap-4">
                                 <div>
@@ -711,7 +724,7 @@ export const CvGenerator = () => {
                         {/* Text Color */}
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 flex items-center gap-2">
-                                <Palette size={14} /> Text Color
+                                <Palette size={14} /> {t('cv.textColor')}
                             </label>
                             <div className="flex items-center gap-3 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg border border-gray-100 dark:border-gray-700">
                                 <div className="relative">
@@ -724,14 +737,14 @@ export const CvGenerator = () => {
                                     <div className="absolute inset-0 rounded-lg ring-1 ring-inset ring-black/10 pointer-events-none"></div>
                                 </div>
                                 <div className="flex-1">
-                                    <div className="text-xs text-gray-500 mb-1">Pick Color</div>
+                                    <div className="text-xs text-gray-500 mb-1">{t('cv.pickColor')}</div>
                                     <div className="font-mono text-sm font-medium text-gray-700 dark:text-gray-300 uppercase">{design.textColor}</div>
                                 </div>
                                 <button
                                     onClick={() => setDesign({ ...design, textColor: '#374151' })}
                                     className="text-xs text-gray-500 hover:text-gray-900 underline"
                                 >
-                                    Reset
+                                    {t('cv.reset')}
                                 </button>
                             </div>
                         </div>
@@ -762,7 +775,8 @@ export const CvGenerator = () => {
                 .input-field:focus { outline: none; border-color: #3b82f6; ring: 2px solid #3b82f633; }
 
                 @media print {
-                    @page { size: auto; margin: 0mm; }
+                    @page { size: A4 portrait; margin: 0mm; }
+                    html, body { height: auto !important; min-height: 100%; margin: 0 !important; padding: 0 !important; overflow: visible !important; }
                     body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                     .print-container {
                         transform: none !important;
@@ -781,7 +795,7 @@ export const CvGenerator = () => {
             <div className="w-full md:w-[400px] lg:w-[450px] flex-shrink-0 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col z-10 shadow-xl">
                 <div className="p-5 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
                     <h1 className="text-xl font-bold flex items-center gap-2 text-gray-900 dark:text-white">
-                        <FileText className="text-blue-600" /> CV Generator
+                        <FileText className="text-blue-600" /> {t('cv.editorTitle')}
                     </h1>
                 </div>
 
@@ -795,7 +809,7 @@ export const CvGenerator = () => {
                             onClick={handlePrint}
                             className="flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-900 text-white py-2.5 rounded-lg font-medium transition-all"
                         >
-                            <Printer size={18} /> Save as PDF
+                            <Printer size={18} /> {t('cv.downloadPDF')}
                         </button>
                         {/* <button
                             onClick={generateWord}
@@ -818,13 +832,13 @@ export const CvGenerator = () => {
                                 <activeTemplateMeta.icon size={20} />
                             </div>
                             <div>
-                                <div className="text-xs text-gray-500 font-bold uppercase tracking-wider">Current Template</div>
+                                <div className="text-xs text-gray-500 font-bold uppercase tracking-wider">{t('cv.currentTemplate')}</div>
                                 <div className="text-sm font-bold text-gray-900 dark:text-white">{activeTemplateMeta.label}</div>
                             </div>
                         </div>
 
                         <div className="flex items-center gap-2">
-                            <button onClick={handlePrevTemplate} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                            <button onClick={handlePrevTemplate} className="p-2 text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
                                 <ChevronDown className="rotate-90" size={20} />
                             </button>
 
@@ -833,10 +847,10 @@ export const CvGenerator = () => {
                                 className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors shadow-lg shadow-gray-900/20"
                             >
                                 <Grid size={18} />
-                                <span className="hidden sm:inline">Browse Gallery</span>
+                                <span className="hidden sm:inline">{t('cv.browseGallery')}</span>
                             </button>
 
-                            <button onClick={handleNextTemplate} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                            <button onClick={handleNextTemplate} className="p-2 text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
                                 <ChevronRight size={20} />
                             </button>
                         </div>
@@ -856,16 +870,16 @@ export const CvGenerator = () => {
                             <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-gray-900 sticky top-0 z-10">
                                 <div>
                                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                        <LayoutGrid className="text-blue-600" /> Template Gallery
+                                        <LayoutGrid className="text-blue-600" /> {t('cv.templateGallery')}
                                     </h2>
-                                    <p className="text-gray-500 text-sm">Select from our collection of {TEMPLATES.length} professional designs.</p>
+                                    <p className="text-gray-500 text-sm">{t('cv.selectTemplateDesc', { count: TEMPLATES.length })}</p>
                                 </div>
 
                                 <div className="flex items-center gap-3">
                                     <div className="relative">
                                         <input
                                             type="text"
-                                            placeholder="Search templates..."
+                                            placeholder={t('cv.searchTemplates')}
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
                                             className="pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-gray-800 border-none rounded-xl w-64 focus:ring-2 focus:ring-blue-500/50 outline-none"
@@ -892,7 +906,7 @@ export const CvGenerator = () => {
                                         : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
                                         }`}
                                 >
-                                    All Designs
+                                    {t('cv.allDesigns')}
                                 </button>
                                 {CATEGORIES.map(cat => (
                                     <button
@@ -950,7 +964,7 @@ export const CvGenerator = () => {
                                 {filteredTemplates.length === 0 && (
                                     <div className="h-full flex flex-col items-center justify-center text-gray-400 opacity-60">
                                         <div className="text-6xl mb-4">🔍</div>
-                                        <p className="text-xl font-medium">No templates found matching "{searchQuery}"</p>
+                                        <p className="text-xl font-medium">{t('cv.noTemplatesFound')} "{searchQuery}"</p>
                                     </div>
                                 )}
                             </div>
@@ -994,6 +1008,15 @@ export const CvGenerator = () => {
                     {activeTemplate === 'glitch' && <GlitchTemplate data={data} design={design} />}
                     {activeTemplate === 'leaf' && <LeafTemplate data={data} design={design} />}
                     {activeTemplate === 'sky' && <SkyTemplate data={data} design={design} />}
+                    {activeTemplate === 'mint' && <MintTemplate data={data} design={design} />}
+                    {activeTemplate === 'azure' && <AzureTemplate data={data} design={design} />}
+                    {activeTemplate === 'sand' && <SandTemplate data={data} design={design} />}
+                    {activeTemplate === 'charcoal' && <CharcoalTemplate data={data} design={design} />}
+                    {activeTemplate === 'ribbon' && <RibbonTemplate data={data} design={design} />}
+                    {activeTemplate === 'emerald' && <EmeraldTemplate data={data} design={design} />}
+                    {activeTemplate === 'slate' && <SlateTemplate data={data} design={design} />}
+                    {activeTemplate === 'arc' && <ArcTemplate data={data} design={design} />}
+                    {activeTemplate === 'rose' && <RoseTemplate data={data} design={design} />}
                 </motion.div>
             </div>
         </div>

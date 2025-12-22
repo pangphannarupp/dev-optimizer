@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Play, RotateCcw, Pause } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 
 interface DsaVisualizerProps {
@@ -8,8 +9,8 @@ interface DsaVisualizerProps {
 }
 
 export const DsaVisualizer: React.FC<DsaVisualizerProps> = ({ topicId }) => {
+    // const { t } = useTranslation();
     // const topic = dsaTopics.find(t => t.id === topicId);
-
     // Determine visualization type
     const isSorting = ['bubble-sort', 'insertion-sort', 'quick-sort', 'merge-sort', 'selection-sort'].includes(topicId);
     const isArray = topicId === 'arrays';
@@ -30,6 +31,7 @@ export const DsaVisualizer: React.FC<DsaVisualizerProps> = ({ topicId }) => {
 
 // --- Sorting Visualizer ---
 const SortingVisualizer: React.FC<{ algo: string }> = ({ algo }) => {
+    const { t } = useTranslation();
     const [array, setArray] = useState<number[]>([]);
     const [sorting, setSorting] = useState(false);
     const [comparing, setComparing] = useState<number[]>([]); // Indices being compared
@@ -89,7 +91,7 @@ const SortingVisualizer: React.FC<{ algo: string }> = ({ algo }) => {
     return (
         <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8">
             <div className="flex justify-between items-center mb-6">
-                <h3 className="font-bold text-gray-800 dark:text-white">Visualizer</h3>
+                <h3 className="font-bold text-gray-800 dark:text-white">{t('tutorial.visualizer')}</h3>
                 <div className="flex gap-2">
                     <button
                         onClick={generateArray}
@@ -104,7 +106,7 @@ const SortingVisualizer: React.FC<{ algo: string }> = ({ algo }) => {
                         className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
                     >
                         {sorting ? <Pause size={18} /> : <Play size={18} />}
-                        {sorting ? 'Running...' : 'Start'}
+                        {sorting ? t('tutorial.running') : t('tutorial.start')}
                     </button>
                 </div>
             </div>
@@ -128,9 +130,9 @@ const SortingVisualizer: React.FC<{ algo: string }> = ({ algo }) => {
                 ))}
             </div>
             <div className="mt-4 flex gap-4 text-xs text-gray-500 justify-center">
-                <div className="flex items-center gap-1"><div className="w-3 h-3 bg-blue-500 rounded"></div> Unsorted</div>
-                <div className="flex items-center gap-1"><div className="w-3 h-3 bg-red-500 rounded"></div> Comparing</div>
-                <div className="flex items-center gap-1"><div className="w-3 h-3 bg-green-500 rounded"></div> Sorted</div>
+                <div className="flex items-center gap-1"><div className="w-3 h-3 bg-blue-500 rounded"></div> {t('tutorial.unsorted')}</div>
+                <div className="flex items-center gap-1"><div className="w-3 h-3 bg-red-500 rounded"></div> {t('tutorial.comparing')}</div>
+                <div className="flex items-center gap-1"><div className="w-3 h-3 bg-green-500 rounded"></div> {t('tutorial.sorted')}</div>
             </div>
         </div>
     );
@@ -138,10 +140,11 @@ const SortingVisualizer: React.FC<{ algo: string }> = ({ algo }) => {
 
 // --- Array Visualizer ---
 const ArrayVisualizer = () => {
+    const { t } = useTranslation();
     const data = [10, 20, 30, 40, 50];
     return (
         <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8">
-            <h3 className="font-bold text-gray-800 dark:text-white mb-6">Array Memory Visualization</h3>
+            <h3 className="font-bold text-gray-800 dark:text-white mb-6">{t('tutorial.arrayMemory')}</h3>
             <div className="flex justify-center items-center gap-0">
                 {data.map((val, idx) => (
                     <div key={idx} className="relative group">
@@ -160,9 +163,10 @@ const ArrayVisualizer = () => {
 
 // --- Linked List Visualizer ---
 const LinkedListVisualizer = () => {
+    const { t } = useTranslation();
     return (
         <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8">
-            <h3 className="font-bold text-gray-800 dark:text-white mb-6">Linked List Visualization</h3>
+            <h3 className="font-bold text-gray-800 dark:text-white mb-6">{t('tutorial.linkedList')}</h3>
             <div className="flex flex-wrap justify-center items-center gap-2">
                 {[10, 20, 30, 40].map((val, idx) => (
                     <React.Fragment key={idx}>
@@ -193,9 +197,10 @@ const LinkedListVisualizer = () => {
 
 // --- Stack Visualizer ---
 const StackVisualizer = () => {
+    const { t } = useTranslation();
     return (
         <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8">
-            <h3 className="font-bold text-gray-800 dark:text-white mb-6">Stack (LIFO) Visualization</h3>
+            <h3 className="font-bold text-gray-800 dark:text-white mb-6">{t('tutorial.stack')}</h3>
             <div className="flex justify-center">
                 <div className="border-l-4 border-b-4 border-r-4 border-gray-300 dark:border-gray-600 p-4 w-32 flex flex-col-reverse gap-2 min-h-[200px] items-center bg-gray-50 dark:bg-gray-900/30">
                     {[40, 30, 20, 10].map((val, idx) => (
@@ -211,9 +216,10 @@ const StackVisualizer = () => {
 
 // --- Queue Visualizer ---
 const QueueVisualizer = () => {
+    const { t } = useTranslation();
     return (
         <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8">
-            <h3 className="font-bold text-gray-800 dark:text-white mb-6">Queue (FIFO) Visualization</h3>
+            <h3 className="font-bold text-gray-800 dark:text-white mb-6">{t('tutorial.queue')}</h3>
             <div className="flex justify-center items-center gap-2 border-t-2 border-b-2 border-gray-300 dark:border-gray-600 p-4 min-h-[100px] relative">
                 <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-full pr-2 text-xs text-gray-500">OUT (Dequeue)</div>
                 {[10, 20, 30, 40].map((val, idx) => (
@@ -229,9 +235,10 @@ const QueueVisualizer = () => {
 
 // --- BST Visualizer ---
 const BSTVisualizer = () => {
+    const { t } = useTranslation();
     return (
         <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 flex flex-col items-center">
-            <h3 className="font-bold text-gray-800 dark:text-white mb-6 w-full text-left">Binary Search Tree</h3>
+            <h3 className="font-bold text-gray-800 dark:text-white mb-6 w-full text-left">{t('tutorial.bst')}</h3>
             <div className="relative w-64 h-48">
                 {/* SVG Lines */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none stroke-gray-300 dark:stroke-gray-600" strokeWidth="2">

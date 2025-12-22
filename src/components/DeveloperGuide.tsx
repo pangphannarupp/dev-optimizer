@@ -11,7 +11,7 @@ import { detectLanguage } from '../utils/codeQualityRules';
 import { extractSymbols, ParsedFile, CodeSymbol } from '../utils/parser';
 
 export const DeveloperGuide: React.FC = () => {
-    useTranslation();
+    const { t } = useTranslation();
     const [files, setFiles] = useState<ParsedFile[]>([]);
     const [selectedFile, setSelectedFile] = useState<ParsedFile | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -37,7 +37,7 @@ export const DeveloperGuide: React.FC = () => {
                     !filename.startsWith('.');
             });
 
-            setProgress({ current: 0, total: entries.length, fileName: 'Starting...' });
+            setProgress({ current: 0, total: entries.length, fileName: t('developerGuide.parsing') });
 
             for (let i = 0; i < entries.length; i++) {
                 const filename = entries[i];
@@ -217,10 +217,10 @@ export const DeveloperGuide: React.FC = () => {
                 <div>
                     <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 flex items-center gap-2">
                         <Book size={24} className="text-blue-600 dark:text-blue-400" />
-                        Developer Guide
+                        {t('developerGuide.title')}
                     </h1>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                        Auto-generated documentation from your source code.
+                        {t('developerGuide.subtitle')}
                     </p>
                 </div>
                 {files.length > 0 && (
@@ -230,14 +230,14 @@ export const DeveloperGuide: React.FC = () => {
                             className="px-3 py-1.5 flex items-center gap-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors shadow-sm"
                         >
                             <Download size={14} />
-                            Export HTML
+                            {t('developerGuide.exportHtml')}
                         </button>
                         <button
                             onClick={handleClear}
                             className="px-3 py-1.5 flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-red-500 dark:hover:text-red-400 border border-gray-200 dark:border-gray-700 rounded-lg transition-colors shadow-sm"
                         >
                             <RotateCcw size={14} />
-                            New Project
+                            {t('developerGuide.newProject')}
                         </button>
                     </div>
                 )}
@@ -286,7 +286,7 @@ export const DeveloperGuide: React.FC = () => {
                                 </div>
 
                                 <div className="text-center w-full space-y-1">
-                                    <p className="text-gray-600 dark:text-gray-300 font-medium">Parsing project structure...</p>
+                                    <p className="text-gray-600 dark:text-gray-300 font-medium">{t('developerGuide.parsing')}</p>
                                     <p className="text-xs text-gray-400 font-mono whitespace-nowrap overflow-x-auto px-4 max-w-full no-scrollbar">
                                         {progress.fileName}
                                     </p>
@@ -297,8 +297,8 @@ export const DeveloperGuide: React.FC = () => {
                                 onFilesDropped={handleZipUpload}
                                 accept=".zip"
                                 multiple={false}
-                                dragDropText="Upload Project ZIP"
-                                supportedText="Supports TS, Native (Kotlin, Swift, etc.)"
+                                dragDropText={t('developerGuide.uploadZip')}
+                                supportedText={t('developerGuide.supports')}
                                 className="border-none"
                             />
                         )}
@@ -314,7 +314,7 @@ export const DeveloperGuide: React.FC = () => {
                                         type="text"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        placeholder="Search files..."
+                                        placeholder={t('developerGuide.searchPlaceholder')}
                                         className="w-full pl-8 pr-3 py-1.5 text-xs bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"
                                     />
                                 </div>
@@ -369,7 +369,7 @@ export const DeveloperGuide: React.FC = () => {
 
                                     <div className="p-8 space-y-8">
                                         {selectedFile.symbols.length === 0 && (
-                                            <p className="text-gray-500 italic">No public symbols detected in this file.</p>
+                                            <p className="text-gray-500 italic">{t('developerGuide.noSymbols')}</p>
                                         )}
 
                                         {/* Organize symbols by type */}
@@ -381,7 +381,7 @@ export const DeveloperGuide: React.FC = () => {
                                                 <div key={typeCategory} className="space-y-4">
                                                     <h3 className="text-lg font-bold uppercase tracking-wider text-gray-400 flex items-center gap-2 border-b border-gray-100 dark:border-gray-700 pb-2">
                                                         {getSymbolIcon(typeCategory as any)}
-                                                        {typeCategory === 'class' ? 'Classes' : typeCategory === 'property' ? 'Properties' : `${typeCategory}s`}
+                                                        {typeCategory === 'class' ? t('developerGuide.classes') : typeCategory === 'property' ? t('developerGuide.properties') : typeCategory === 'function' ? t('developerGuide.functions') : t('developerGuide.interfaces')}
                                                     </h3>
                                                     <div className="grid gap-6">
                                                         {categorySymbols.map((symbol) => (
@@ -390,7 +390,7 @@ export const DeveloperGuide: React.FC = () => {
                                                                     <h4 className="font-semibold text-lg text-gray-800 dark:text-gray-200">
                                                                         {symbol.name}
                                                                     </h4>
-                                                                    <span className="text-xs text-gray-400 font-mono">Line {symbol.line}</span>
+                                                                    <span className="text-xs text-gray-400 font-mono">{t('developerGuide.line')} {symbol.line}</span>
                                                                 </div>
 
                                                                 {/* Signature Block */}
@@ -418,7 +418,7 @@ export const DeveloperGuide: React.FC = () => {
                                                                 {symbol.children && symbol.children.length > 0 && (
                                                                     <div className="mt-4 border border-gray-100 dark:border-gray-800 rounded-lg overflow-hidden">
                                                                         <div className="bg-gray-50 dark:bg-gray-900/50 px-4 py-2 border-b border-gray-100 dark:border-gray-800 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                                                                            Members
+                                                                            {t('developerGuide.members')}
                                                                         </div>
                                                                         <div className="divide-y divide-gray-100 dark:divide-gray-800">
                                                                             {symbol.children.map(child => (
@@ -456,7 +456,7 @@ export const DeveloperGuide: React.FC = () => {
                             ) : (
                                 <div className="flex-1 flex flex-col items-center justify-center text-gray-400 gap-4">
                                     <Book size={48} className="opacity-20" />
-                                    <p>Select a file from the sidebar to view documentation.</p>
+                                    <p>{t('developerGuide.selectFile')}</p>
                                 </div>
                             )}
                         </div>

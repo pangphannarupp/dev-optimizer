@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { dsaTopics, DsaTopic, DsaDifficulty } from '../data/DsaData';
 import { ChevronRight, BookOpen, Clock, Database, Code, Search, Menu, X } from 'lucide-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -8,20 +9,30 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { DsaVisualizer } from './DsaVisualizer';
 
 export const DsaTutorial: React.FC = () => {
+    const { t } = useTranslation();
     const [selectedTopicId, setSelectedTopicId] = useState<string>(dsaTopics[0].id);
     const [searchTerm, setSearchTerm] = useState('');
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
+    const translatedTopics = useMemo(() =>
+        dsaTopics.map(topic => ({
+            ...topic,
+            title: t(topic.title),
+            description: t(topic.description),
+            explanation: topic.explanation ? t(topic.explanation) : undefined
+        })),
+        [t]);
+
     const selectedTopic = useMemo(() =>
-        dsaTopics.find(t => t.id === selectedTopicId) || dsaTopics[0],
-        [selectedTopicId]);
+        translatedTopics.find(t => t.id === selectedTopicId) || translatedTopics[0],
+        [translatedTopics, selectedTopicId]);
 
     const filteredTopics = useMemo(() =>
-        dsaTopics.filter(t =>
+        translatedTopics.filter(t =>
             t.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             t.description.toLowerCase().includes(searchTerm.toLowerCase())
         ),
-        [searchTerm]);
+        [translatedTopics, searchTerm]);
 
     const groupedTopics = useMemo(() => {
         const groups: Record<string, DsaTopic[]> = {};
@@ -66,13 +77,13 @@ export const DsaTutorial: React.FC = () => {
                         <div className="p-6 border-b border-gray-100 dark:border-gray-700">
                             <h2 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 flex items-center gap-2">
                                 <BookOpen className="text-blue-600" size={24} />
-                                DSA Tutorial
+                                {t('tutorial.dsaTitle')}
                             </h2>
                             <div className="mt-4 relative">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={14} />
                                 <input
                                     type="text"
-                                    placeholder="Search topics..."
+                                    placeholder={t('tutorial.searchTopics')}
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     className="w-full pl-9 pr-3 py-2 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
@@ -148,7 +159,7 @@ export const DsaTutorial: React.FC = () => {
                                 <div className="p-4 bg-orange-50 dark:bg-orange-900/10 border border-orange-100 dark:border-orange-900/30 rounded-xl">
                                     <div className="flex items-center gap-2 mb-2 text-orange-700 dark:text-orange-400 font-semibold">
                                         <Clock size={18} />
-                                        Time Complexity
+                                        {t('tutorial.timeComplexity')}
                                     </div>
                                     <div className="text-2xl font-mono text-gray-800 dark:text-white">
                                         {selectedTopic.complexity.time}
@@ -157,7 +168,7 @@ export const DsaTutorial: React.FC = () => {
                                 <div className="p-4 bg-indigo-50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-900/30 rounded-xl">
                                     <div className="flex items-center gap-2 mb-2 text-indigo-700 dark:text-indigo-400 font-semibold">
                                         <Database size={18} />
-                                        Space Complexity
+                                        {t('tutorial.spaceComplexity')}
                                     </div>
                                     <div className="text-2xl font-mono text-gray-800 dark:text-white">
                                         {selectedTopic.complexity.space}
@@ -176,7 +187,7 @@ export const DsaTutorial: React.FC = () => {
                             <div className="mb-8 max-w-none">
                                 <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
                                     <BookOpen size={20} className="text-gray-400" />
-                                    Explanation
+                                    {t('tutorial.explanation')}
                                 </h3>
                                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 whitespace-pre-wrap leading-relaxed text-gray-800 dark:text-gray-200">
                                     {selectedTopic.explanation}
@@ -189,7 +200,7 @@ export const DsaTutorial: React.FC = () => {
                             <div className="mb-8">
                                 <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
                                     <Code size={20} className="text-gray-400" />
-                                    Implementation
+                                    {t('tutorial.implementation')}
                                 </h3>
                                 <div className="rounded-xl overflow-hidden shadow-lg border border-gray-200 dark:border-gray-800">
                                     <div className="bg-gray-100 dark:bg-gray-900 px-4 py-2 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">

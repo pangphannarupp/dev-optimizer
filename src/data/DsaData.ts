@@ -20,21 +20,11 @@ export const dsaTopics: DsaTopic[] = [
   // --- Big O ---
   {
     id: 'big-o',
-    title: 'Big O Notation',
+    title: 'content.dsa.big-o.title',
     category: 'Big O',
     difficulty: 'Basic',
-    description: 'Big O notation is used to describe the performance or complexity of an algorithm.',
-    explanation: `
-Big O notation characterizes functions according to their growth rates: different functions with the same growth rate may be represented using the same O notation.
-
-**Common Complexities:**
-- **O(1)**: Constant time
-- **O(log n)**: Logarithmic time
-- **O(n)**: Linear time
-- **O(n log n)**: Linearithmic time
-- **O(n^2)**: Quadratic time
-- **O(2^n)**: Exponential time
-    `,
+    description: 'content.dsa.big-o.description',
+    explanation: 'content.dsa.big-o.explanation',
     codeExample: `
 // O(1) - Constant
 function isFirstElementNull(array) {
@@ -54,10 +44,10 @@ function containsValue(array, value) {
   // --- Data Structures (Basic) ---
   {
     id: 'arrays',
-    title: 'Arrays',
+    title: 'content.dsa.arrays.title',
     category: 'Data Structures',
     difficulty: 'Basic',
-    description: 'A collection of items stored at contiguous memory locations.',
+    description: 'content.dsa.arrays.description',
     complexity: { time: 'Access: O(1), Search: O(n)', space: 'O(n)' },
     codeExample: `
 const arr = [1, 2, 3, 4, 5];

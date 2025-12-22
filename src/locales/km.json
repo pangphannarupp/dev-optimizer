@@ -122,6 +122,48 @@
             "macos": "macOS",
             "windows": "Windows",
             "linux": "Linux"
+        },
+        "tabs": {
+            "react": "React (TS)",
+            "vue": "Vue (TS)",
+            "android_kotlin": "Android (Kotlin)",
+            "android_java": "Android (Java)",
+            "ios_swift": "iOS (Swift)",
+            "ios_objc": "iOS (Obj-C)"
+        },
+        "uploadProject": "Upload Project (ZIP)",
+        "manualInput": "Manual Input",
+        "dropZip": "Drag & drop a ZIP file here, or click to select",
+        "zipSupport": "Supports .zip archives containing source code",
+        "processing": "Processing...",
+        "files": "Files",
+        "noSupportedFiles": "No supported files found in this archive.",
+        "selectFile": "Select a file to view code and issues.",
+        "processedFiles": "Processed {{count}} files",
+        "dashboard": {
+            "overview": "ទិដ្ឋភាពទូទៅ",
+            "totalFiles": "ឯកសារសរុប",
+            "totalIssues": "បញ្ហាសរុប",
+            "passed": "ជាប់",
+            "failed": "បរាជ័យ",
+            "error": "កំហុស",
+            "warning": "ការព្រមាន",
+            "errors": "កំហុស",
+            "warnings": "ការព្រមាន",
+            "search": "ស្វែងរកឯកសារ...",
+            "filterAll": "ទាំងអស់",
+            "filterPassed": "ជាប់",
+            "filterFailed": "បរាជ័យ",
+            "filterError": "កំហុស",
+            "filterWarning": "ការព្រមាន",
+            "columns": {
+                "file": "File",
+                "language": "Language",
+                "issues": "Issues",
+                "status": "Status",
+                "actions": "Actions"
+            },
+            "viewDetails": "មើលព័ត៌មានលម្អិត"
         }
     },
     "lottie": {
@@ -517,20 +559,72 @@
         "downloadIdenticalDesc": "មានតែឯកសារដែលមិនបានផ្លាស់ប្តូរ",
         "filesData": "{{count}} ឯកសារ",
         "comparisonResult": "លទ្ធផលនៃការប្រៀបធៀប",
-        "sizeDiff": "ភាពខុសគ្នានៃទំហំ"
+        "sizeDiff": "ភាពខុសគ្នានៃទំហំ",
+        "searchPlaceholder": "Search files..."
     },
     "regexTester": {
         "title": "អ្នកសាកល្បង Regex",
         "inputPlaceholder": "បញ្ចូលអត្ថបទសាកល្បងនៅទីនេះ...",
         "regexPlaceholder": "បញ្ចូលកន្សោមធម្មតា...",
-        "flags": "Flags",
+        "flags": {
+            "g": {
+                "label": "Global",
+                "desc": "Don't return after first match"
+            },
+            "i": {
+                "label": "Insensitive",
+                "desc": "Case insensitive match"
+            },
+            "m": {
+                "label": "Multiline",
+                "desc": "^ and $ match start/end of line"
+            },
+            "s": {
+                "label": "Single Line",
+                "desc": "Dot matches newline"
+            },
+            "u": {
+                "label": "Unicode",
+                "desc": "Enable Unicode support"
+            },
+            "y": {
+                "label": "Sticky",
+                "desc": "Anchor to this.lastIndex"
+            }
+        },
         "matches": "ការផ្គូផ្គង",
-        "noMatches": "រកមិនឃើញការផ្គូផ្គងទេ។",
+        "noMatches": "No matches found",
         "cheatSheet": "សន្លឹកបន្លំ",
         "commonPatterns": "លំនាំទូទៅ",
         "matchInfo": "ព័ត៌មានផ្គូផ្គង",
-        "group": "ក្រុម",
-        "index": "លិបិក្រម"
+        "group": "Group",
+        "index": "Index",
+        "description": "សាកល្បងនិងកែសម្រួលកន្សោមធម្មតារបស់អ្នក។",
+        "regexPattern": "លំនាំ Regex",
+        "testString": "អត្ថបទសាកល្បង",
+        "testStringPlaceholder": "បិទភ្ជាប់អត្ថបទរបស់អ្នកនៅទីនេះ...",
+        "matchHighlight": "គូសបញ្ជាក់ការផ្គូផ្គង",
+        "matchCount": "{{count}} ការផ្គូផ្គង",
+        "matchDetails": "Match Details",
+        "match": "Match",
+        "guide": {
+            "title": "សន្លឹកបន្លំ",
+            "common": "លំនាំទូទៅ",
+            "viewDocs": "មើលឯកសារ MDN ពេញលេញ",
+            "description": "Quick reference for common patterns",
+            "anchors": "Anchors",
+            "classes": "Character Classes",
+            "quantifiers": "Quantifiers",
+            "groups": "Groups & Lookaround",
+            "items": {
+                "anchor": {
+                    "startStr": "Start of string/line",
+                    "endStr": "End of string/line",
+                    "wordBound": "Word boundary",
+                    "notWordBound": "Not a word boundary"
+                }
+            }
+        }
     },
     "storeValidator": {
         "title": "កម្មវិធីផ្ទៀងផ្ទាត់ Store Asset",
@@ -973,7 +1067,7 @@
         "clear": "សម្អាតកូដ",
         "exportCSV": "នាំចេញទៅ Excel",
         "placeholder": "បិទភ្ជាប់កូដរបស់អ្នកនៅទីនេះ...",
-        "suggestion": "សំណូមពរ",
+        "suggestion": "ការណែនាំ",
         "genericMessage": "បានរកឃើញបញ្ហា",
         "title": "កម្មវិធីពិនិត្យគុណភាពកូដ",
         "description": "វិភាគកូដរបស់អ្នកសម្រាប់បញ្ហាគុណភាព សុវត្ថិភាព និងប្រសិទ្ធភាព។",
@@ -981,7 +1075,7 @@
             "manual": "ពិនិត្យដោយដៃ",
             "project": "ស្កេនគម្រោង"
         },
-        "reupload": "ស្កេនម្តងទៀត",
+        "reupload": "ស្កេនថ្មី",
         "dropZip": "អូស និងទម្លាក់ឯកសារ ZIP នៅទីនេះ",
         "zipSupport": "គាំទ្រឯកសារ .zip",
         "tabs": {
@@ -1014,6 +1108,824 @@
                 "status": "ស្ថានភាព",
                 "actions": "សកម្មភាព"
             }
+        },
+        "analyzing": "កំពុងវិភាគ...",
+        "copyReport": "ចម្លងរបាយការណ៍",
+        "severity": {
+            "error": "កំហុស",
+            "warning": "ការព្រមាន",
+            "info": "ព័ត៌មាន"
+        },
+        "filesAnalyzed": "Files Analyzed",
+        "issuesFound": "Issues Found",
+        "noIssues": "No issues found",
+        "processing": "Processing..."
+    },
+    "cv": {
+        "profile": "ប្រវត្តិរូប",
+        "experience": "បទពិសោធន៍",
+        "education": "ការសិក្សា",
+        "skills": "ជំនាញ",
+        "languages": "ភាសា",
+        "certifications": "វិញ្ញាបនបត្រ",
+        "references": "អ្នកធានា",
+        "portfolio": "ស្នាដៃ",
+        "contact": "ទំនាក់ទំនង",
+        "about": "អំពីខ្ញុំ",
+        "summary": "សង្ខេប",
+        "work": "ការងារ",
+        "projects": "គម្រោង",
+        "expertise": "ជំនាញឯកទេស",
+        "awards": "ពានរង្វាន់",
+        "professionalSummary": "សង្ខេបអាជីព",
+        "keyProjects": "គម្រោងសំខាន់ៗ",
+        "coreCompetencies": "សមត្ថភាពស្នូល",
+        "selectedWorks": "ការងារដែលបានជ្រើសរើស",
+        "contactDetails": "ព័ត៌មានទំនាក់ទំនង",
+        "latestExperience": "បទពិសោធន៍ចុងក្រោយ",
+        "publications": "ការបោះពុម្ពផ្សាយ និងគម្រោង",
+        "research": "ការស្រាវជ្រាវ និងបទពិសោធន៍",
+        "cvTitle": "ប្រវត្តិរូបសង្ខេប",
+        "generatedBy": "បង្កើតដោយ Dev Optimizer",
+        "personalInformation": "ព័ត៌មានផ្ទាល់ខ្លួន",
+        "designColors": "ការរចនា និងពណ៌",
+        "themeColor": "ពណ៌ស្បែក",
+        "typography": "ការសរសេរ",
+        "textColor": "ពណ៌អក្សរ",
+        "profilePhoto": "រូបថតប្រវត្តិរូប",
+        "chooseFile": "ជ្រើសរើសឯកសារ",
+        "remove": "លុបចេញ",
+        "addPosition": "បន្ថែមការងារ",
+        "addEducation": "បន្ថែមការសិក្សា",
+        "addProject": "បន្ថែមគម្រោង",
+        "addReference": "បន្ថែមអ្នកធានា",
+        "addLanguage": "បន្ថែមភាសា",
+        "addCertification": "បន្ថែមវិញ្ញាបនបត្រ",
+        "fullName": "ឈ្មោះពេញ",
+        "jobTitle": "តួនាទីការងារ",
+        "email": "អ៊ីមែល",
+        "phone": "ទូរស័ព្ទ",
+        "location": "ទីតាំង",
+        "website": "គេហទំព័រ / LinkedIn",
+        "role": "តួនាទី",
+        "company": "ក្រុមហ៊ុន",
+        "startDate": "ថ្ងៃចាប់ផ្តើម",
+        "endDate": "ថ្ងៃបញ្ចប់",
+        "description": "ការពិពណ៌នា",
+        "school": "សាលា",
+        "degree": "កម្រិតវប្បធម៌",
+        "year": "ឆ្នាំ",
+        "projectName": "ឈ្មោះគម្រោង",
+        "link": "តំណភ្ជាប់ / URL",
+        "shortDescription": "ការពិពណ៌នាសង្ខេប",
+        "name": "ឈ្មោះ",
+        "proficiency": "កម្រិតជំនាញ",
+        "level": "កម្រិត",
+        "certification": "វិញ្ញាបនបត្រ",
+        "issuer": "អ្នកចេញ",
+        "pickColor": "ជ្រើសរើសពណ៌",
+        "reset": "កំណត់ឡើងវិញ",
+        "downloadPDF": "ទាញយក PDF",
+        "selectTemplate": "ជ្រើសរើសគំរូ",
+        "editorTitle": "អ្នកបង្កើតប្រវត្តិរូប",
+        "dragDrop": "អូស និងទម្លាក់ ឬចុចដើម្បីផ្ទុកឡើង",
+        "currentTemplate": "គំរូបច្ចុប្បន្ន",
+        "browseGallery": "រកមើលវិចិត្រសាល",
+        "templateGallery": "វិចិត្រសាលគំរូ",
+        "selectTemplateDesc": "ជ្រើសរើសពីបណ្ុំការរចនាអាជីពរបស់យើង។",
+        "searchTemplates": "ស្វែងរកគំរូ...",
+        "allDesigns": "ការរចនាទាំងអស់",
+        "noTemplatesFound": "រកមិនឃើគំរូដែលត្រូវគ្នាទេ"
+    },
+    "screenAudio": {
+        "title": "Screen Audio Studio",
+        "subtitle": "Professional Text-to-Speech Editor",
+        "voiceSettings": "Voice Settings",
+        "characterVoice": "Character Voice",
+        "speed": "Speed",
+        "pitch": "Pitch",
+        "emotiveStyles": "Emotive Styles",
+        "exportAudio": "Export Audio",
+        "exportNote": "Browser limitation: To download, you must share 'Tab Audio' in the popup.",
+        "saveRecording": "Save Recording",
+        "recordToDownload": "Record to Download",
+        "recordingState": "Recording... (Share Audio)",
+        "clearScript": "Clear Script",
+        "startReading": "Start Reading",
+        "resume": "Resume",
+        "pause": "Pause",
+        "editText": "Edit Text",
+        "khmerMissingTitle": "Khmer Voice Missing",
+        "khmerMissingText": "Your system does not appear to have a Khmer text-to-speech voice installed. The audio may sound incorrect.",
+        "installVoice": "Install Voice",
+        "installModalTitle": "Install Khmer Voice",
+        "installModalNote": "High-quality voices are part of your Operating System. You can install them for free in your settings.",
+        "gotIt": "Got it, thanks!",
+        "windows": "Windows 10/11",
+        "mac": "macOS",
+        "android": "Android",
+        "styles": {
+            "standard": "Standard",
+            "storyteller": "Storyteller",
+            "serious": "Serious",
+            "excited": "Excited",
+            "soft": "Soft"
         }
+    },
+    "tutorial": {
+        "progTitle": "Programming Tutorials",
+        "progSubtitle": "Choose a technology to start learning",
+        "backToLanguages": "Back to Languages",
+        "searchTopics": "Search topics...",
+        "dsaTitle": "DSA Tutorial",
+        "visualizer": "Visualizer",
+        "start": "Start",
+        "running": "Running...",
+        "reset": "Reset",
+        "unsorted": "Unsorted",
+        "comparing": "Comparing",
+        "sorted": "Sorted",
+        "arrayMemory": "Array Memory Visualization",
+        "linkedList": "Linked List Visualization",
+        "stack": "Stack (LIFO) Visualization",
+        "queue": "Queue (FIFO) Visualization",
+        "bst": "Binary Search Tree",
+        "timeComplexity": "Time Complexity",
+        "spaceComplexity": "Space Complexity",
+        "visualGuide": "Visual Guide",
+        "guide": "Guide",
+        "example": "Example",
+        "explanation": "Explanation",
+        "implementation": "Implementation",
+        "selectTopic": "Select a topic to start learning",
+        "skip": "Skip",
+        "back": "Back",
+        "next": "Next",
+        "finish": "Finish"
+    },
+    "content": {
+        "prog": {
+            "android-basic-intro": {
+                "title": "Introduction to Android & Kotlin",
+                "description": "Getting started with Android development.",
+                "content": "Android is a mobile operating system based on a modified version of the Linux kernel and other open source software, designed primarily for touchscreen mobile devices such as smartphones and tablets. Kotlin is the recommended language for Android development."
+            },
+            "android-basic-kotlinsyntax": {
+                "title": "Kotlin Syntax Basics",
+                "description": "Variables, Functions, and Null Safety.",
+                "content": "Kotlin is concise and null-safe by default. `val` is immutable, `var` is mutable."
+            },
+            "android-basic-control-flow": {
+                "title": "Control Flow",
+                "description": "If, When, For, While.",
+                "content": "Kotlin uses `if` as an expression and `when` as a powerful replacement for switch statements."
+            },
+            "android-basic-collections": {
+                "title": "Collections",
+                "description": "Lists, Sets, and Maps.",
+                "content": "Kotlin distinguishes between mutable and immutable collections."
+            },
+            "android-basic-compose-ui": {
+                "title": "Basic Compose UI",
+                "description": "Building blocks: Column, Row, Text.",
+                "content": "Compose builds UI by nesting composable functions."
+            },
+            "android-basic-activity": {
+                "title": "Activity Lifecycle",
+                "description": "Understanding how activities are created, started, paused, and destroyed.",
+                "content": "The Activity class provides a core set of six callbacks: onCreate(), onStart(), onResume(), onPause(), onStop(), and onDestroy()."
+            },
+            "android-basic-layouts-xml": {
+                "title": "Layouts (XML)",
+                "description": "Building UI with LinearConstraint and ConstraintLayout.",
+                "content": "XML layouts define the structure of the UI. ConstraintLayout allows you to create large and complex layouts with a flat view hierarchy."
+            },
+            "android-xml-linear": {
+                "title": "LinearLayout (XML)",
+                "description": "Organizing views in a single row or column.",
+                "content": "LinearLayout is a view group that aligns all children in a single direction, vertically or horizontally."
+            },
+            "android-xml-relative": {
+                "title": "RelativeLayout (XML)",
+                "description": "Positioning views relative to others.",
+                "content": "RelativeLayout allows you to display children in positions relative to the parent or other siblings. (Note: ConstraintLayout is preferred for complex layouts)."
+            },
+            "android-xml-frame": {
+                "title": "FrameLayout (XML)",
+                "description": "Blocking out an area on screen.",
+                "content": "FrameLayout is designed to block out an area on the screen to display a single item. Child views are drawn in a stack."
+            },
+            "android-xml-scroll": {
+                "title": "ScrollView (XML)",
+                "description": "Scrollable container.",
+                "content": "ScrollView is a view group that allows the view hierarchy to be scrolled. It needs to have exactly one child."
+            },
+            "android-inter-compose-basic": {
+                "title": "Jetpack Compose Basics",
+                "description": "Declarative UI with Kotlin.",
+                "content": "Compose is Android’s modern toolkit for building native UI."
+            },
+            "android-compose-layouts-standard": {
+                "title": "Standard Layouts (Deep Dive)",
+                "description": "Column, Row, and Box configuration.",
+                "content": "Understanding `verticalArrangement`, `horizontalAlignment`, and `Box` stacking is crucial for pixel-perfect UIs."
+            },
+            "android-compose-scaffold": {
+                "title": "Scaffold & Slot APIs",
+                "description": "Material Design layout structure.",
+                "content": "Scaffold implements the basic material design visual layout structure. It provides slots for the most common top-level components."
+            },
+            "android-compose-constraint": {
+                "title": "ConstraintLayout (Compose)",
+                "description": "Complex layouts with constraints.",
+                "content": "ConstraintLayout in Compose works similarly to XML but with a clearer Kotlin DSL. Use it to avoid deeply nested layouts."
+            },
+            "android-compose-surface": {
+                "title": "Surface & Material",
+                "description": "Material Design container.",
+                "content": "Surface is the basic building block for Material Design. It handles elevation, shape, and background color."
+            },
+            "android-inter-state": {
+                "title": "State in Compose",
+                "description": "Managing state with remember and mutableStateOf.",
+                "content": "State describes any value that can change over time. `remember` preserves state across recompositions."
+            },
+            "android-inter-coroutines": {
+                "title": "Coroutines",
+                "description": "Asynchronous programming made easy.",
+                "content": "A coroutine is a concurrency design pattern that you can use on Android to simplify code that executes asynchronously."
+            },
+            "android-adv-hilt": {
+                "title": "Dependency Injection (Hilt)",
+                "description": "Managing dependencies efficiently.",
+                "content": "Hilt provides a standard way to incorporate Dagger dependency injection into an Android application."
+            },
+            "android-adv-room": {
+                "title": "Room Database",
+                "description": "Local data persistence.",
+                "content": "The Room persistence library provides an abstraction layer over SQLite."
+            },
+            "ios-basic-intro": {
+                "title": "Introduction to iOS & Swift",
+                "description": "Getting started with iOS development.",
+                "content": "iOS is the operating system that powers the iPhone and iPod touch. Swift is the modern, safe, and fast programming language used to build apps for iOS."
+            },
+            "ios-basic-swift": {
+                "title": "Swift Fundamentals",
+                "description": "Variables, Types, and Control Flow.",
+                "content": "Swift provides its own versions of all fundamental C and Objective-C types, including Int, Double, Float, Bool, and String."
+            },
+            "ios-basic-optionals": {
+                "title": "Optionals",
+                "description": "Handling missing values safely.",
+                "content": "You use optionals in situations where a value may be absent."
+            },
+            "ios-basic-control-flow": {
+                "title": "Control Flow",
+                "description": "If, Switch, Guard, For.",
+                "content": "Swift provides powerful control flow statements. `guard` is used for early exit if a condition is not met."
+            },
+            "ios-basic-collections": {
+                "title": "Collections",
+                "description": "Arrays, Sets, and Dictionaries.",
+                "content": "Swift provides three primary collection types, known as arrays (ordered), sets (unordered, unique), and dictionaries (key-value pairs)."
+            },
+            "ios-basic-functions": {
+                "title": "Functions & Closures",
+                "description": "Reusable code blocks.",
+                "content": "Functions are self-contained chunks of code. Closures are self-contained blocks of functionality that can be passed around."
+            },
+            "ios-basic-layouts": {
+                "title": "Layouts Deep Dive",
+                "description": "VStack, HStack, ZStack.",
+                "content": "SwiftUI layouts are built using stacks. VStack arranges views vertically, HStack horizontally, and ZStack overlays them."
+            },
+            "ios-inter-swiftui-views": {
+                "title": "SwiftUI Views & Modifiers",
+                "description": "Building declarative UIs.",
+                "content": "SwiftUI uses a declarative syntax so you can simply state what your user interface should do."
+            },
+            "ios-inter-state": {
+                "title": "State & Binding",
+                "description": "Managing data flow in SwiftUI.",
+                "content": "`@State` is a property wrapper type that can read and write a value managed by SwiftUI."
+            },
+            "ios-inter-navigation": {
+                "title": "NavigationStack",
+                "description": "Screen transitions.",
+                "content": "NavigationStack is the modern way to handle push and pop navigation in SwiftUI."
+            },
+            "ios-inter-lists": {
+                "title": "Lists & Grids",
+                "description": "Displaying collections.",
+                "content": "List and LazyVGrid are used to display scrollable collections of data efficiently."
+            },
+            "ios-inter-networking": {
+                "title": "Networking (Async/Await)",
+                "description": "Fetching data from API.",
+                "content": "Swift\\"
+            },
+            "ios-adv-combine": {
+                "title": "Combine Framework",
+                "description": "Processing values over time.",
+                "content": "Customize handling of asynchronous events by combining event-processing operators."
+            },
+            "ios-adv-coredata": {
+                "title": "Core Data",
+                "description": "Persisting data locally.",
+                "content": "Use Core Data to save your application’s permanent data for offline use, to cache temporary data, and to add undo functionality."
+            },
+            "ios-adv-concurrency": {
+                "title": "Concurrency",
+                "description": "Async/Await & Actors.",
+                "content": "Modern Swift concurrency makes it easier to write asynchronous and parallel code."
+            },
+            "ios-adv-swiftdata": {
+                "title": "SwiftData",
+                "description": "Modern persistence.",
+                "content": "SwiftData combines Core Data\\"
+            },
+            "ios-adv-animations": {
+                "title": "Animations",
+                "description": "Transitions & MatchedGeometry.",
+                "content": "SwiftUI animation is interruptible and physics-based by default."
+            },
+            "ios-sys-camera": {
+                "title": "Camera (AVFoundation)",
+                "description": "Capture photo/video.",
+                "content": "AVFoundation is the framework for working with time-based audiovisual media. You can use it to create, edit, and play custom media."
+            },
+            "ios-sys-location": {
+                "title": "Location (CoreLocation)",
+                "description": "GPS & Geocoding.",
+                "content": "Core Location provides services for determining a device’s geographic location, altitude, and orientation."
+            },
+            "ios-sys-sensors": {
+                "title": "Sensors (CoreMotion)",
+                "description": "Accelerometer & Gyro.",
+                "content": "Core Motion reports motion- and environment-related data from the onboard hardware of iOS devices."
+            },
+            "react-basic-components": {
+                "title": "Components & Props",
+                "description": "The core building blocks.",
+                "content": "Components let you split the UI into independent, reusable pieces."
+            },
+            "react-basic-jsx": {
+                "title": "JSX Syntax",
+                "description": "Writing HTML inside JavaScript.",
+                "content": "JSX is a syntax extension for JavaScript. It is recommended to use it with React to describe what the UI should look like."
+            },
+            "react-inter-hooks-state": {
+                "title": "useState Hook",
+                "description": "Managing local component state.",
+                "content": "`useState` is a Hook that lets you add React state to function components."
+            },
+            "react-inter-hooks-effect": {
+                "title": "useEffect Hook",
+                "description": "Performing side effects.",
+                "content": "Data fetching, subscription, or manually changing the DOM are all examples of side effects."
+            },
+            "react-adv-context": {
+                "title": "Context API",
+                "description": "Passing data deeply without props drilling.",
+                "content": "Context provides a way to pass data through the component tree without having to pass props down manually at every level."
+            },
+            "react-adv-redux": {
+                "title": "Redux Toolkit",
+                "description": "Global state management.",
+                "content": "Redux is a predictable state container for JS apps."
+            },
+            "vue-basic-template": {
+                "title": "Template Syntax",
+                "description": "Binding data to the DOM.",
+                "content": "Vue.js uses an HTML-based template syntax."
+            },
+            "vue-basic-directives": {
+                "title": "Directives (v-if, v-for)",
+                "description": "Special attributes with the v- prefix.",
+                "content": "Directives apply special reactive behavior to the rendered DOM."
+            },
+            "vue-inter-composition": {
+                "title": "Composition API",
+                "description": "Using setup() and refs.",
+                "content": "Composition API is a set of APIs that allows us to author Vue components using imported functions instead of declaring options."
+            },
+            "vue-inter-computed": {
+                "title": "Computed Properties",
+                "description": "Reactive derived state.",
+                "content": "For complex logic that includes reactive data, you should use a computed property."
+            },
+            "vue-adv-pinia": {
+                "title": "State Management (Pinia)",
+                "description": "The intuitive store for Vue.js.",
+                "content": "Pinia is a store library for Vue, it allows you to share a state across components/pages."
+            },
+            "css-basic-selectors": {
+                "title": "Selectors & Specificity",
+                "description": "Targeting elements to style.",
+                "content": "CSS selectors define the pattern to select elements to which a set of CSS rules are then applied."
+            },
+            "css-basic-boxmodel": {
+                "title": "The Box Model",
+                "description": "Margins, Borders, and Padding.",
+                "content": "All HTML elements can be considered as boxes."
+            },
+            "css-inter-flexbox": {
+                "title": "Flexbox",
+                "description": "1D layout model.",
+                "content": "The Flexible Box Layout Module makes it easier to design flexible responsive layout structures."
+            },
+            "css-inter-grid": {
+                "title": "CSS Grid",
+                "description": "2D layout system.",
+                "content": "CSS Grid Layout excels at dividing a page into major regions or defining the relationship in terms of size, position, and layer."
+            },
+            "css-adv-animations": {
+                "title": "Animations & Transitions",
+                "description": "Bringing movement to the web.",
+                "content": "CSS animations make it possible to animate transitions from one CSS style configuration to another."
+            },
+            "js-basic-vars": {
+                "title": "Variables & Types",
+                "description": "let, const, and var.",
+                "content": "Always use `const` or `let`. Avoid `var` to prevent scope issues."
+            },
+            "js-basic-functions": {
+                "title": "Functions & Arrow Functions",
+                "description": "Writing reusable blocks of code.",
+                "content": "Arrow functions provide a shorter syntax."
+            },
+            "js-inter-async": {
+                "title": "Async/Await & Promises",
+                "description": "Handling asynchronous operations.",
+                "content": "`async` and `await` make promises easier to write."
+            },
+            "js-inter-dom": {
+                "title": "DOM Manipulation",
+                "description": "Interacting with the webpage.",
+                "content": "The DOM (Document Object Model) is an interface for changing the content of a document."
+            },
+            "js-adv-closures": {
+                "title": "Closures",
+                "description": "Function scope and lexical environments.",
+                "content": "A closure is the combination of a function bundled together (enclosed) with references to its surrounding state (the lexical environment)."
+            },
+            "js-adv-event-loop": {
+                "title": "The Event Loop",
+                "description": "How JS handles concurrency.",
+                "content": "JavaScript has a runtime model based on an event loop, which is responsible for executing the code, collecting and processing events, and executing queued sub-tasks."
+            },
+            "html-basic-semantic": {
+                "title": "Semantic HTML",
+                "description": "Using the right tag for the job.",
+                "content": "Semantic elements clearly describe their meaning to both the browser and the developer (e.g., <header>, <article>, <footer>)."
+            },
+            "html-inter-forms": {
+                "title": "Forms & Inputs",
+                "description": "Collecting user data.",
+                "content": "HTML forms are used to collect user input."
+            },
+            "html-adv-canvas": {
+                "title": "Canvas API",
+                "description": "Drawing graphics on the fly.",
+                "content": "The HTML <canvas> element is used to draw graphics, on the fly, via JavaScript."
+            },
+            "python-basic-syntax": {
+                "title": "Syntax & Indentation",
+                "description": "Writing clean Python code.",
+                "content": "Python uses indentation to indicate a block of code."
+            },
+            "python-basic-lists": {
+                "title": "Lists & Dictionaries",
+                "description": "Core data structures.",
+                "content": "Lists are ordered and mutable. Dictionaries are key-value pairs."
+            },
+            "python-inter-functions": {
+                "title": "Functions & Modules",
+                "description": "Reusability and organization.",
+                "content": "A function is a block of code which only runs when it is called."
+            },
+            "python-inter-classes": {
+                "title": "Classes & Objects",
+                "description": "Object-Oriented Programming (OOP).",
+                "content": "Python is an object oriented programming language."
+            },
+            "python-adv-decorators": {
+                "title": "Decorators",
+                "description": "Modifying function behavior.",
+                "content": "Decorators are a very powerful and useful tool in Python since it allows programmers to modify the behaviour of a function or class."
+            },
+            "python-adv-generators": {
+                "title": "Generators",
+                "description": "Iterators using yield.",
+                "content": "Generators are a simple and powerful tool for creating iterators."
+            },
+            "android-inter-navigation": {
+                "title": "Navigation Component",
+                "description": "Moving between screens.",
+                "content": "The Navigation component consists of three key parts: Navigation Graph, NavHost, and NavController."
+            },
+            "android-inter-retrofit": {
+                "title": "Networking (Retrofit)",
+                "description": "Type-safe HTTP client.",
+                "content": "Retrofit turns your HTTP API into a Java interface."
+            },
+            "android-adv-workmanager": {
+                "title": "WorkManager",
+                "description": "Background processing.",
+                "content": "WorkManager is the recommended solution for persistent work that needs to be guaranteed to execute."
+            },
+            "android-inter-lazy-layouts": {
+                "title": "Lazy Lists (RecyclerView)",
+                "description": "Displaying large lists efficiently.",
+                "content": "`LazyColumn` and `LazyRow` are equivalent to RecyclerView in standard Android views but with much less boilerplate."
+            },
+            "android-inter-viewmodel": {
+                "title": "ViewModel",
+                "description": "Store UI-related data.",
+                "content": "The `ViewModel` class allows data to survive configuration changes such as screen rotations."
+            },
+            "android-adv-flow": {
+                "title": "Kotlin Flow",
+                "description": "Reactive streams for Kotlin.",
+                "content": "In coroutines, a flow is a type that can emit multiple values sequentially, as opposed to suspend functions that return only a single value."
+            },
+            "android-inter-side-effects": {
+                "title": "Side Effects (LaunchedEffect)",
+                "description": "Running suspend functions in Composable.",
+                "content": "To call suspend functions safely from inside a composable, use the `LaunchedEffect` composable."
+            },
+            "android-adv-animations": {
+                "title": "Animations",
+                "description": "Adding motion to UI.",
+                "content": "Compose provides high-level animation APIs like `AnimatedVisibility` and `animate*AsState`."
+            },
+            "android-adv-datastore": {
+                "title": "DataStore",
+                "description": "Modern data storage.",
+                "content": "Jetpack DataStore is a data storage solution that allows you to store key-value pairs or typed objects with Protocol Buffers."
+            },
+            "android-inter-permissions": {
+                "title": "Permissions",
+                "description": "Handling runtime permissions.",
+                "content": "Requesting permissions at runtime is necessary for sensitive user data or features."
+            },
+            "android-adv-notifications": {
+                "title": "Notifications",
+                "description": "Showing alerts to the user.",
+                "content": "Notifications provide short, timely information about events in your app while it is not in use."
+            },
+            "android-adv-testing": {
+                "title": "Testing (Unit & UI)",
+                "description": "Ensuring app quality.",
+                "content": "Android testing includes unit tests (JUnit) and UI tests (Compose Test Rule / Espresso)."
+            },
+            "android-kotlin-data-sealed": {
+                "title": "Data & Sealed Classes",
+                "description": "Modelling state and data.",
+                "content": "`data class` automatically generates equals/hashCode/toString. `sealed class` represents restricted class hierarchies."
+            },
+            "android-kotlin-extensions": {
+                "title": "Extension Functions",
+                "description": "Extending existing classes.",
+                "content": "Kotlin provides the ability to extend a class with new functionality without having to inherit from the class."
+            },
+            "android-kotlin-lambdas": {
+                "title": "Higher-Order Functions & Lambdas",
+                "description": "Functions as parameters.",
+                "content": "A higher-order function is a function that takes functions as parameters, or returns a function."
+            },
+            "android-kotlin-generics": {
+                "title": "Generics",
+                "description": "Type safety and reusability.",
+                "content": "Classes and functions in Kotlin can have type parameters, just like in Java."
+            },
+            "android-compose-modifiers": {
+                "title": "Modifiers Deep Dive",
+                "description": "Chaining and ordering modifiers.",
+                "content": "Modifiers allow you to decorate or augment a composable. The order of modifiers matters significantly."
+            },
+            "android-compose-theming": {
+                "title": "Theming (Material3)",
+                "description": "Consistent styling with Material 3.",
+                "content": "Jetpack Compose offers an implementation of Material Design 3, a comprehensive design system for creating digital interfaces."
+            },
+            "android-compose-gestures": {
+                "title": "Gestures & Touch Input",
+                "description": "Handling tabs, swipes, and drags.",
+                "content": "Compose provides a variety of APIs for handling user interactions, from high-level `clickable` to low-level `pointerInput`."
+            },
+            "android-compose-canvas": {
+                "title": "Canvas Drawing",
+                "description": "Custom 2D graphics.",
+                "content": "The `Canvas` composable gives you precise control over rendering, allowing you to draw shapes, paths, text, and images."
+            },
+            "android-sys-camerax": {
+                "title": "CameraX",
+                "description": "Easy camera integration.",
+                "content": "CameraX is a Jetpack support library, built to help you make camera app development easier."
+            },
+            "android-sys-location": {
+                "title": "Location Services",
+                "description": "GPS and Geolocation.",
+                "content": "The fused location provider is a location API in Google Play services that combines different signals to provide location information."
+            },
+            "android-sys-sensors": {
+                "title": "Sensors (Accelerometer)",
+                "description": "Accessing device sensors.",
+                "content": "The Android platform provides several sensors that let you monitor the motion, position, and various environmental conditions."
+            },
+            "android-sys-services": {
+                "title": "Background Services",
+                "description": "Long-running operations.",
+                "content": "A Service is an application component that can perform long-running operations in the background. It does not provide a user interface."
+            },
+            "android-arch-mvvm": {
+                "title": "MVVM Pattern (Deep Dive)",
+                "description": "Model-View-ViewModel.",
+                "content": "MVVM separates the UI (View) from the data and logic (ViewModel/Model). The ViewModel exposes streams of data to the View."
+            },
+            "android-arch-clean": {
+                "title": "Clean Architecture",
+                "description": "Separation of concerns.",
+                "content": "Clean Architecture divides the app into layers: Presentation (UI), Domain (Business Logic), and Data (Repositories/Data Sources)."
+            },
+            "android-arch-repository": {
+                "title": "Repository Pattern",
+                "description": "Single source of truth.",
+                "content": "Repositories abstract access to data sources (API, Database) and provide a clean API to the rest of the app."
+            },
+            "android-arch-di": {
+                "title": "Dependency Injection",
+                "description": "Hilt & Koin.",
+                "content": "DI allows you to provide dependencies to classes from outside, making testing and maintenance easier."
+            },
+            "android-firebase-setup": {
+                "title": "Firebase Setup",
+                "description": "Connecting your app.",
+                "content": "Firebase is a platform developed by Google for creating mobile and web applications. It provides authentication, database, analytics, and more."
+            },
+            "android-firebase-firestore": {
+                "title": "Cloud Firestore",
+                "description": "NoSQL Cloud Database.",
+                "content": "Firestore is a flexible, scalable NoSQL cloud database to store and sync data for client- and server-side development."
+            },
+            "android-firebase-crashlytics": {
+                "title": "Crashlytics",
+                "description": "Realtime crash reporting.",
+                "content": "Firebase Crashlytics is a lightweight, realtime crash reporter that helps you track, prioritize, and fix stability issues."
+            },
+            "android-sec-biometric": {
+                "title": "Biometric Authentication",
+                "description": "Fingerprint & Face Unlock.",
+                "content": "BiometricPrompt API provides a standard mechanism for handling biometric authentication in a device-agnostic way."
+            },
+            "android-sec-encrypted-prefs": {
+                "title": "EncryptedSharedPreferences",
+                "description": "Secure data storage.",
+                "content": "EncryptedSharedPreferences is a wrapper around SharedPreferences that automatically encrypts keys and values using Mainline Jetpack Security library."
+            },
+            "android-async-channels": {
+                "title": "Coroutines Channels & SharedFlow",
+                "description": "Hot streams and events.",
+                "content": "SharedFlow is a hot flow that emits values to all consumers. Channels are used for communication between coroutines."
+            },
+            "ios-arch-mvvm": {
+                "title": "MVVM Pattern",
+                "description": "Model-View-ViewModel.",
+                "content": "MVVM is the standard architecture for SwiftUI. ViewModels conform to `ObservableObject` and publish changes to the View."
+            },
+            "ios-arch-clean": {
+                "title": "Clean Architecture",
+                "description": "Domain & Data layers.",
+                "content": "Separating your app into Presentation, Domain, and Data layers ensures scalability and testability."
+            },
+            "ios-firebase-setup": {
+                "title": "Firebase Integration",
+                "description": "Analytics & Firestore.",
+                "content": "Add the Firebase SDK via Swift Package Manager (SPM) to access cloud services."
+            },
+            "ios-sec-keychain": {
+                "title": "Keychain & Biometrics",
+                "description": "Secure storage & FaceID.",
+                "content": "Use Keychain for sensitive data (tokens) and LocalAuthentication for FaceID/TouchID."
+            },
+            "ios-inter-uikit-interop": {
+                "title": "UIKit Interoperability",
+                "description": "Using UIKit in SwiftUI.",
+                "content": "UIViewRepresentable allows you to wrap a UIKit view and use it within your SwiftUI View hierarchy."
+            },
+            "ios-adv-testing": {
+                "title": "Unit Testing",
+                "description": "Ensuring code quality.",
+                "content": "XCTest is the framework for writing unit tests in Swift."
+            },
+            "react-inter-router": {
+                "title": "React Router",
+                "description": "Client-side routing.",
+                "content": "React Router enables \"client side routing\"."
+            },
+            "react-adv-performance": {
+                "title": "Performance Optimization",
+                "description": "useMemo and useCallback.",
+                "content": "Memorization helpers to prevent unnecessary re-renders."
+            },
+            "vue-inter-router": {
+                "title": "Vue Router",
+                "description": "Official router for Vue.js.",
+                "content": "Vue Router seamlessly integrates with Vue.js core to make building Single Page Applications a breeze."
+            },
+            "vue-adv-slots": {
+                "title": "Slots",
+                "description": "Content distribution API.",
+                "content": "Slots allows you to inject content into a component from a parent."
+            },
+            "js-basic-es6": {
+                "title": "ES6+ Features",
+                "description": "Modern JavaScript syntax.",
+                "content": "Destructuring, Spread/Rest operators, Template Literals."
+            }
+        },
+        "dsa": {
+            "big-o": {
+                "title": "Big O Notation",
+                "description": "Big O notation is used to describe the performance or complexity of an algorithm.",
+                "explanation": "Big O notation characterizes functions according to their growth rates: different functions with the same growth rate may be represented using the same O notation.\n\n**Common Complexities:**\n- **O(1)**: Constant time\n- **O(log n)**: Logarithmic time\n- **O(n)**: Linear time\n- **O(n log n)**: Linearithmic time\n- **O(n^2)**: Quadratic time\n- **O(2^n)**: Exponential time"
+            },
+            "arrays": {
+                "title": "Arrays",
+                "description": "A collection of items stored at contiguous memory locations."
+            }
+        }
+    },
+    "developerGuide": {
+        "title": "មគ្គុទ្ទេសក៍អ្នកអភិវឌ្ឍន៍",
+        "subtitle": "អត្ថបទទិន្នន័យដែលបង្កើតដោយស្វ័យប្រវត្តិពីកូដរបស់អ្នក។",
+        "exportHtml": "នាំចេញ HTML",
+        "newProject": "គម្រោងថ្មី",
+        "parsing": "កំពុងញែករចនាសម្ព័ន្ធ...",
+        "uploadZip": "ផ្ទុកឡើង ZIP គម្រោង",
+        "supports": "គាំទ្រ TS, Native (Kotlin, Swift, etc.)",
+        "searchPlaceholder": "ស្វែងរកឯកសារ...",
+        "noSymbols": "មិនរកឃើញនិមិត្តសញ្ញាសាធារណៈទេ។",
+        "classes": "ថ្នាក់ (Classes)",
+        "properties": "លក្ខណសម្បត្តិ",
+        "functions": "អនុគមន៍",
+        "interfaces": "ចំណុចប្រទាក់",
+        "members": "សមាជិក",
+        "line": "ជួរ",
+        "selectFile": "ជ្រើសរើសឯកសារដើម្បីមើលឯកសារ។",
+        "files": "ឯកសារ",
+        "generatedOn": "បានបង្កើតនៅ"
+    },
+    "mockData": {
+        "title": "អ្នកបង្កើតទិន្នន័យក្លែងក្លាយ",
+        "description": "បង្កើតទិន្នន័យ JSON ដោយចៃដន្យសម្រាប់ការធ្វើតេស្ត។",
+        "configTitle": "ការកំណត់",
+        "addField": "បន្ថែមវាល",
+        "rowCount": "ជួរដេកដើម្បីបង្កើត",
+        "generate": "បង្កើតទិន្នន័យ",
+        "preview": "មើលទិន្នន័យជាមុន",
+        "noData": "គ្មានទិន្នន័យ។ ចុច 'បង្កើតទិន្នន័យ' ដើម្បីចាប់ផ្តើម។",
+        "types": {
+            "uuid": "UUID",
+            "name": "ឈ្មោះពេញ",
+            "firstName": "នាមខ្លួន",
+            "lastName": "នាមត្រកូល",
+            "email": "អ៊ីមែល",
+            "boolean": "Boolean",
+            "number": "លេខ",
+            "date": "កាលបរិច្ឆេទ",
+            "custom": "បញ្ជីផ្ទាល់ខ្លួន"
+        }
+    },
+    "jsonToCode": {
+        "title": "JSON ទៅកូដ",
+        "description": "បង្កើតម៉ូដែល TypeScript, Kotlin, Swift ឬ Dart ពី JSON",
+        "inputJson": "បញ្ចូល JSON",
+        "loadExample": "ផ្ទុកឧទាហរណ៍"
+    },
+    "unixConverter": {
+        "title": "ឧបករណ៍បម្លែងពេលវេលា Unix",
+        "description": "បម្លែងរវាងត្រាពេលវេលា Unix និងកាលបរិច្ឆេទដែលអានបាន។"
+    },
+    "markdownEditor": {
+        "title": "កម្មវិធីកែ Markdown",
+        "description": "កែសម្រួលនិងមើលមាតិកា Markdown ជាមុន",
+        "editor": "អ្នកកែសម្រួល",
+        "preview": "មើលជាមុន",
+        "placeholder": "វាយ markdown នៅទីនេះ..."
+    },
+    "codePlayground": {
+        "title": "កន្លែងសរសេរកូដ",
+        "description": "សរសេរនិងសាកល្បងកូដ",
+        "web": "Web (HTML/JS)",
+        "android": "Android (Kotlin)",
+        "ios": "iOS (Swift)",
+        "flutter": "Flutter (Dart)",
+        "java": "Java",
+        "refresh": "ផ្ទុកឡើងវិញ",
+        "code": "កូដ",
+        "preview": "មើលជាមុន"
     }
 }
