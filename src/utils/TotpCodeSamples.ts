@@ -52,7 +52,9 @@ class TotpActivity : AppCompatActivity() {
         binding.tvCode.text = "\${code.substring(0, 3)} \${code.substring(3)}"
         
         // Update Progress (30s window)
-        val epoch = System.currentTimeMillis()
+        // Use UTC time for consistency
+        val calendar = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC"))
+        val epoch = calendar.timeInMillis
         val millisLeft = 30000 - (epoch % 30000)
         binding.progressBar.progress = (millisLeft / 10).toInt()
     }
@@ -106,7 +108,10 @@ public class TotpActivity extends AppCompatActivity {
 
     private void updateUI() {
         try {
-            long now = System.currentTimeMillis();
+            // Ensure UTC time
+            java.util.Calendar calendar = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC"));
+            long now = calendar.getTimeInMillis();
+            
             String code = generateTOTP(secret, now);
             
             // Format 000 000
@@ -198,6 +203,7 @@ struct TotpView: View {
             self.code = "\(prefix) \(suffix)"
             
             // Update Progress
+            // Date() yields UTC interval since 1970
             let epoch = Date().timeIntervalSince1970
             let timeLeft = 30.0 - fmod(epoch, 30.0)
             self.progress = timeLeft / 30.0
@@ -249,6 +255,7 @@ class TotpViewController: UIViewController {
         }
         
         // 2. Update Progress
+        // Date() is UTC
         let epoch = Date().timeIntervalSince1970
         let timeLeft = 30.0 - fmod(epoch, 30.0)
         progressView.setProgress(Float(timeLeft / 30.0), animated: true)
@@ -293,6 +300,7 @@ class TotpViewController: UIViewController {
     }
     
     // Progress
+    // NSDate gives UTC timestamp
     NSTimeInterval epoch = [[NSDate date] timeIntervalSince1970];
     double timeLeft = 30.0 - fmod(epoch, 30.0);
     [self.progressView setProgress:(timeLeft / 30.0) animated:YES];
@@ -350,7 +358,8 @@ class _TotpScreenState extends State<TotpScreen> {
   }
 
   void _update() {
-    final now = DateTime.now().millisecondsSinceEpoch;
+    // Ensure UTC Time
+    final now = DateTime.now().toUtc().millisecondsSinceEpoch;
     
     // Generate Code
     final rawCode = OTP.generateTOTPCodeString(
@@ -413,6 +422,7 @@ export default function TotpScreen() {
         const raw = totp.generate();
         setCode(\`\${raw.slice(0,3)} \${raw.slice(3)}\`);
         
+        // Date.now() returns UTC timestamp
         const epoch = Math.floor(Date.now() / 1000);
         setTimeLeft(30 - (epoch % 30));
     }, 1000);
@@ -456,7 +466,7 @@ export const TotpDisplay = ({ secret }: { secret: string }) => {
       const raw = totp.generate();
       setCode(\`\${raw.slice(0,3)} \${raw.slice(3)}\`);
 
-      // 2. Progress
+      // 2. Progress (Date.now() is UTC)
       const epoch = Date.now();
       const left = 30000 - (epoch % 30000);
       setProgress((left / 30000) * 100);
@@ -501,6 +511,7 @@ const update = () => {
   const raw = totp.generate();
   code.value = \`\${raw.slice(0, 3)} \${raw.slice(3)}\`;
 
+  // Use UTC timestamp
   const epoch = Date.now();
   const msLeft = 30000 - (epoch % 30000);
   progress.value = (msLeft / 30000) * 100;
@@ -603,7 +614,7 @@ export class TotpComponent implements OnInit, OnDestroy {
     const raw = totp.generate();
     this.code = \`\${raw.slice(0, 3)} \${raw.slice(3)}\`;
 
-    // Timer
+    // Timer (Date.now() is UTC)
     const epoch = Date.now();
     const msLeft = 30000 - (epoch % 30000);
     this.progress = (msLeft / 30000) * 100;

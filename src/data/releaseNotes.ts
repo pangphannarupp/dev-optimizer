@@ -6,6 +6,15 @@ export interface ReleaseNote {
 
 export const releaseNotes: ReleaseNote[] = [
     {
+        version: '1.1.11',
+        date: '2025-12-23',
+        changes: [
+            'Add new feature "Firebease Analytics"',
+            'Improve feature "TOTP Generator"',
+            'Improve performance'
+        ]
+    },
+    {
         version: '1.1.10',
         date: '2025-12-22',
         changes: [

@@ -61,7 +61,17 @@ const CvGenerator = lazy(() => import('./components/CvGenerator').then(module =>
 const YoutubeDownloader = lazy(() => import('./components/YoutubeDownloader').then(module => ({ default: module.YoutubeDownloader })));
 
 
+
+import { usePageTracking } from './hooks/usePageTracking';
+
+import { useErrorTracking } from './hooks/useErrorTracking';
+import { useUserProperties } from './hooks/useUserProperties';
+
 function AppContent() {
+  usePageTracking();
+  useErrorTracking();
+  useUserProperties();
+
   const location = useLocation();
   // Simple check for home page vs tools
   const isHome = location.pathname === '/';
