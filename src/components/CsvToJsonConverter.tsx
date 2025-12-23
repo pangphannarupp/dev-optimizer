@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
-import { FileJson, Download, AlertCircle, CheckCircle, Smartphone, Apple, ArrowRightLeft, Upload, FileSpreadsheet, Loader2, X, Table, Network, Search, Eye, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Download, AlertCircle, CheckCircle, ArrowRightLeft, Upload, FileSpreadsheet, Loader2, X, Table, Network, Search, Eye, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { DropZone } from './DropZone';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import { MindmapViewer } from './MindmapViewer';
+import jsonIcon from '../assets/json-icon.svg';
+import androidIcon from '../assets/android-icon.svg';
+import iosIcon from '../assets/ios-icon.svg';
 
 interface TranslationData {
     [language: string]: any;
@@ -621,7 +624,7 @@ export function CsvToJsonConverter() {
     };
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8">
+        <div className="w-full min-h-full flex flex-col space-y-6 p-4">
             <div className="text-center space-y-2">
                 <h2 className="text-2xl font-bold text-gray-800 dark:text-white">{t('csvToJson.title')}</h2>
                 <p className="text-gray-600 dark:text-gray-400">
@@ -631,7 +634,7 @@ export function CsvToJsonConverter() {
 
             {/* Mode Switcher */}
             <div className="flex justify-center mb-6">
-                <div className="bg-white dark:bg-gray-800 p-1 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 inline-flex">
+                <div className="bg-white dark:bg-gray-800 p-1 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 inline-flex flex-shrink-0">
                     <button
                         onClick={() => handleModeChange('import')}
                         className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${mode === 'import'
@@ -655,7 +658,7 @@ export function CsvToJsonConverter() {
                 </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 relative overflow-hidden min-h-[500px]">
+            <div className="flex-1 flex flex-col bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 relative overflow-hidden min-h-[500px]">
                 {isProcessing && (
                     <div className="absolute inset-0 bg-white/80 dark:bg-gray-800/80 z-10 flex flex-col items-center justify-center backdrop-blur-sm transition-all animate-in fade-in duration-200">
                         <div className="bg-white dark:bg-gray-900 p-4 rounded-full shadow-lg">
@@ -1024,7 +1027,7 @@ export function CsvToJsonConverter() {
                                     : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-gray-800/50'
                                     }`}
                             >
-                                <FileJson size={16} />
+                                <img src={jsonIcon} alt="JSON" className="w-5 h-5" />
                                 {t('csvToJson.formats.json')}
                             </button>
                             <button
@@ -1034,7 +1037,7 @@ export function CsvToJsonConverter() {
                                     : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-gray-800/50'
                                     }`}
                             >
-                                <Smartphone size={16} />
+                                <img src={androidIcon} alt="Android" className="w-5 h-5" />
                                 {t('csvToJson.formats.android')}
                             </button>
                             <button
@@ -1044,7 +1047,7 @@ export function CsvToJsonConverter() {
                                     : 'text-gray-600 dark:text-gray-400 hover:bg-white/50 dark:hover:bg-gray-800/50'
                                     }`}
                             >
-                                <Apple size={16} />
+                                <img src={iosIcon} alt="iOS" className="w-5 h-5" />
                                 {t('csvToJson.formats.ios')}
                             </button>
                         </div>
@@ -1092,9 +1095,9 @@ export function CsvToJsonConverter() {
 
                     <div className="p-4 h-[600px] flex flex-col">
                         <div className="flex items-center gap-2 mb-3 pb-3 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
-                            {activeFormat === 'json' && <FileJson className="text-blue-500" size={20} />}
-                            {activeFormat === 'android' && <Smartphone className="text-green-500" size={20} />}
-                            {activeFormat === 'ios' && <Apple className="text-gray-900 dark:text-white" size={20} />}
+                            {activeFormat === 'json' && <img src={jsonIcon} alt="JSON" className="w-6 h-6" />}
+                            {activeFormat === 'android' && <img src={androidIcon} alt="Android" className="w-6 h-6" />}
+                            {activeFormat === 'ios' && <img src={iosIcon} alt="iOS" className="w-6 h-6" />}
                             <h3 className="font-semibold text-gray-800 dark:text-white">
                                 {activePreviewTab}
                                 {activeFormat === 'json' ? '.json' : activeFormat === 'android' ? '.xml' : '.strings'}

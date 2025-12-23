@@ -16,7 +16,7 @@ const getLineNumber = (content: string, index: number): number => {
 export // Helper to check if string contains potential hardcoded text
     const isPotentialHardcodedString = (str: string): boolean => {
         // Filter out short strings, keys (no spaces), imports, urls, data uris
-        if (!str || str.length <= 3 || !str.includes(' ') || str.startsWith('http') || str.startsWith('data:') || str.startsWith('file:') || str === 'use strict' || str === "'use strict'") {
+        if (!str || str.length <= 3 || !str.includes(' ') || str.startsWith('http') || str.startsWith('data:') || str.startsWith('file:') || str.startsWith('javascript:') || str === 'use strict' || str === "'use strict'") {
             return false;
         }
 
@@ -38,8 +38,11 @@ export // Helper to check if string contains potential hardcoded text
         // Exclude Logs/Tech prefixes
         if (/^(notify status|subscribe:|error:|warning:|info:|debug:)/i.test(str)) return false;
 
-        // Exclude date formats
-        if (/^[ymdYMDHhmsS\/\-:\sT\.]+$/.test(str)) return false;
+        // Exclude date formats (including 'a' for AM/PM marker and comma)
+        if (/^[ymdYMDHhmsS\/\-:\sT\.a,]+$/.test(str)) return false;
+
+        // Exclude Time strings (e.g. 12:30 PM, 23:59:59)
+        if (/^\d{1,2}:\d{2}(:\d{2})?(\s?[AP]M)?$/i.test(str)) return false;
 
         // Exclude string format specifiers (e.g. %.1f, %d, %s)
         if (/^%[\d\.]*[sdf]/.test(str)) return false;
@@ -143,7 +146,7 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
             }
         }
 
-        const attributeRegex = /\s(label|placeholder|title|alt|aria-label)="([^"]+)"/g;
+        const attributeRegex = /\s(label|placeholder|title|aria-label)="([^"]+)"/g;
         while ((match = attributeRegex.exec(meaningfulContent)) !== null) {
             const attr = match[1];
             const val = match[2];
@@ -267,7 +270,10 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
         const stringLiteralRegex = /"([^"\\]*(?:\\.[^"\\]*)*)"/g;
         let match;
 
-        while ((match = stringLiteralRegex.exec(content)) !== null) {
+        // Mask block comments
+        const maskedContent = content.replace(/\/\*[\s\S]*?\*\//g, (match) => ' '.repeat(match.length));
+
+        while ((match = stringLiteralRegex.exec(maskedContent)) !== null) {
             const str = match[1];
             if (!isPotentialHardcodedString(str)) continue;
 
@@ -279,17 +285,25 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
             // Ignore comments
             if (lineContent.trim().startsWith('//')) continue;
 
+            // Ignore Toast messages
+            if (/Toast\.makeText\(/.test(lineContent)) continue;
+
             // Ignore Logs
-            if (/(Log\.[civdw]|Logger\.|System\.out\.|Timber\.|BizMOBLogger\.|println\()|(\.log\()/.test(lineContent)) continue;
+            const logContext = content.substring(Math.max(0, index - 300), index);
+            if (/(Log\.[civdwe]|Logger\.|System\.out\.|Timber\.|BizMOBLogger\.|println\()|(\.log\()/.test(lineContent) || /(Log\.[civdwe]|Logger\.|System\.out\.|Timber\.|BizMOBLogger\.|println\()[\s\S]*$/.test(logContext)) continue;
 
             // Ignore HTTP Headers
-            if (/(\.addHeader\(|\.header\()/.test(lineContent)) continue;
+            if (/(\.addHeader\(|\.header\(|\.setRequestProperty\()/.test(lineContent)) continue;
 
             // Ignore Annotations (lines starting with @, or string inside @Annotation(...))
             if (lineContent.trim().startsWith('@')) continue;
 
             // Ignore usual non-translatable keys in maps/intents
             if (/(extra|key|action|name|id|tag|token|pref)/i.test(lineContent) && !lineContent.includes('Title') && !lineContent.includes('Message')) continue;
+
+            // Ignore Exceptions (throw new Exception("...") or throw Exception("..."))
+            const exceptionContext = content.substring(Math.max(0, index - 300), index);
+            if (/(throw\s+|Exception\(|Error\()/.test(lineContent) || /(throw\s+new\s+[a-zA-Z0-9_.]+|throw\s+[a-zA-Z0-9_.]+\()[\s\S]*$/.test(exceptionContext)) continue;
 
             details.push({
                 line: getLineNumber(content, index + 1), // +1 to point to content inside quote

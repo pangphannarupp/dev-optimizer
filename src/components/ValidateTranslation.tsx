@@ -24,6 +24,8 @@ export function ValidateTranslation() {
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [results, setResults] = useState<FileValidationResult[]>([]);
     const [ignoredPaths, setIgnoredPaths] = useState<Set<string>>(new Set());
+    const [ignoredExtensions, setIgnoredExtensions] = useState<string[]>([]);
+    const [extensionInput, setExtensionInput] = useState('');
     const [hideIgnored, setHideIgnored] = useState(false);
     const [showInvalidOnly, setShowInvalidOnly] = useState(true);
     const [currentFile, setCurrentFile] = useState<File | null>(null);
@@ -101,7 +103,7 @@ export function ValidateTranslation() {
         return filtered;
     }, [results, ignoredPaths, hideIgnored, showInvalidOnly, searchQuery]);
 
-    const processFile = async (file: File, keepIgnored = false) => {
+    const processFile = useCallback(async (file: File, keepIgnored = false) => {
         setIsAnalyzing(true);
         setResults([]);
         if (!keepIgnored) {
@@ -122,6 +124,11 @@ export function ValidateTranslation() {
 
                 // Ignore directories, hidden files, and system folders
                 if (zipEntry.dir) return false;
+
+                // Check for user-ignored extensions
+                if (ignoredExtensions.some(ext => fileName.toLowerCase().endsWith(ext))) {
+                    return false;
+                }
 
                 if (relativePath.includes('__MACOSX') ||
                     relativePath.includes('node_modules') ||
@@ -184,13 +191,13 @@ export function ValidateTranslation() {
             setProgress(0);
             setProcessingFile('');
         }
-    };
+    }, [ignoredExtensions]);
 
     const handleReAnalyze = useCallback(() => {
         if (currentFile) {
             processFile(currentFile, true);
         }
-    }, [currentFile]);
+    }, [currentFile, processFile]);
 
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -203,7 +210,7 @@ export function ValidateTranslation() {
         if (zipFile) {
             processFile(zipFile);
         }
-    }, []);
+    }, [processFile]);
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -469,6 +476,47 @@ export function ValidateTranslation() {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     className="pl-9 pr-3 py-1.5 text-sm bg-slate-50 dark:bg-gray-900 border-none rounded-lg w-full lg:w-56 focus:ring-2 focus:ring-blue-500/50 transition-all placeholder:text-slate-400 text-slate-700 dark:text-gray-200"
+                                />
+                            </div>
+
+                            <div
+                                className="flex flex-wrap items-center gap-1.5 px-3 py-1.5 bg-slate-50 dark:bg-gray-900 border border-transparent focus-within:ring-2 focus-within:ring-blue-500/50 rounded-lg w-full sm:max-w-xs transition-all cursor-text min-h-[36px]"
+                                onClick={() => document.getElementById('extension-input')?.focus()}
+                            >
+                                <EyeOff size={14} className="text-gray-400 mr-1" />
+                                {ignoredExtensions.map((ext, i) => (
+                                    <span key={i} className="flex items-center gap-1 text-xs font-medium px-2 py-0.5 bg-white dark:bg-gray-800 text-slate-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-md">
+                                        {ext}
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setIgnoredExtensions(prev => prev.filter((_, idx) => idx !== i));
+                                            }}
+                                            className="text-slate-400 hover:text-red-500 transition-colors"
+                                        >
+                                            <X size={12} />
+                                        </button>
+                                    </span>
+                                ))}
+                                <input
+                                    id="extension-input"
+                                    type="text"
+                                    placeholder={ignoredExtensions.length === 0 ? "Ignore ext (.spec.ts)" : ""}
+                                    value={extensionInput}
+                                    onChange={(e) => setExtensionInput(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ',') {
+                                            e.preventDefault();
+                                            const val = extensionInput.trim().toLowerCase();
+                                            if (val && !ignoredExtensions.includes(val)) {
+                                                setIgnoredExtensions([...ignoredExtensions, val]);
+                                                setExtensionInput('');
+                                            }
+                                        } else if (e.key === 'Backspace' && !extensionInput && ignoredExtensions.length > 0) {
+                                            setIgnoredExtensions(ignoredExtensions.slice(0, -1));
+                                        }
+                                    }}
+                                    className="bg-transparent border-none outline-none text-sm text-slate-700 dark:text-gray-200 placeholder:text-slate-400 min-w-[80px] flex-1 p-0"
                                 />
                             </div>
 
