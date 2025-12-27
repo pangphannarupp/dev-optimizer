@@ -6,6 +6,20 @@ export interface ReleaseNote {
 
 export const releaseNotes: ReleaseNote[] = [
     {
+        version: '1.1.14',
+        date: '2025-12-27',
+        changes: [
+            'Add new feature "Project Translation Verifier"'
+        ]
+    },
+    {
+        version: '1.1.13',
+        date: '2025-12-26',
+        changes: [
+            'Improve performance',
+        ]
+    },
+    {
         version: '1.1.12',
         date: '2025-12-24',
         changes: [

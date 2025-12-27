@@ -15,10 +15,20 @@ const getLineNumber = (content: string, index: number): number => {
 
 export // Helper to check if string contains potential hardcoded text
     const isPotentialHardcodedString = (str: string): boolean => {
+        const trimmed = str.trim();
         // Filter out short strings, keys (no spaces), imports, urls, data uris
-        if (!str || str.length <= 3 || !str.includes(' ') || str.startsWith('http') || str.startsWith('data:') || str.startsWith('file:') || str.startsWith('javascript:') || str === 'use strict' || str === "'use strict'") {
+        if (!str || str.length <= 1 || (str.length <= 3 && !/[a-zA-Z]/.test(str))) {
             return false;
         }
+
+        if (trimmed.startsWith('http') || trimmed.startsWith('https') || trimmed.startsWith('data:') || trimmed.startsWith('file:') || trimmed.startsWith('javascript:')) {
+            return false;
+        }
+
+        if (str === 'use strict' || str === "'use strict'") return false;
+
+        // Single word heuristic (often keys) - if it has no spaces, and is not a long sentence
+        if (!str.includes(' ') && str.length < 50) return false;
 
         // Ignore strings with underscores (usually technical keys or class names like 'line_top')
         if (str.includes('_')) return false;
@@ -294,6 +304,10 @@ export const validateContent = (content: string, type: 'vue' | 'ts' | 'js' | 'ts
 
             // Ignore HTTP Headers
             if (/(\.addHeader\(|\.header\(|\.setRequestProperty\()/.test(lineContent)) continue;
+
+            // Ignore string methods (startsWith, endsWith, contains, equals, matches, replace, split) using hardcoded technical strings
+            // e.g. url.startsWith("http") -> "http" is technical
+            if (/\.(startsWith|endsWith|contains|equals|indexOf|lastIndexOf|matches|replace|split)\(/.test(lineContent)) continue;
 
             // Ignore Annotations (lines starting with @, or string inside @Annotation(...))
             if (lineContent.trim().startsWith('@')) continue;

@@ -2,7 +2,7 @@
 import { saveAs } from 'file-saver';
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import JSZip from 'jszip';
-import { Upload, FileText, CheckCircle, AlertTriangle, AlertCircle, RefreshCw, Layers, Eye, EyeOff, Download, X, Code, List, FileSpreadsheet, Search } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertTriangle, AlertCircle, RefreshCw, Layers, Eye, EyeOff, Download, X, Code, List, FileSpreadsheet, Search, Copy, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { clsx } from 'clsx';
 import * as XLSX from 'xlsx';
@@ -35,6 +35,7 @@ export function ValidateTranslation() {
     const [progress, setProgress] = useState(0);
     const [processingFile, setProcessingFile] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState('');
+    const [copiedText, setCopiedText] = useState<string | null>(null);
 
     // TEMP: Mock data for scroll testing
     // useEffect(() => {
@@ -358,6 +359,12 @@ export function ValidateTranslation() {
     const handleJumpToCode = (line: number) => {
         setViewMode('code');
         setHighlightedLine(line);
+    };
+
+    const handleCopy = (text: string) => {
+        navigator.clipboard.writeText(text);
+        setCopiedText(text);
+        setTimeout(() => setCopiedText(null), 2000);
     };
 
     return (
@@ -812,8 +819,20 @@ export function ValidateTranslation() {
                                                                     </span>
                                                                 </td>
                                                                 <td className="p-4">
-                                                                    <div className="font-mono text-sm break-all text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/10 p-2 rounded border border-red-100 dark:border-red-900/20">
-                                                                        {detail.text}
+                                                                    <div className="flex items-center gap-2 group/text">
+                                                                        <div className="font-mono text-sm break-all text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/10 p-2 rounded border border-red-100 dark:border-red-900/20 flex-1">
+                                                                            {detail.text}
+                                                                        </div>
+                                                                        <button
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                handleCopy(detail.text);
+                                                                            }}
+                                                                            className="p-1.5 text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-all opacity-0 group-hover/text:opacity-100 focus:opacity-100"
+                                                                            title={t('common.copy')}
+                                                                        >
+                                                                            {copiedText === detail.text ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
+                                                                        </button>
                                                                     </div>
                                                                 </td>
                                                                 <td className="p-4 text-slate-600 dark:text-gray-300 text-sm">

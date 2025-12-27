@@ -5,11 +5,11 @@ export const BackgroundWave: React.FC = () => {
     const config = {
         width: 1440,
         height: 1400,
-        step: 5, // Resolution (higher = smoother)
+        step: 3, // Resolution (higher = smoother)
         layers: [
-            { count: 5, spacing: 12, amplitude: 15, period: 4, speed: 0.002, color: '#c084fc', opacity: 0.2, phaseBase: 0 },   // Back
-            { count: 5, spacing: 18, amplitude: 25, period: 4, speed: 0.003, color: '#22d3ee', opacity: 0.5, phaseBase: 1 },   // Mid
-            { count: 5, spacing: 24, amplitude: 40, period: 4, speed: 0.005, color: '#fb923c', opacity: 0.8, phaseBase: 2.5 }  // Front
+            // { count: 3, spacing: 12, amplitude: 15, period: 4, speed: 0.002, color: '#c084fc', opacity: 0.2, phaseBase: 0 },   // Back
+            { count: 3, spacing: 18, amplitude: 25, period: 4, speed: 0.003, color: '#22d3ee', opacity: 0.5, phaseBase: 1 },   // Mid
+            { count: 3, spacing: 24, amplitude: 40, period: 4, speed: 0.005, color: '#fb923c', opacity: 0.8, phaseBase: 2.5 }  // Front
         ]
     };
 

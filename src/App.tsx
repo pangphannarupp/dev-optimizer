@@ -59,6 +59,7 @@ const ProgrammingTutorial = lazy(() => import('./components/ProgrammingTutorial'
 const ScreenAudioMaker = lazy(() => import('./components/ScreenAudioMaker').then(module => ({ default: module.ScreenAudioMaker })));
 const CvGenerator = lazy(() => import('./components/CvGenerator').then(module => ({ default: module.CvGenerator })));
 const YoutubeDownloader = lazy(() => import('./components/YoutubeDownloader').then(module => ({ default: module.YoutubeDownloader })));
+const ProjectTranslationVerifier = lazy(() => import('./components/ProjectTranslationVerifier').then(module => ({ default: module.ProjectTranslationVerifier })));
 
 
 
@@ -717,6 +718,18 @@ function AppContent() {
                     className="h-full overflow-y-auto p-6"
                   >
                     <YoutubeDownloader />
+                  </motion.main>
+                } />
+
+                <Route path="/project-translation-verifier" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <ProjectTranslationVerifier />
                   </motion.main>
                 } />
 
