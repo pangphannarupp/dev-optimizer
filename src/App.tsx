@@ -60,6 +60,7 @@ const ScreenAudioMaker = lazy(() => import('./components/ScreenAudioMaker').then
 const CvGenerator = lazy(() => import('./components/CvGenerator').then(module => ({ default: module.CvGenerator })));
 const YoutubeDownloader = lazy(() => import('./components/YoutubeDownloader').then(module => ({ default: module.YoutubeDownloader })));
 const ProjectTranslationVerifier = lazy(() => import('./components/ProjectTranslationVerifier').then(module => ({ default: module.ProjectTranslationVerifier })));
+const WatermarkRemover = lazy(() => import('./components/WatermarkRemover').then(module => ({ default: module.WatermarkRemover })));
 
 
 
@@ -730,6 +731,18 @@ function AppContent() {
                     className="h-full overflow-y-auto"
                   >
                     <ProjectTranslationVerifier />
+                  </motion.main>
+                } />
+
+                <Route path="/watermark-remover" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <WatermarkRemover />
                   </motion.main>
                 } />
 

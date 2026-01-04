@@ -38,7 +38,24 @@
         "settings": "Settings",
         "validateTranslation": "Validate Translation",
         "sourceCompare": "Source Comparison",
-        "storeValidatorTab": "Store Validator"
+        "storeValidatorTab": "Store Validator",
+        "watermarkRemoverTab": "Watermark Remover"
+    },
+    "watermarkRemover": {
+        "title": "Watermark Remover AI",
+        "description": "Remove watermarks from images using AI",
+        "upload": "Upload Image",
+        "process": "Remove Watermark",
+        "processing": "Removing Watermark...",
+        "download": "Download Clean Image",
+        "original": "Original",
+        "processed": "Processed",
+        "compare": "Compare",
+        "apiKeyParams": "API Key (Optional)",
+        "apiKeyPlaceholder": "Enter API Key if you have one",
+        "alert": {
+            "processError": "Failed to remove watermark. Please try again."
+        }
     },
     "settings": {
         "title": "Settings",

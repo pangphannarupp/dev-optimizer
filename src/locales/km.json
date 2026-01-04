@@ -38,7 +38,24 @@
         "settings": "ការកំណត់",
         "validateTranslation": "ផ្ទៀងផ្ទាត់ការបកប្រែ",
         "sourceCompare": "ប្រៀបធៀបប្រភព",
-        "storeValidatorTab": "កម្មវិធីផ្ទៀងផ្ទាត់ Store"
+        "storeValidatorTab": "កម្មវិធីផ្ទៀងផ្ទាត់ Store",
+        "watermarkRemoverTab": "អ្នកលុប Watermark"
+    },
+    "watermarkRemover": {
+        "title": "Watermark Remover AI",
+        "description": "លុប Watermark ចេញពីរូបភាពដោយប្រើ AI",
+        "upload": "ផ្ទុកឡើងរូបភាព",
+        "process": "លុប Watermark",
+        "processing": "កំពុងលុប Watermark...",
+        "download": "ទាញយក",
+        "original": "ដើម",
+        "processed": "លទ្ធផល",
+        "compare": "ប្រៀបធៀប",
+        "apiKeyParams": "API Key (ស្រេចចិត្ត)",
+        "apiKeyPlaceholder": "បញ្ចូល API Key ប្រសិនបើមាន",
+        "alert": {
+            "processError": "បរាជ័យក្នុងការលុប Watermark។ សូមព្យាយាមម្តងទៀត។"
+        }
     },
     "settings": {
         "title": "ការកំណត់",

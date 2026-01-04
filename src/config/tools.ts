@@ -11,7 +11,7 @@ export type ToolId =
     | 'density-converter' | 'regex-tester' | 'css-generator' | 'screenshot-framer'
     | 'totp-generator' | 'deeplink-generator' | 'qr' | 'svg-drawable' | 'base64'
     | 'json' | 'json-to-code' | 'csv-json' | 'validate-translation' | 'jwt' | 'encryption' | 'sha'
-    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground' | 'dsa-tutorial' | 'programming-tutorial' | 'screen-audio-maker' | 'cv-generator' | 'youtube-downloader' | 'project-translation-verifier';
+    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground' | 'dsa-tutorial' | 'programming-tutorial' | 'screen-audio-maker' | 'cv-generator' | 'youtube-downloader' | 'project-translation-verifier' | 'watermark-remover';
 
 export interface Tool {
     id: ToolId;
@@ -63,6 +63,7 @@ export const useTools = () => {
         { id: 'cv-generator', icon: FileText, label: 'CV Generator', description: 'Create professionals resumes and export to PDF/Word' },
         { id: 'youtube-downloader', icon: Download, label: 'YouTube Downloader', description: 'Download videos and playlists' },
         { id: 'project-translation-verifier', icon: CheckCircle, label: t('projectTranslationVerifier.title', 'Project Translation Verifier'), description: t('projectTranslationVerifier.description', 'Verify translation keys in project') },
+        { id: 'watermark-remover', icon: Sparkles, label: t('watermarkRemover.title', 'Watermark Remover AI'), description: t('watermarkRemover.description', 'Remove watermarks from images using AI') },
     ];
 
     return tools;

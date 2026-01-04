@@ -28,5 +28,9 @@ test-results
 *.sln
 *.sw?
 
-release
+
+# Secrets
+credentials.json
+token.json
+secrets/*.json
 
