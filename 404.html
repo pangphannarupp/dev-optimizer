@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/dev-optimizer/assets/icon-BnkVLD8C.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dev Optimizer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            overflow: hidden;
+            -webkit-user-select: none;
+               -moz-user-select: none;
+                    user-select: none;
+        }
+
+        #root {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #root:has(> .flex) {
+            /* Once React mounts and adds standard layout classes, reset these */
+            height: auto;
+            width: auto;
+            display: block;
+        }
+
+        .logo-container {
+            position: relative;
+            width: 128px;
+            height: 128px;
+            margin-bottom: 32px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            -o-object-fit: contain;
+               object-fit: contain;
+            filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        h1.splash-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            opacity: 0;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+            letter-spacing: 0.5px;
+        }
+
+        .splash-copyright {
+            position: absolute;
+            bottom: 32px;
+            font-size: 13px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.8s forwards;
+            color: rgba(156, 163, 175, 0.8);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));
+            }
+
+            50% {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.8));
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+    <script>
+        (function () {
+            try {
+                const saved = localStorage.getItem('theme');
+                const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                const theme = saved === 'system' || !saved ? system : saved;
+                document.documentElement.classList.add(theme);
+            } catch (e) {
+                console.error('Failed to set initial theme', e);
+            }
+        })();
+    </script>
+  <script type="module" crossorigin src="/dev-optimizer/assets/index-D3BnbEK0.js"></script>
+  <link rel="modulepreload" crossorigin href="/dev-optimizer/assets/react-vendor-BGp5FbCG.js">
+  <link rel="modulepreload" crossorigin href="/dev-optimizer/assets/ui-vendor-DEvE63cZ.js">
+  <link rel="modulepreload" crossorigin href="/dev-optimizer/assets/framer-vendor-DEiCTn3G.js">
+  <link rel="modulepreload" crossorigin href="/dev-optimizer/assets/utils-vendor-CJFcDo9C.js">
+  <link rel="stylesheet" crossorigin href="/dev-optimizer/assets/index-Bd9yN5dl.css">
+</head>
+
+<body>
+    <div id="root">
+        <div class="logo-container">
+            <img src="/dev-optimizer/icon.png" alt="Dev Optimizer Logo" class="logo-img">
+        </div>
+        <h1 class="splash-title">Dev Optimizer</h1>
+        <div class="splash-copyright">Copyright © 2025 by Pang Phanna</div>
+    </div>
+</body>
+
+</html>
