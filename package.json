@@ -19,7 +19,7 @@
     "upload:drive": "node scripts/upload-drive.cjs",
     "release:all": "npm run build:all && npm run upload:drive && npm run deploy",
     "predeploy": "npm run build:web",
-    "deploy:gh": "npm run build:web && gh-pages -d dist"
+    "deploy:gh": "npm run build:web && cp dist/index.html dist/404.html && gh-pages -d dist"
   },
   "homepage": "https://pangphannarupp.github.io/dev-optimizer",
   "build": {

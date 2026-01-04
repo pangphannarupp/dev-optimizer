@@ -1,5 +1,5 @@
 import { useState, useCallback, lazy, Suspense, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { v4 as uuidv4 } from 'uuid';
 import { ProcessedImage } from './components/ImageItem'; // Keep type import
@@ -758,7 +758,7 @@ function AppContent() {
                   </motion.main>
                 } />
 
-                <Route path="*" element={<Navigate to="/" replace />} />
+                <Route path="*" element={<div className="p-10 text-center">404 - Page Not Found (Debug Mode)</div>} />
               </Routes>
             </AnimatePresence>
           </Suspense>
@@ -776,7 +776,7 @@ function App() {
   return (
     <ThemeProvider>
       <TutorialProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/dev-optimizer">
           <AppContent />
         </BrowserRouter>
       </TutorialProvider>
