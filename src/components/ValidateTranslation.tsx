@@ -679,31 +679,63 @@ export function ValidateTranslation() {
     }, [translationPattern, androidTranslationPattern, androidCodePattern, iosTranslationPattern]);
 
     const handleDownloadFixedSources = useCallback(async () => {
+        setIsAnalyzing(true);
+        setProcessingFile("Initializing...");
+
+        // Allow UI to update
+        await new Promise(resolve => setTimeout(resolve, 100));
+
         const zip = new JSZip();
         let hasFixedFiles = false;
 
         // 1. Generate Global Translation Data (to ensure keys are consistent)
         const translationData = collectInvalidTranslations();
 
-        results.forEach(r => {
-            // Updated filtering to use isFileIgnored
-            if (r.isValid || isFileIgnored(r.path) || !r.details || !r.content) return;
+        // Filter files to process
+        const filesToProcess = results.filter(r => !r.isValid && !isFileIgnored(r.path) && r.details && r.content);
+        const totalFiles = filesToProcess.length;
+        const CHUNK_SIZE = 10;
 
-            const screenName = getScreenName(r.path);
-            const fixedContent = applyTranslationsToFile(r.content, r.details, screenName, r.type as string, translationData);
+        for (let i = 0; i < totalFiles; i += CHUNK_SIZE) {
+            const chunk = filesToProcess.slice(i, i + CHUNK_SIZE);
 
-            if (fixedContent !== r.content) {
-                zip.file(r.path, fixedContent);
-                hasFixedFiles = true;
-            }
-        });
+            // Process chunk
+            chunk.forEach(r => {
+                const screenName = getScreenName(r.path);
+                const fixedContent = applyTranslationsToFile(r.content!, r.details!, screenName, r.type as string, translationData);
+
+                if (fixedContent !== r.content) {
+                    zip.file(r.path, fixedContent);
+                    hasFixedFiles = true;
+                }
+            });
+
+            // Update progress
+            const processedCount = Math.min(i + CHUNK_SIZE, totalFiles);
+            const progressPercent = Math.round((processedCount / totalFiles) * 100);
+            setProgress(progressPercent);
+            setProcessingFile(`Processing ${processedCount}/${totalFiles} files...`);
+
+            // Yield to main thread
+            await new Promise(resolve => setTimeout(resolve, 0));
+        }
 
         if (hasFixedFiles) {
-            const content = await zip.generateAsync({ type: 'blob' });
+            setProcessingFile("Compressing...");
+            // Yield again before heavy compression
+            await new Promise(resolve => setTimeout(resolve, 50));
+
+            const content = await zip.generateAsync({ type: 'blob' }, (metadata) => {
+                setProcessingFile(`Compressing ${metadata.percent.toFixed(0)}%...`);
+            });
             saveAs(content, 'fixed_sources.zip');
         } else {
             alert('No files were modified.');
         }
+
+        setIsAnalyzing(false);
+        setProcessingFile("");
+        setProgress(0);
     }, [results, isFileIgnored, applyTranslationsToFile, collectInvalidTranslations]);
 
     return (
@@ -1395,6 +1427,47 @@ export function ValidateTranslation() {
                     </div>
                 )
             }
+            {/* Progress Overlay for Fixed Source Download */}
+            {isAnalyzing && results.length > 0 && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl flex flex-col items-center max-w-sm w-full mx-4">
+                        <div className="relative w-24 h-24 mb-6">
+                            <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                                <circle
+                                    className="text-gray-100 dark:text-gray-700 stroke-current"
+                                    strokeWidth="8"
+                                    cx="50"
+                                    cy="50"
+                                    r="40"
+                                    fill="transparent"
+                                ></circle>
+                                <circle
+                                    className="text-blue-500 progress-ring__circle stroke-current transition-all duration-300 ease-out"
+                                    strokeWidth="8"
+                                    strokeLinecap="round"
+                                    cx="50"
+                                    cy="50"
+                                    r="40"
+                                    fill="transparent"
+                                    strokeDasharray="251.2"
+                                    strokeDashoffset={251.2 - (251.2 * progress) / 100}
+                                ></circle>
+                            </svg>
+                            <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+                                <span className="text-xl font-bold text-slate-700 dark:text-white">
+                                    {Math.round(progress)}%
+                                </span>
+                            </div>
+                        </div>
+                        {/* <h3 className="text-lg font-semibold text-slate-800 dark:text-white mb-2">
+                            {progress < 100 ? 'Processing Files...' : 'Compressing...'}
+                        </h3> */}
+                        <p className="text-sm text-slate-500 dark:text-gray-400 text-center animate-pulse">
+                            {processingFile}
+                        </p>
+                    </div>
+                </div>
+            )}
         </div >
     );
 }
