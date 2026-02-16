@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import {
     Image as ImageIcon, Layers, Sparkles, QrCode, FileCode, Code, Key, Lock, Hash,
     FileUp, Split, Film, Link, ScanLine, Palette, Zap, Clock, Monitor,
-    Smartphone, KeyRound, CheckCircle, Database, Book, Binary, Terminal, Mic, FileText, Download
+    Smartphone, KeyRound, CheckCircle, Database, Book, Binary, Terminal, Mic, FileText, Download, FileSpreadsheet, Bot
 } from 'lucide-react';
 
 export type ToolId =
@@ -11,7 +11,7 @@ export type ToolId =
     | 'density-converter' | 'regex-tester' | 'css-generator' | 'screenshot-framer'
     | 'totp-generator' | 'deeplink-generator' | 'qr' | 'svg-drawable' | 'base64'
     | 'json' | 'json-to-code' | 'csv-json' | 'validate-translation' | 'jwt' | 'encryption' | 'sha'
-    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground' | 'dsa-tutorial' | 'programming-tutorial' | 'screen-audio-maker' | 'cv-generator' | 'youtube-downloader' | 'project-translation-verifier' | 'watermark-remover';
+    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground' | 'dsa-tutorial' | 'programming-tutorial' | 'screen-audio-maker' | 'cv-generator' | 'youtube-downloader' | 'project-translation-verifier' | 'watermark-remover' | 'error-code-generator' | 'test-automation';
 
 export interface Tool {
     id: ToolId;
@@ -64,6 +64,8 @@ export const useTools = () => {
         { id: 'youtube-downloader', icon: Download, label: 'YouTube Downloader', description: 'Download videos and playlists' },
         { id: 'project-translation-verifier', icon: CheckCircle, label: t('projectTranslationVerifier.title', 'Project Translation Verifier'), description: t('projectTranslationVerifier.description', 'Verify translation keys in project') },
         { id: 'watermark-remover', icon: Sparkles, label: t('watermarkRemover.title', 'Watermark Remover AI'), description: t('watermarkRemover.description', 'Remove watermarks from images using AI') },
+        { id: 'error-code-generator', icon: FileSpreadsheet, label: t('errorCodeGenerator.title', 'Error Code Generator'), description: t('errorCodeGenerator.description', 'Generate Android/iOS error codes from Excel') },
+        { id: 'test-automation', icon: Bot, label: t('testAutomation.title', 'Test Automation'), description: t('testAutomation.description', 'Automate Web, Mobile, and Desktop testing') },
     ];
 
     return tools;

@@ -2,7 +2,7 @@
 import { saveAs } from 'file-saver';
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import JSZip from 'jszip';
-import { Upload, FileText, CheckCircle, AlertTriangle, AlertCircle, RefreshCw, Layers, Eye, EyeOff, Download, X, Code, List, FileSpreadsheet, Search, Copy, Check } from 'lucide-react';
+import { Upload, FileText, CheckCircle, AlertTriangle, AlertCircle, RefreshCw, Layers, Eye, EyeOff, Download, X, Code, List, FileSpreadsheet, Search, Copy, Check, Settings } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { clsx } from 'clsx';
 import * as XLSX from 'xlsx';
@@ -36,6 +36,17 @@ export function ValidateTranslation() {
     const [processingFile, setProcessingFile] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState('');
     const [copiedText, setCopiedText] = useState<string | null>(null);
+
+    // Settings for source code fix
+    const [translationPattern, setTranslationPattern] = useState("t('{key}')");
+    const [androidTranslationPattern, setAndroidTranslationPattern] = useState("@string/{key}");
+    const [androidCodePattern, setAndroidCodePattern] = useState("getString(R.string.{key})");
+    const [iosTranslationPattern, setIosTranslationPattern] = useState('NSLocalizedString("{key}", comment: "")');
+    const [showFixSettings, setShowFixSettings] = useState(false);
+
+    // ... existing code ...
+
+
 
     // TEMP: Mock data for scroll testing
     // useEffect(() => {
@@ -81,18 +92,24 @@ export function ValidateTranslation() {
         setCurrentFile(null);
     }, []);
 
+    const isFileIgnored = useCallback((path: string) => {
+        if (ignoredPaths.has(path)) return true;
+        const fileName = path.split('/').pop()?.toLowerCase() || '';
+        return ignoredExtensions.some(ext => fileName.endsWith(ext));
+    }, [ignoredPaths, ignoredExtensions]);
+
     const stats = useMemo(() => {
-        const activeResults = results.filter(r => !ignoredPaths.has(r.path));
+        const activeResults = results.filter(r => !isFileIgnored(r.path));
         const total = activeResults.length;
         const valid = activeResults.filter(r => r.isValid).length;
         const invalid = total - valid;
         return { total, valid, invalid };
-    }, [results, ignoredPaths]);
+    }, [results, isFileIgnored]);
 
     const displayedResults = useMemo(() => {
         let filtered = results;
         if (hideIgnored) {
-            filtered = filtered.filter(r => !ignoredPaths.has(r.path));
+            filtered = filtered.filter(r => !isFileIgnored(r.path));
         }
         if (showInvalidOnly) {
             filtered = filtered.filter(r => !r.isValid);
@@ -102,7 +119,7 @@ export function ValidateTranslation() {
             filtered = filtered.filter(r => r.path.toLowerCase().includes(query));
         }
         return filtered;
-    }, [results, ignoredPaths, hideIgnored, showInvalidOnly, searchQuery]);
+    }, [results, isFileIgnored, hideIgnored, showInvalidOnly, searchQuery]);
 
     const processFile = useCallback(async (file: File, keepIgnored = false) => {
         setIsAnalyzing(true);
@@ -134,6 +151,12 @@ export function ValidateTranslation() {
                 if (relativePath.includes('__MACOSX') ||
                     relativePath.includes('node_modules') ||
                     relativePath.includes('.git') ||
+                    relativePath.includes('/build/') ||
+                    relativePath.startsWith('build/') ||
+                    relativePath.includes('/Pods/') ||
+                    relativePath.startsWith('Pods/') ||
+                    relativePath.includes('/test/') ||
+                    relativePath.startsWith('test/') ||
                     fileName.startsWith('.')) {
                     return false;
                 }
@@ -236,9 +259,9 @@ export function ValidateTranslation() {
         const rows: string[] = [];
 
         displayedResults
-            .filter(r => !ignoredPaths.has(r.path))
+            .filter(r => !isFileIgnored(r.path))
             .forEach(r => {
-                const isIgnored = ignoredPaths.has(r.path); // Should always be false now, but harmless
+                const isIgnored = isFileIgnored(r.path); // Should always be false now, but harmless
                 const status = r.isValid ? t('validation.translated') : t('validation.untranslated');
                 const ignoredStr = isIgnored ? t('validation.statusLabel.ignored') : t('common.no');
 
@@ -271,7 +294,7 @@ export function ValidateTranslation() {
         const csvContent = [headers.join(','), ...rows].join('\n');
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
         saveAs(blob, 'validation_report.csv');
-    }, [displayedResults, ignoredPaths]);
+    }, [displayedResults, isFileIgnored]);
 
     const handleExportExcel = useCallback(() => {
         const headers = [
@@ -287,9 +310,9 @@ export function ValidateTranslation() {
         const rows: any[][] = [headers];
 
         displayedResults
-            .filter(r => !ignoredPaths.has(r.path))
+            .filter(r => !isFileIgnored(r.path))
             .forEach(r => {
-                const isIgnored = ignoredPaths.has(r.path);
+                const isIgnored = isFileIgnored(r.path);
                 const status = r.isValid ? t('validation.translated') : t('validation.untranslated');
                 const ignoredStr = isIgnored ? t('validation.statusLabel.ignored') : t('common.no');
                 const fileName = r.path.split('/').pop() || r.path;
@@ -366,6 +389,322 @@ export function ValidateTranslation() {
         setCopiedText(text);
         setTimeout(() => setCopiedText(null), 2000);
     };
+
+    // Helper to generate a CONSTANT_CASE key from text
+    // Smart key generation: Use first 4 words. If collision, add more words. If no more words, add suffix.
+    const generateSmartKey = (text: string, existingKeys: Set<string>): string => {
+        const cleanText = text.replace(/['"]/g, '').replace(/[^\w\s]/g, '');
+        const words = cleanText.split(/\s+/).filter(w => w.length > 0);
+
+        if (words.length === 0) {
+            // Fallback for purely symbolic strings or empty ones
+            let i = 1;
+            while (existingKeys.has(`UNKNOWN_${i}`)) i++;
+            return `UNKNOWN_${i}`;
+        }
+
+        // Start with max 4 words, or limit to available words if fewer
+        let currentWordCount = Math.min(4, words.length);
+        let key = '';
+
+        while (true) {
+            const slice = words.slice(0, currentWordCount);
+            key = toConstantCase(slice.join(' ')); // Ensure reuse of clean key formatting
+
+            // If key is unique, return it
+            if (!existingKeys.has(key)) {
+                return key;
+            }
+
+            // If collision, try to add another word if available
+            if (currentWordCount < words.length) {
+                currentWordCount++;
+            } else {
+                // No more words to add, append numeric suffix
+                let i = 1;
+                while (existingKeys.has(`${key}_${i}`)) i++;
+                return `${key}_${i}`;
+            }
+        }
+    };
+
+    const toConstantCase = (str: string): string => {
+        return str
+            .replace(/([a-z])([A-Z])/g, '$1_$2') // camelCase to snake_case
+            .replace(/[\s\W-]+/g, '_') // replace spaces and non-word chars with underscore
+            .toUpperCase()
+            .replace(/^_+|_+$/g, ''); // trim leading/trailing underscores
+    };
+
+    // Helper to extract screen name from path
+    const getScreenName = (path: string): string => {
+        const fileName = path.split('/').pop() || path;
+        const name = fileName.split('.')[0]; // Remove extension
+        return toConstantCase(name);
+    };
+
+    // Helper to determine type from message and context
+    const getTypeFromDetail = (detail: ValidationError): string => {
+        // 1. Check Context first (Tag name or Attribute name)
+        if (detail.context) {
+            const ctx = detail.context.toLowerCase();
+
+            // Buttons
+            if (/button|touchable|pressable/.test(ctx)) return 'BUTTON';
+
+            // Titles / Headers
+            if (/h[1-6]|header|title|heading/.test(ctx) && !/subtitle|description/.test(ctx)) return 'TITLE';
+
+            // Labels / Placeholders
+            if (/label|placeholder|hint|accessibility|testid/.test(ctx)) return 'LABEL';
+
+            // Specific Attributes
+            if (ctx === 'text' || ctx === 'value') return 'TEXT';
+            if (ctx === 'title' || ctx === 'headerTitle') return 'TITLE';
+        }
+
+        // 2. Fallback to Message (Legacy logic)
+        const message = detail.message;
+        const match = message.match(/attribute \[(.*?)\]/);
+        if (match && match[1]) {
+            // Map attribute names to types
+            const attr = match[1].toLowerCase();
+            if (attr === 'placeholder' || attr === 'label' || attr === 'hint') return 'LABEL';
+            if (attr === 'title') return 'TITLE';
+            return 'TEXT'; // Default attribute text
+        }
+
+        if (message.toLowerCase().includes('button')) return 'BUTTON'; // If message says "Button text"
+        if (message.toLowerCase().includes('title')) return 'TITLE';
+        if (message.includes('attribute')) return 'LABEL'; // Generic attribute fallback
+
+        return 'TEXT';
+    };
+
+    // Data structure: Screen -> Type -> Key -> Value
+    type TranslationData = Record<string, Record<string, Record<string, string>>>;
+
+    // Collect all unique untranslated strings structured by Screen and Type
+    const collectInvalidTranslations = useCallback((): TranslationData => {
+        const data: TranslationData = {};
+        // Keep track of used keys per screen.type to avoid collisions
+        const usedKeysPerScope: Record<string, Set<string>> = {};
+
+        results.filter(r => !isFileIgnored(r.path) && !r.isValid)
+            .forEach(r => {
+                const screenName = getScreenName(r.path);
+
+                r.details?.forEach(d => {
+                    // Filter out non-text errors
+                    if (!d.text || !d.text.trim()) return;
+
+                    const type = getTypeFromDetail(d);
+                    const scopeId = `${screenName}.${type}`;
+
+                    if (!data[screenName]) data[screenName] = {};
+                    if (!data[screenName][type]) data[screenName][type] = {};
+                    if (!usedKeysPerScope[scopeId]) usedKeysPerScope[scopeId] = new Set();
+
+                    // Check if this text already has a key in this scope (deduplication by value)
+                    const existingEntry = Object.entries(data[screenName][type]).find(([_, v]) => v === d.text);
+                    let key = existingEntry ? existingEntry[0] : '';
+
+                    if (!key) {
+                        key = generateSmartKey(d.text, usedKeysPerScope[scopeId]);
+                        usedKeysPerScope[scopeId].add(key);
+                        data[screenName][type][key] = d.text;
+                    }
+                });
+            });
+        return data;
+    }, [results, isFileIgnored]);
+
+    const handleExportJSON = useCallback(() => {
+        const data = collectInvalidTranslations();
+        // The data is already in the requested nested format: { SCREEN: { TYPE: { KEY: VALUE } } }
+        const content = JSON.stringify(data, null, 2);
+        const blob = new Blob([content], { type: 'application/json;charset=utf-8' });
+        saveAs(blob, 'missing_translations.json');
+    }, [collectInvalidTranslations]);
+
+    const handleExportAndroid = useCallback(() => {
+        const data = collectInvalidTranslations();
+        let content = '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n';
+
+        Object.entries(data).forEach(([screen, types]) => {
+            Object.entries(types).forEach(([type, keys]) => {
+                Object.entries(keys).forEach(([key, value]) => {
+                    const fullKey = `${screen}.${type}.${key}`;
+                    // Escape special characters for XML
+                    const escapedText = value
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, "\\'");
+                    content += `    <string name="${fullKey}">${escapedText}</string>\n`;
+                });
+            });
+        });
+        content += '</resources>';
+
+        const blob = new Blob([content], { type: 'text/xml;charset=utf-8' });
+        saveAs(blob, 'strings.xml');
+    }, [collectInvalidTranslations]);
+
+    const handleExportIOS = useCallback(() => {
+        const data = collectInvalidTranslations();
+        let content = '';
+
+        Object.entries(data).forEach(([screen, types]) => {
+            Object.entries(types).forEach(([type, keys]) => {
+                Object.entries(keys).forEach(([key, value]) => {
+                    const fullKey = `${screen}.${type}.${key}`;
+                    // Escape double quotes
+                    const escapedText = value.replace(/"/g, '\\"');
+                    content += `"${fullKey}" = "${escapedText}";\n`;
+                });
+            });
+        });
+
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        saveAs(blob, 'Localizable.strings');
+    }, [collectInvalidTranslations]);
+
+    // IMPORTANT: applyTranslationsToFile must use the SAME key generation logic
+    // We should pass the generated data map to it, OR (simpler) generate the map in handleDownloadFixedSources and pass it down.
+
+    // UPDATED applyTranslationsToFile
+    const applyTranslationsToFile = useCallback((content: string, details: ValidationError[], screenName: string, type: string, translationData: TranslationData) => {
+        let modifiedContent = content;
+
+        // Sort details by text length descending to avoid partial replacements
+        const sortedDetails = [...details].sort((a, b) => b.text.length - a.text.length);
+
+        sortedDetails.forEach(d => {
+            if (!d.text || !d.text.trim()) return;
+
+            const keyType = getTypeFromDetail(d);
+
+            // Find the key for this text in translationData
+            // We assume translationData is already populated (which it is, see handleDownloadFixedSources)
+            let keyName = '';
+            if (translationData[screenName] && translationData[screenName][keyType]) {
+                const entry = Object.entries(translationData[screenName][keyType]).find(([_, v]) => v === d.text);
+                if (entry) keyName = entry[0];
+            }
+
+            // Fallback if not found (should not happen if data is sync)
+            if (!keyName) keyName = toConstantCase(d.text);
+
+            const fullKey = `${screenName}.${keyType}.${keyName}`;
+
+            // Escape special regex characters in the text to match
+            const escapedText = d.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+            if (type === 'tsx' || type === 'ts' || type === 'js' || type === 'vue') {
+                // Generate replacement based on user pattern (default: t('{key}'))
+                const replacementExpr = translationPattern.replace('{key}', fullKey);
+
+                // 1. Replace JSX attributes: title="Text" -> title={t('KEY')}
+                modifiedContent = modifiedContent.replace(
+                    new RegExp(`([a-zA-Z0-9_-]+)=["']${escapedText}["']`, 'g'),
+                    `$1={${replacementExpr}}`
+                );
+
+                // 2. Replace JSX text content: >Text< -> >{t('KEY')}<
+                modifiedContent = modifiedContent.replace(
+                    new RegExp(`>${escapedText}<`, 'g'),
+                    `>{${replacementExpr}}<`
+                );
+
+                // 3. Replace text inside curly braces: {"Text"} -> {t('KEY')}
+                modifiedContent = modifiedContent.replace(
+                    new RegExp(`{["']${escapedText}["']}`, 'g'),
+                    `{${replacementExpr}}`
+                );
+            } else if (type === 'android-xml') {
+                // Generate replacement based on user pattern (default: @string/{key})
+                // For Android XML, the pattern usually replaces just the value inside quotes
+                // But users typically just want to change the reference format if needed
+
+                // If the user pattern is just the reference (e.g. @string/{key}), we use it inside quotes
+
+                // logic: replace "Text" with "PATTERN"
+
+                const replacement = androidTranslationPattern.replace('{key}', fullKey);
+
+                // Replace android:text="Text" -> android:text="PATTERN"
+                modifiedContent = modifiedContent.replace(
+                    new RegExp(`([a-zA-Z0-9_:]+)=["']${escapedText}["']`, 'g'),
+                    `$1="${replacement}"`
+                );
+                // Replace >Text< -> >PATTERN<
+                modifiedContent = modifiedContent.replace(
+                    new RegExp(`>${escapedText}<`, 'g'),
+                    `>${replacement}<`
+                );
+            } else if (type === 'kotlin' || type === 'java') {
+                // Generate replacement based on user pattern (default: getString(R.string.{key}))
+                const replacement = androidCodePattern.replace('{key}', fullKey);
+
+                // Replace "Text" -> PATTERN
+                modifiedContent = modifiedContent.replace(
+                    new RegExp(`"${escapedText}"`, 'g'),
+                    replacement
+                );
+            } else if (type === 'swift' || type === 'objc') {
+                // Generate replacement based on user pattern (default: NSLocalizedString("{key}", comment: ""))
+                // This replaces the WHOLE string literal including quotes
+
+                const replacement = iosTranslationPattern.replace('{key}', fullKey);
+
+                // Replace "Text" -> PATTERN
+                modifiedContent = modifiedContent.replace(
+                    new RegExp(`"${escapedText}"`, 'g'),
+                    replacement
+                );
+            } else if (type === 'ios-xib') {
+                // For XIBs, it's usually just the key ID or value
+                // We keep the logic simple here: title="Text" -> title="KEY"
+                // XIBs are complex and usually use ObjectID specific strings, but for now we follow the existing pattern
+                modifiedContent = modifiedContent.replace(
+                    new RegExp(`([a-zA-Z0-9_-]+)=["']${escapedText}["']`, 'g'),
+                    `$1="${fullKey}"`
+                );
+            }
+        });
+
+        return modifiedContent;
+    }, [translationPattern, androidTranslationPattern, androidCodePattern, iosTranslationPattern]);
+
+    const handleDownloadFixedSources = useCallback(async () => {
+        const zip = new JSZip();
+        let hasFixedFiles = false;
+
+        // 1. Generate Global Translation Data (to ensure keys are consistent)
+        const translationData = collectInvalidTranslations();
+
+        results.forEach(r => {
+            // Updated filtering to use isFileIgnored
+            if (r.isValid || isFileIgnored(r.path) || !r.details || !r.content) return;
+
+            const screenName = getScreenName(r.path);
+            const fixedContent = applyTranslationsToFile(r.content, r.details, screenName, r.type as string, translationData);
+
+            if (fixedContent !== r.content) {
+                zip.file(r.path, fixedContent);
+                hasFixedFiles = true;
+            }
+        });
+
+        if (hasFixedFiles) {
+            const content = await zip.generateAsync({ type: 'blob' });
+            saveAs(content, 'fixed_sources.zip');
+        } else {
+            alert('No files were modified.');
+        }
+    }, [results, isFileIgnored, applyTranslationsToFile, collectInvalidTranslations]);
 
     return (
         <div className="h-full flex flex-col p-8 max-w-[1400px] mx-auto w-full relative font-khmer">
@@ -569,6 +908,119 @@ export function ValidateTranslation() {
                                 >
                                     <Download size={18} />
                                 </button>
+
+                                <div className="hidden sm:block w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1"></div>
+
+                                <button
+                                    onClick={handleExportJSON}
+                                    className="px-3 py-1.5 text-xs font-semibold text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded-lg transition-all active:scale-95 whitespace-nowrap"
+                                    title="Export Missing as JSON"
+                                >
+                                    JSON
+                                </button>
+                                <button
+                                    onClick={handleExportAndroid}
+                                    className="px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 rounded-lg transition-all active:scale-95 whitespace-nowrap"
+                                    title="Export Missing as Android XML"
+                                >
+                                    Android
+                                </button>
+                                <button
+                                    onClick={handleExportIOS}
+                                    className="px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 rounded-lg transition-all active:scale-95 whitespace-nowrap"
+                                    title="Export Missing as iOS Strings"
+                                >
+                                    iOS
+                                </button>
+
+                                <div className="relative">
+                                    <button
+                                        onClick={() => setShowFixSettings(!showFixSettings)}
+                                        className={clsx(
+                                            "p-1.5 rounded-lg transition-colors",
+                                            showFixSettings
+                                                ? "bg-slate-200 dark:bg-gray-600 text-slate-800 dark:text-white"
+                                                : "text-slate-500 hover:text-slate-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-slate-100 dark:hover:bg-gray-700"
+                                        )}
+                                        title="Source Fix Settings"
+                                    >
+                                        <Settings size={18} />
+                                    </button>
+                                    {showFixSettings && (
+                                        <>
+                                            <div className="fixed inset-0 z-40" onClick={() => setShowFixSettings(false)}></div>
+                                            <div className="absolute top-full right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-4 z-50 animate-in fade-in zoom-in-95 duration-200">
+                                                <div className="flex flex-col gap-4">
+                                                    <div className="flex flex-col gap-2">
+                                                        <label className="text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wide">
+                                                            JS/TS Pattern
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            value={translationPattern}
+                                                            onChange={(e) => setTranslationPattern(e.target.value)}
+                                                            placeholder="t('{key}')"
+                                                            className="w-full px-3 py-2 bg-slate-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-slate-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 font-mono"
+                                                        />
+                                                    </div>
+
+                                                    <div className="flex flex-col gap-2">
+                                                        <label className="text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wide">
+                                                            Android XML Pattern
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            value={androidTranslationPattern}
+                                                            onChange={(e) => setAndroidTranslationPattern(e.target.value)}
+                                                            placeholder="@string/{key}"
+                                                            className="w-full px-3 py-2 bg-slate-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-slate-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 font-mono"
+                                                        />
+                                                    </div>
+
+                                                    <div className="flex flex-col gap-2">
+                                                        <label className="text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wide">
+                                                            Android Kotlin/Java Pattern
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            value={androidCodePattern}
+                                                            onChange={(e) => setAndroidCodePattern(e.target.value)}
+                                                            placeholder="getString(R.string.{key})"
+                                                            className="w-full px-3 py-2 bg-slate-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-slate-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 font-mono"
+                                                        />
+                                                    </div>
+
+                                                    <div className="flex flex-col gap-2">
+                                                        <label className="text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wide">
+                                                            iOS Swift/ObjC Pattern
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            value={iosTranslationPattern}
+                                                            onChange={(e) => setIosTranslationPattern(e.target.value)}
+                                                            placeholder='NSLocalizedString("{key}", comment: "")'
+                                                            className="w-full px-3 py-2 bg-slate-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm text-slate-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 font-mono"
+                                                        />
+                                                    </div>
+
+                                                    <p className="text-[10px] text-slate-400 dark:text-gray-500 leading-normal border-t border-gray-100 dark:border-gray-700 pt-2 mt-1">
+                                                        Use <code className="bg-slate-100 dark:bg-gray-700 px-1 rounded text-slate-600 dark:text-gray-300 font-mono">{'{key}'}</code> as a placeholder for the translation key.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                                <button
+                                    onClick={handleDownloadFixedSources}
+                                    className="px-3 py-1.5 text-xs font-semibold text-purple-700 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 rounded-lg transition-all active:scale-95 whitespace-nowrap flex items-center gap-1"
+                                    title="Download Fixed Source Files"
+                                >
+                                    <Download size={14} />
+                                    Fix Sources
+                                </button>
+
+                                <div className="hidden sm:block w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1"></div>
 
                                 <button
                                     onClick={handleReAnalyze}

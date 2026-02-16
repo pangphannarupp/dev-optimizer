@@ -1935,5 +1935,21 @@
         "selectFile": "Select a file from the sidebar to view documentation.",
         "files": "Files",
         "generatedOn": "Generated on"
+    },
+    "testAutomation": {
+        "title": "Test Automation",
+        "subtitle": "Automate Web, Mobile, and Desktop testing",
+        "description": "Generate and run Playwright tests for various platforms.",
+        "buttons": {
+            "run": "Run Test",
+            "running": "Running...",
+            "generate": "Generate Script",
+            "copy": "Copy Code"
+        },
+        "modes": {
+            "web": "Web",
+            "mobile": "Mobile",
+            "desktop": "Desktop"
+        }
     }
 }

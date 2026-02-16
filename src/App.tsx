@@ -61,6 +61,8 @@ const CvGenerator = lazy(() => import('./components/CvGenerator').then(module =>
 const YoutubeDownloader = lazy(() => import('./components/YoutubeDownloader').then(module => ({ default: module.YoutubeDownloader })));
 const ProjectTranslationVerifier = lazy(() => import('./components/ProjectTranslationVerifier').then(module => ({ default: module.ProjectTranslationVerifier })));
 const WatermarkRemover = lazy(() => import('./components/WatermarkRemover').then(module => ({ default: module.WatermarkRemover })));
+const ErrorCodeGenerator = lazy(() => import('./components/ErrorCodeGenerator').then(module => ({ default: module.ErrorCodeGenerator })));
+const TestAutomation = lazy(() => import('./components/TestAutomation/TestAutomation'));
 
 
 
@@ -746,6 +748,30 @@ function AppContent() {
                   </motion.main>
                 } />
 
+                <Route path="/error-code-generator" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto p-6"
+                  >
+                    <ErrorCodeGenerator />
+                  </motion.main>
+                } />
+
+                <Route path="/test-automation" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <TestAutomation />
+                  </motion.main>
+                } />
+
                 <Route path="/base64" element={
                   <motion.main
                     initial={{ opacity: 0, y: 20 }}
@@ -776,7 +802,7 @@ function App() {
   return (
     <ThemeProvider>
       <TutorialProvider>
-        <BrowserRouter basename="/dev-optimizer">
+        <BrowserRouter basename="/">
           <AppContent />
         </BrowserRouter>
       </TutorialProvider>

@@ -260,4 +260,77 @@ app.whenReady().then(() => {
     });
 
   });
+
+  // --- Playwright Automation Handler ---
+  ipcMain.handle('playwright:run', async (_, { script, env }: { script: string, env?: Record<string, string> }) => {
+    const fs = await import('node:fs');
+    const path = await import('node:path');
+
+    // Create temp file inside the project's e2e directory
+    const e2eDir = path.join(process.cwd(), 'e2e');
+    const tempFile = path.join(e2eDir, `temp-${Date.now()}.spec.ts`);
+
+    try {
+      if (!fs.existsSync(e2eDir)) {
+        await fs.promises.mkdir(e2eDir, { recursive: true });
+      }
+
+      await fs.promises.writeFile(tempFile, script, 'utf-8');
+
+      return new Promise((resolve) => {
+        console.log(`Running Playwright test: ${tempFile}`);
+        // Default to chromium if BROWSER not set, but Playwright handles this via config usually.
+        // We can pass process.env.BROWSER if we want to override via standard vars, 
+        // or just rely on the script to use specific browsers.
+        // However, standard `npx playwright test` runs on all configured projects unless filtered.
+        // We'll trust the env vars passed in.
+
+        const proc = spawn('npx', ['playwright', 'test', tempFile, '--reporter=line', '--headed'], {
+          cwd: process.cwd(),
+          shell: true,
+          env: { ...process.env, ...env }
+        });
+
+        let output = '';
+        const stripAnsi = (str: string) => str.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
+
+        proc.stdout.on('data', (data) => { output += stripAnsi(data.toString()); });
+        proc.stderr.on('data', (data) => { output += stripAnsi(data.toString()); });
+
+        proc.on('close', async (code) => {
+          try { await fs.promises.unlink(tempFile); } catch (e) { console.error('Failed to cleanup temp file', e); }
+
+          if (code === 0) {
+            resolve(output || 'Test passed successfully.');
+          } else {
+            resolve(`Test failed with code ${code}:\n${output}`);
+          }
+        });
+
+        proc.on('error', (err) => { resolve(`Failed to spawn Playwright: ${err.message}`); });
+      });
+    } catch (error: any) {
+      return `Error: ${error.message}`;
+    }
+  });
+
+  // --- File I/O for Artifacts ---
+  ipcMain.handle('io:readImage', async (_, { filePath }: { filePath: string }) => {
+    const fs = await import('node:fs');
+    const path = await import('node:path');
+
+    // Security: ensure path is within project
+    const fullPath = path.resolve(process.cwd(), filePath);
+    if (!fullPath.startsWith(process.cwd())) {
+      throw new Error('Access denied: Path outside project root');
+    }
+
+    try {
+      if (fs.existsSync(fullPath)) {
+        const buffer = await fs.promises.readFile(fullPath);
+        return `data:image/png;base64,${buffer.toString('base64')}`;
+      }
+    } catch (e) { console.error('Failed to read image', e); }
+    return null;
+  });
 })
