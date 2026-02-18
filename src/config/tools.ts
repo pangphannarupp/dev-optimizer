@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import {
     Image as ImageIcon, Layers, Sparkles, QrCode, FileCode, Code, Key, Lock, Hash,
     FileUp, Split, Film, Link, ScanLine, Palette, Zap, Clock, Monitor,
-    Smartphone, KeyRound, CheckCircle, Database, Book, Binary, Terminal, Mic, FileText, Download, FileSpreadsheet, Bot
+    Smartphone, KeyRound, CheckCircle, Database, Book, Binary, Terminal, Mic, FileText, Download, FileSpreadsheet, Bot, FilePlus, FileImage
 } from 'lucide-react';
 
 export type ToolId =
@@ -11,7 +11,7 @@ export type ToolId =
     | 'density-converter' | 'regex-tester' | 'css-generator' | 'screenshot-framer'
     | 'totp-generator' | 'deeplink-generator' | 'qr' | 'svg-drawable' | 'base64'
     | 'json' | 'json-to-code' | 'csv-json' | 'validate-translation' | 'jwt' | 'encryption' | 'sha'
-    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground' | 'dsa-tutorial' | 'programming-tutorial' | 'screen-audio-maker' | 'cv-generator' | 'youtube-downloader' | 'project-translation-verifier' | 'watermark-remover' | 'error-code-generator' | 'test-automation';
+    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground' | 'dsa-tutorial' | 'programming-tutorial' | 'screen-audio-maker' | 'cv-generator' | 'youtube-downloader' | 'project-translation-verifier' | 'watermark-remover' | 'error-code-generator' | 'test-automation' | 'image-to-pdf' | 'pdf-to-image';
 
 export interface Tool {
     id: ToolId;
@@ -66,6 +66,8 @@ export const useTools = () => {
         { id: 'watermark-remover', icon: Sparkles, label: t('watermarkRemover.title', 'Watermark Remover AI'), description: t('watermarkRemover.description', 'Remove watermarks from images using AI') },
         { id: 'error-code-generator', icon: FileSpreadsheet, label: t('errorCodeGenerator.title', 'Error Code Generator'), description: t('errorCodeGenerator.description', 'Generate Android/iOS error codes from Excel') },
         { id: 'test-automation', icon: Bot, label: t('testAutomation.title', 'Test Automation'), description: t('testAutomation.description', 'Automate Web, Mobile, and Desktop testing') },
+        { id: 'image-to-pdf', icon: FilePlus, label: t('imageToPdf.title', 'Image to PDF'), description: t('imageToPdf.description', 'Convert images to PDF') },
+        { id: 'pdf-to-image', icon: FileImage, label: t('pdfToImage.title', 'PDF to Image'), description: t('pdfToImage.description', 'Convert PDF pages to Images') },
     ];
 
     return tools;

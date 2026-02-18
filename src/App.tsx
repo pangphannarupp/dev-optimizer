@@ -63,6 +63,8 @@ const ProjectTranslationVerifier = lazy(() => import('./components/ProjectTransl
 const WatermarkRemover = lazy(() => import('./components/WatermarkRemover').then(module => ({ default: module.WatermarkRemover })));
 const ErrorCodeGenerator = lazy(() => import('./components/ErrorCodeGenerator').then(module => ({ default: module.ErrorCodeGenerator })));
 const TestAutomation = lazy(() => import('./components/TestAutomation/TestAutomation'));
+const ImageToPdf = lazy(() => import('./components/ImageToPdf').then(module => ({ default: module.ImageToPdf })));
+const PdfToImage = lazy(() => import('./components/PdfToImage').then(module => ({ default: module.PdfToImage })));
 
 
 
@@ -769,6 +771,30 @@ function AppContent() {
                     className="h-full overflow-y-auto"
                   >
                     <TestAutomation />
+                  </motion.main>
+                } />
+
+                <Route path="/image-to-pdf" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <ImageToPdf />
+                  </motion.main>
+                } />
+
+                <Route path="/pdf-to-image" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <PdfToImage />
                   </motion.main>
                 } />
 
