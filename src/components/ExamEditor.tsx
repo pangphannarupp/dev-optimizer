@@ -4,8 +4,10 @@ import {
     ArrowLeft, Download, Camera, FileText, Code, Link as LinkIcon,
     Maximize, Minimize, ChevronUp, ChevronDown, Undo, Redo, Eye, Columns, FileType,
     Bold, Italic, Underline, Strikethrough, List, ListOrdered, Quote, AlignLeft,
-    AlignCenter, AlignRight, Heading1, Heading2, Heading3, Search, X
+    AlignCenter, AlignRight, Heading1, Heading2, Heading3, Search, X, Loader2
 } from 'lucide-react';
+// import { jsPDF } from 'jspdf';
+// import { toPng } from 'html-to-image';
 
 import { MathSymbolPalette } from './math/MathSymbolPalette';
 import { MathOCRModal } from './math/MathOCRModal';
@@ -41,6 +43,7 @@ export const ExamEditor = () => {
     const [showTemplateModal, setShowTemplateModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [showFind, setShowFind] = useState(false);
+    const [isExporting, setIsExporting] = useState(false);
 
     const [findMatchIndex, setFindMatchIndex] = useState(-1);
     const [findMatches, setFindMatches] = useState<number[]>([]);
@@ -279,40 +282,18 @@ export const ExamEditor = () => {
         document.body.removeChild(link);
     };
 
-    const exportPDF = () => {
-        const printWindow = window.open('', '_blank');
-        if (!printWindow) return;
-
-        const htmlContent = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>${filename} - PDF Export</title>
-                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
-                <style>
-                    body { font-family: 'Times New Roman', serif; padding: 40px; max-width: 800px; margin: 0 auto; line-height: 1.6; font-size: ${fontSize}px; }
-                    h1, h2, h3 { color: #333; }
-                    code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; }
-                    pre { background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
-                    blockquote { border-left: 3px solid #ccc; margin: 0; padding-left: 10px; color: #666; }
-                    img { max-width: 100%; }
-                    @media print { .no-print { display: none !important; } }
-                </style>
-                <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
-                <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
-            </head>
-            <body>
-                <div id="content">
-                    ${document.getElementById('latex-preview')?.innerHTML || ''}
-                </div>
-            </body>
-            </html>
-        `;
-
-        printWindow.document.write(htmlContent);
-        printWindow.document.close();
-        printWindow.focus();
-        setTimeout(() => printWindow.print(), 500);
+    const exportPDF = async () => {
+        setIsExporting(true);
+        try {
+            // Dynamic import to avoid circular dependency issues or load time
+            const { generatePdfFromLatex } = await import('../utils/LatexParser');
+            await generatePdfFromLatex(code, filename);
+        } catch (error) {
+            console.error('PDF generation failed:', error);
+            alert(`Failed to generate PDF: ${error instanceof Error ? error.message : String(error)}`);
+        } finally {
+            setIsExporting(false);
+        }
     };
 
     return (
@@ -399,7 +380,11 @@ export const ExamEditor = () => {
                             <>
                                 <RibbonGroup label="File">
                                     <RibbonButton icon={<FileText size={18} />} label="Import" onClick={() => fileInputRef.current?.click()} />
-                                    <RibbonButton icon={<Download size={18} />} label="Export" onClick={exportPDF} />
+                                    <RibbonButton
+                                        icon={isExporting ? <Loader2 size={18} className="animate-spin" /> : <Download size={18} />}
+                                        label={isExporting ? "Exporting..." : "Export"}
+                                        onClick={exportPDF}
+                                    />
                                     <RibbonButton icon={<Code size={18} />} label="Save .tex" onClick={exportTex} />
                                 </RibbonGroup>
 
@@ -485,6 +470,7 @@ export const ExamEditor = () => {
                                 </RibbonGroup>
                                 <RibbonGroup label="Links">
                                     <RibbonButton icon={<LinkIcon size={18} />} label="Link" onClick={insertLink} />
+                                    <RibbonButton icon={<Columns size={18} />} label="Page Break" onClick={() => insertAtCursor('\n\\newpage\n')} />
                                 </RibbonGroup>
                                 <div className="flex flex-col border-r border-gray-200 dark:border-gray-700 pr-2 mr-2 min-w-[300px]">
                                     <div className="text-[10px] text-gray-400 text-center mb-1">Math Symbols</div>

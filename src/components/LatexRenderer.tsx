@@ -112,7 +112,9 @@ export const LatexRenderer = ({ content }: LatexRendererProps) => {
             .replace(/\\section\*?{(.+?)}/g, '<h1 class="text-2xl font-bold mt-8 mb-4 border-b border-gray-200 pb-2 text-gray-800 dark:text-gray-200 break-inside-avoid-column">$1</h1>')
             .replace(/\\subsection\*?{(.+?)}/g, '<h2 class="text-xl font-bold mt-6 mb-3 text-gray-800 dark:text-gray-200 break-inside-avoid-column">$1</h2>')
 
-            // Newlines
+            // Newlines & spacing
+            // We add 'html2pdf__page-break' class which is standard for some libraries, and inline styles for others.
+            .replace(/\\newpage/g, '<div class="page-break-marker" style="page-break-after: always; break-after: page; height: 1px; margin: 2rem 0; border-bottom: 2px dashed #e5e7eb;"></div>')
             .replace(/\\\\/g, '<br/>')
             .replace(/\n\n/g, '<div class="h-3"></div>')
             .replace(/\n/g, ' ');
