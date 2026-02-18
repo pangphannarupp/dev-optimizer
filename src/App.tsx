@@ -65,6 +65,8 @@ const ErrorCodeGenerator = lazy(() => import('./components/ErrorCodeGenerator').
 const TestAutomation = lazy(() => import('./components/TestAutomation/TestAutomation'));
 const ImageToPdf = lazy(() => import('./components/ImageToPdf').then(module => ({ default: module.ImageToPdf })));
 const PdfToImage = lazy(() => import('./components/PdfToImage').then(module => ({ default: module.PdfToImage })));
+const MathSnap = lazy(() => import('./components/MathSnap').then(module => ({ default: module.MathSnap })));
+const ExamEditor = lazy(() => import('./components/ExamEditor').then(module => ({ default: module.ExamEditor })));
 
 
 
@@ -795,6 +797,30 @@ function AppContent() {
                     className="h-full overflow-y-auto"
                   >
                     <PdfToImage />
+                  </motion.main>
+                } />
+
+                <Route path="/math-snap" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <MathSnap />
+                  </motion.main>
+                } />
+
+                <Route path="/math-editor" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto p-0"
+                  >
+                    <ExamEditor />
                   </motion.main>
                 } />
 

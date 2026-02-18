@@ -6,11 +6,18 @@ export interface ReleaseNote {
 
 export const releaseNotes: ReleaseNote[] = [
     {
+        version: '1.3.0',
+        date: '2026-02-19',
+        changes: [
+            'Add feature "Latex Editor"',
+        ]
+    },
+    {
         version: '1.2.0',
         date: '2026-02-18',
         changes: [
-            'Improve feature "Image To PDF"',
-            'Improve feature "PDF To Image"',
+            'Add feature "Image To PDF"',
+            'Add feature "PDF To Image"',
         ]
     },
     {

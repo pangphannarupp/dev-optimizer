@@ -11,7 +11,7 @@ export type ToolId =
     | 'density-converter' | 'regex-tester' | 'css-generator' | 'screenshot-framer'
     | 'totp-generator' | 'deeplink-generator' | 'qr' | 'svg-drawable' | 'base64'
     | 'json' | 'json-to-code' | 'csv-json' | 'validate-translation' | 'jwt' | 'encryption' | 'sha'
-    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground' | 'dsa-tutorial' | 'programming-tutorial' | 'screen-audio-maker' | 'cv-generator' | 'youtube-downloader' | 'project-translation-verifier' | 'watermark-remover' | 'error-code-generator' | 'test-automation' | 'image-to-pdf' | 'pdf-to-image';
+    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground' | 'dsa-tutorial' | 'programming-tutorial' | 'screen-audio-maker' | 'cv-generator' | 'youtube-downloader' | 'project-translation-verifier' | 'watermark-remover' | 'error-code-generator' | 'test-automation' | 'image-to-pdf' | 'pdf-to-image' | 'math-snap' | 'math-editor';
 
 export interface Tool {
     id: ToolId;
@@ -68,6 +68,8 @@ export const useTools = () => {
         { id: 'test-automation', icon: Bot, label: t('testAutomation.title', 'Test Automation'), description: t('testAutomation.description', 'Automate Web, Mobile, and Desktop testing') },
         { id: 'image-to-pdf', icon: FilePlus, label: t('imageToPdf.title', 'Image to PDF'), description: t('imageToPdf.description', 'Convert images to PDF') },
         { id: 'pdf-to-image', icon: FileImage, label: t('pdfToImage.title', 'PDF to Image'), description: t('pdfToImage.description', 'Convert PDF pages to Images') },
+        { id: 'math-snap', icon: Binary, label: t('mathSnap.title', 'Math Snap'), description: t('mathSnap.description', 'Convert LaTeX to Image') },
+        { id: 'math-editor', icon: FileText, label: t('mathEditor.title', 'LaTeX Editor'), description: t('mathEditor.description', 'Write and preview LaTeX documents') },
     ];
 
     return tools;
