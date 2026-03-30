@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useDeferredValue } from 'react';
+import React, { useState, useCallback, useMemo, useDeferredValue, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AlertTriangle, CheckCircle, FileCode, Filter, Loader, Search, X, XCircle, Eye, Download, Trash2, Info, Copy, RotateCcw } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -9,6 +9,12 @@ import { DonutChart } from './DonutChart';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { TechnicalDebtBadge } from './TechnicalDebtBadge';
+import { QualityRating } from './QualityRating';
+import { parseDetektReport, parseSwiftLintReport, calculateMaintainabilityRating, ExternalReportIssue, parseLcovReport, CoverageData } from '../utils/reportParsers';
+import { detectDuplications, calculateComplexity, checkQualityGate } from '../utils/analysisEngine';
+import { QualityGateBadge } from './QualityGateBadge';
+import { HistoryTrends, HistorySnap } from './HistoryTrends';
 
 export const CodeQualityChecker: React.FC = () => {
     const { t } = useTranslation();
@@ -24,6 +30,12 @@ export const CodeQualityChecker: React.FC = () => {
     const [manualCode, setManualCode] = useState('');
     const [manualLanguage, setManualLanguage] = useState<SupportedLanguage>('react-ts');
     const [manualIssues, setManualIssues] = useState<QualityIssue[]>([]);
+    const [externalIssues, setExternalIssues] = useState<ExternalReportIssue[]>([]);
+    const [_coverageData, setCoverageData] = useState<Map<string, CoverageData>>(new Map());
+    const [history, setHistory] = useState<HistorySnap[]>(() => {
+        const saved = localStorage.getItem('quality_history');
+        return saved ? JSON.parse(saved) : [];
+    });
     const [isAnalyzing, setIsAnalyzing] = useState(false);
 
     // Progress State
@@ -36,8 +48,44 @@ export const CodeQualityChecker: React.FC = () => {
         const errorFiles = projectFiles.filter(f => f.issues.some(i => i.severity === 'error')).length;
         const warningFiles = projectFiles.filter(f => f.issues.some(i => i.severity === 'warning') && !f.issues.some(i => i.severity === 'error')).length;
         const passedFiles = totalFiles - errorFiles - warningFiles;
-        const totalIssues = projectFiles.reduce((acc, curr) => acc + curr.issues.length, 0);
-        return { totalFiles, errorFiles, warningFiles, passedFiles, totalIssues };
+
+        // Quality Metrics
+        const allIssues = [
+            ...projectFiles.flatMap(f => f.issues),
+            ...externalIssues
+        ];
+
+        const totalIssues = allIssues.length;
+        const totalDebt = allIssues.reduce((acc, curr) => acc + (curr.effort || 0), 0);
+
+        const bugs = allIssues.filter(i => i.category === 'bug' || i.severity === 'error').length;
+        const vulnerabilities = allIssues.filter(i => i.category === 'vulnerability').length;
+        const codeSmells = allIssues.filter(i => i.category === 'code_smell').length;
+
+        // Ratings Logic
+        const reliabilityRating = bugs === 0 ? 'A' : bugs < 5 ? 'B' : bugs < 10 ? 'C' : bugs < 20 ? 'D' : 'E';
+        const securityRating = vulnerabilities === 0 ? 'A' : vulnerabilities < 2 ? 'B' : vulnerabilities < 5 ? 'C' : vulnerabilities < 10 ? 'D' : 'E';
+
+        // Maintainability based on debt density
+        const totalLines = projectFiles.reduce((acc, curr) => acc + curr.content.split('\n').length, 0) || 1000;
+        const maintainabilityRating = calculateMaintainabilityRating(totalDebt, totalLines) as any;
+
+        const stats = {
+            totalFiles, errorFiles, warningFiles, passedFiles, totalIssues,
+            totalDebt, bugs, vulnerabilities, codeSmells,
+            reliabilityRating, securityRating, maintainabilityRating
+        };
+
+        const qualityGate = checkQualityGate(stats);
+
+        return { ...stats, qualityGate };
+    }, [projectFiles, externalIssues]);
+
+    // Save history when analysis completes
+    useEffect(() => {
+        if (projectFiles.length > 0) {
+            saveToHistory(dashboardStats);
+        }
     }, [projectFiles]);
 
     const filteredFiles = useMemo(() => {
@@ -84,9 +132,50 @@ export const CodeQualityChecker: React.FC = () => {
         setManualCode('');
         setManualIssues([]);
         setProjectFiles([]);
+        setExternalIssues([]);
+        setCoverageData(new Map());
         setSelectedFileForModal(null);
         setProgress(0);
         setCurrentFile('');
+    };
+
+    const saveToHistory = (stats: any) => {
+        const snap: HistorySnap = {
+            timestamp: Date.now(),
+            reliability: stats.reliabilityRating,
+            security: stats.securityRating,
+            maintainability: stats.maintainabilityRating,
+            debt: stats.totalDebt,
+            bugs: stats.bugs
+        };
+        const newHistory = [...history, snap].slice(-10); // Keep last 10
+        setHistory(newHistory);
+        localStorage.setItem('quality_history', JSON.stringify(newHistory));
+    };
+
+    const handleReportUpload = async (file: File, type: 'detekt' | 'swiftlint' | 'lcov') => {
+        const content = await file.text();
+
+        if (type === 'lcov') {
+            const data = parseLcovReport(content);
+            setCoverageData(data);
+            return;
+        }
+
+        let issues: ExternalReportIssue[] = [];
+        if (type === 'detekt') {
+            issues = parseDetektReport(content);
+        } else if (type === 'swiftlint') {
+            issues = parseSwiftLintReport(content);
+        }
+
+        // Add effort to external issues
+        const issuesWithEffort = issues.map(i => ({
+            ...i,
+            effort: i.severity === 'error' ? 20 : i.severity === 'warning' ? 10 : 5
+        }));
+
+        setExternalIssues(prev => [...prev, ...issuesWithEffort]);
     };
 
     const handleZipUpload = useCallback(async (files: File[]) => {
@@ -128,6 +217,21 @@ export const CodeQualityChecker: React.FC = () => {
 
                 if (detectedLang) {
                     const fileIssues = analyzeCode(content, detectedLang);
+
+                    // Complexity Analysis
+                    const complexity = calculateComplexity(content);
+                    if (complexity > 20) {
+                        fileIssues.push({
+                            ruleId: 'high-complexity',
+                            message: `Function/Module complexity is high (${complexity}).`,
+                            line: 1,
+                            severity: complexity > 40 ? 'error' : 'warning',
+                            category: 'complexity',
+                            effort: complexity * 2,
+                            suggestion: 'Break down large functions and simplify logic structure.'
+                        });
+                    }
+
                     extractedFiles.push({
                         name: filename,
                         content,
@@ -140,8 +244,23 @@ export const CodeQualityChecker: React.FC = () => {
                 setProgress(Math.round((processedCount / totalFiles) * 100));
             }
 
+            // Post-process: Duplication Detection
+            const duplicationIssues = detectDuplications(extractedFiles);
+            duplicationIssues.forEach(issue => {
+                const targetFile = extractedFiles.find(f => f.name === issue.url);
+                if (targetFile) {
+                    targetFile.issues.push({ ...issue, url: undefined });
+                }
+            });
+
             setProjectFiles(extractedFiles);
             setViewMode('project');
+
+            // Auto-save to history after analysis
+            setTimeout(() => {
+                // Re-calculate stats for history? Or just use current dashboardStats
+                // Since this runs after setProjectFiles, dashboardStats will update on next tick
+            }, 500);
         } catch (error) {
             console.error("Failed to unzip", error);
         } finally {
@@ -491,28 +610,83 @@ export const CodeQualityChecker: React.FC = () => {
                                     supportedText={t('codeQuality.zipSupport', 'Supports .zip archives')}
                                     className="border-none bg-transparent hover:bg-transparent"
                                 />
+
+                                <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700 w-full max-w-lg flex flex-col gap-4">
+                                    <p className="text-center text-xs font-semibold text-gray-500 uppercase tracking-widest">{t('codeQuality.externalReports', 'Or Import External Reports')}</p>
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <label className="flex flex-col items-center gap-2 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer transition-all shadow-sm">
+                                            <FileCode className="text-purple-500" size={24} />
+                                            <span className="text-xs font-bold text-gray-700 dark:text-gray-300">Detekt (XML)</span>
+                                            <input type="file" className="hidden" accept=".xml" onChange={(e) => e.target.files?.[0] && handleReportUpload(e.target.files[0], 'detekt')} />
+                                        </label>
+                                        <label className="flex flex-col items-center gap-2 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer transition-all shadow-sm">
+                                            <FileCode className="text-orange-500" size={24} />
+                                            <span className="text-xs font-bold text-gray-700 dark:text-gray-300">SwiftLint (JSON)</span>
+                                            <input type="file" className="hidden" accept=".json" onChange={(e) => e.target.files?.[0] && handleReportUpload(e.target.files[0], 'swiftlint')} />
+                                        </label>
+                                        <label className="flex flex-col items-center gap-2 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-500 dark:hover:border-blue-400 cursor-pointer transition-all shadow-sm">
+                                            <FileCode className="text-emerald-500" size={24} />
+                                            <span className="text-xs font-bold text-gray-700 dark:text-gray-300">LCOV (.info)</span>
+                                            <input type="file" className="hidden" accept=".info" onChange={(e) => e.target.files?.[0] && handleReportUpload(e.target.files[0], 'lcov')} />
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         ) : (
-                            <>
+                            <div className="flex flex-col gap-6">
+                                {/* Quality Gate & Trends */}
+                                <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+                                    <div className="lg:col-span-3">
+                                        <QualityGateBadge result={dashboardStats.qualityGate} />
+                                    </div>
+                                    <div className="lg:col-span-1">
+                                        <HistoryTrends history={history} />
+                                    </div>
+                                </div>
+
                                 {/* Dashboard Stats */}
                                 <div className="mb-4 shrink-0">
-                                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 flex flex-col items-center justify-center relative overflow-hidden group">
-                                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500" />
-                                        <div className="w-full mb-4 flex items-center justify-between px-4">
-                                            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('codeQuality.dashboard.overview', 'Overview')}</h3>
-                                            <div className="flex gap-4 text-xs font-medium">
-                                                <span className="text-gray-500 dark:text-gray-400">Total: <span className="text-gray-900 dark:text-white font-bold">{dashboardStats.totalFiles}</span></span>
+                                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 flex flex-col md:flex-row gap-8 relative overflow-hidden group">
+                                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500" />
+
+                                        {/* Ratings Section */}
+                                        <div className="flex flex-col gap-4 border-r border-gray-100 dark:border-gray-700 pr-8">
+                                            <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">{t('codeQuality.dashboard.ratings', 'Ratings')}</h3>
+                                            <div className="flex gap-6">
+                                                <QualityRating rating={dashboardStats.reliabilityRating as any} label="Reliability" />
+                                                <QualityRating rating={dashboardStats.securityRating as any} label="Security" />
+                                                <QualityRating rating={dashboardStats.maintainabilityRating as any} label="Maintainability" />
                                             </div>
                                         </div>
-                                        <div className="w-full flex justify-center py-2">
+
+                                        {/* Chart Section */}
+                                        <div className="flex-1 flex flex-col items-center justify-center">
                                             <DonutChart
-                                                total={dashboardStats.totalFiles}
+                                                total={dashboardStats.totalIssues}
                                                 items={[
-                                                    { id: 'passed', value: dashboardStats.passedFiles, label: t('codeQuality.dashboard.passed', 'Passed'), color: 'text-green-500', bg: 'bg-green-500', icon: CheckCircle },
-                                                    { id: 'warning', value: dashboardStats.warningFiles, label: t('codeQuality.dashboard.warning', 'Warning'), color: 'text-yellow-500', bg: 'bg-yellow-500', icon: AlertTriangle },
-                                                    { id: 'error', value: dashboardStats.errorFiles, label: t('codeQuality.dashboard.error', 'Error'), color: 'text-red-500', bg: 'bg-red-500', icon: XCircle },
+                                                    { id: 'passed', value: dashboardStats.passedFiles, label: 'Files OK', color: 'text-emerald-500', bg: 'bg-emerald-500', icon: CheckCircle },
+                                                    { id: 'warning', value: dashboardStats.warningFiles, label: 'Warnings', color: 'text-amber-500', bg: 'bg-amber-500', icon: AlertTriangle },
+                                                    { id: 'error', value: dashboardStats.errorFiles, label: 'Errors', color: 'text-rose-500', bg: 'bg-rose-500', icon: XCircle },
                                                 ]}
                                             />
+                                        </div>
+
+                                        {/* Stats Section */}
+                                        <div className="flex flex-col gap-3 min-w-[180px] bg-stone-50/50 dark:bg-stone-900/40 p-4 rounded-xl border border-stone-100 dark:border-stone-800">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-xs text-gray-500 font-medium">Bugs</span>
+                                                <span className="text-sm font-bold text-rose-500">{dashboardStats.bugs}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-xs text-gray-500 font-medium">Vulnerabilities</span>
+                                                <span className="text-sm font-bold text-orange-500">{dashboardStats.vulnerabilities}</span>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-xs text-gray-500 font-medium">Code Smells</span>
+                                                <span className="text-sm font-bold text-amber-500">{dashboardStats.codeSmells}</span>
+                                            </div>
+                                            <div className="h-px bg-stone-200 dark:bg-stone-700 my-1" />
+                                            <TechnicalDebtBadge minutes={dashboardStats.totalDebt} />
                                         </div>
                                     </div>
                                 </div>
@@ -661,7 +835,7 @@ export const CodeQualityChecker: React.FC = () => {
                                         </table>
                                     </div>
                                 </div>
-                            </>
+                            </div>
                         )}
                     </div>
                 )}

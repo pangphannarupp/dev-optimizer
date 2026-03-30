@@ -4,7 +4,7 @@ import {
     ArrowLeft, Download, Camera, FileText, Code, Link as LinkIcon,
     Maximize, Minimize, ChevronUp, ChevronDown, Undo, Redo, Eye, Columns, FileType,
     Bold, Italic, Underline, Strikethrough, List, ListOrdered, Quote, AlignLeft,
-    AlignCenter, AlignRight, Heading1, Heading2, Heading3, Search, X, Loader2
+    AlignCenter, AlignRight, Heading1, Heading2, Heading3, Search, X, Loader2, Table
 } from 'lucide-react';
 // import { jsPDF } from 'jspdf';
 // import { toPng } from 'html-to-image';
@@ -12,6 +12,7 @@ import {
 import { MathSymbolPalette } from './math/MathSymbolPalette';
 import { MathOCRModal } from './math/MathOCRModal';
 import { TemplateSelectorModal } from './modals/TemplateSelectorModal';
+import { TableWizardModal } from './modals/TableWizardModal';
 import { ConfirmationModal } from './modals/ConfirmationModal';
 import { LatexRenderer } from './LatexRenderer';
 import { BookOpen } from 'lucide-react';
@@ -41,6 +42,7 @@ export const ExamEditor = () => {
     const [filename, setFilename] = useState(() => localStorage.getItem('latex_filename') || 'New Document.tex');
     const [showOCR, setShowOCR] = useState(false);
     const [showTemplateModal, setShowTemplateModal] = useState(false);
+    const [showTableWizard, setShowTableWizard] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [showFind, setShowFind] = useState(false);
     const [isExporting, setIsExporting] = useState(false);
@@ -215,21 +217,6 @@ export const ExamEditor = () => {
     const insertQuote = () => insertAtCursor('\n\\begin{quote}\nQuote here\n\\end{quote}\n');
     const insertLink = () => insertAtCursor('\\href{url}{text}', -6);
 
-    // -- Templates --
-    const insertTable = () => insertAtCursor(`
-\\begin{table}[h]
-    \\centering
-    \\begin{tabular}{|c|c|}
-        \\hline
-        Header 1 & Header 2 \\\\
-        \\hline
-        Cell 1 & Cell 2 \\\\
-        \\hline
-    \\end{tabular}
-    \\caption{Caption}
-    \\label{tab:my_label}
-\\end{table}
-`);
 
     const insertFigure = () => insertAtCursor(`
 \\begin{figure}[h]
@@ -459,9 +446,12 @@ export const ExamEditor = () => {
                                 <RibbonGroup label="Media">
                                     <RibbonButton icon={<Camera size={18} />} label="Scan OCR" onClick={() => setShowOCR(true)} />
                                 </RibbonGroup>
+                                <RibbonGroup label="Structure">
+                                    <RibbonButton icon={<Table size={18} />} label="Table" onClick={() => setShowTableWizard(true)} />
+                                    <RibbonButton icon={<List size={18} />} label="List" onClick={() => insertAtCursor('\\begin{itemize}\n  \\item Item 1\n  \\item Item 2\n\\end{itemize}\n')} />
+                                </RibbonGroup>
                                 <RibbonGroup label="Templates">
                                     <RibbonButton icon={<BookOpen size={18} />} label="Browse" onClick={() => setShowTemplateModal(true)} />
-                                    <RibbonButton icon={<FileType size={18} />} label="Table" onClick={insertTable} />
                                     <RibbonButton icon={<FileType size={18} />} label="Figure" onClick={insertFigure} />
                                 </RibbonGroup>
                                 <RibbonGroup label="Code">
@@ -619,6 +609,13 @@ export const ExamEditor = () => {
                 confirmText="Replace"
                 isDanger={true}
             />
+            {/* Table Wizard Modal */}
+            <TableWizardModal
+                isOpen={showTableWizard}
+                onClose={() => setShowTableWizard(false)}
+                onInsert={(latex) => insertAtCursor(latex)}
+            />
+
         </div>
     );
 };

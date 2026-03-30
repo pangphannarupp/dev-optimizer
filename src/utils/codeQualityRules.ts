@@ -1,9 +1,11 @@
 export type Severity = 'error' | 'warning' | 'info';
+export type IssueCategory = 'bug' | 'vulnerability' | 'code_smell' | 'security_hotspot' | 'complexity' | 'duplication';
 
 export interface CodeQualityRule {
     id: string;
     message: string;
     severity: Severity;
+    category?: IssueCategory;
     pattern: RegExp;
     suggestion?: string;
     url?: string;
@@ -21,6 +23,7 @@ export const RULES: Record<SupportedLanguage, CodeQualityRule[]> = {
             id: 'console-log',
             message: 'Avoid using console.log in production code',
             severity: 'warning',
+            category: 'code_smell',
             pattern: /console\.log\(/,
             suggestion: 'Use a proper logging service or remove before deployment',
             url: 'https://eslint.org/docs/latest/rules/no-console'
@@ -29,6 +32,7 @@ export const RULES: Record<SupportedLanguage, CodeQualityRule[]> = {
             id: 'any-type',
             message: 'Avoid using "any" type',
             severity: 'warning',
+            category: 'code_smell',
             pattern: /:\s*any\b/,
             suggestion: 'Specify a more precise type or use "unknown"',
             url: 'https://typescript-eslint.io/rules/no-explicit-any/'
@@ -37,6 +41,7 @@ export const RULES: Record<SupportedLanguage, CodeQualityRule[]> = {
             id: 'index-key',
             message: 'Avoid using array index as key in mapped elements',
             severity: 'error',
+            category: 'bug',
             pattern: /key\s*=\s*{\s*(index|i|idx)\s*}/,
             suggestion: 'Use a unique ID from the data instead',
             url: 'https://react.dev/learn/rendering-lists#keeping-list-items-in-order-with-key'
@@ -45,6 +50,7 @@ export const RULES: Record<SupportedLanguage, CodeQualityRule[]> = {
             id: 'inline-style',
             message: 'Avoid inline styles',
             severity: 'info',
+            category: 'code_smell',
             pattern: /style\s*=\s*{{/,
             suggestion: 'Use CSS classes or styled components for better performance and maintainability',
             url: 'https://react.dev/dom/elements#style'
@@ -53,6 +59,7 @@ export const RULES: Record<SupportedLanguage, CodeQualityRule[]> = {
             id: 'useEffect-missing-deps',
             message: 'Potential missing dependency in useEffect',
             severity: 'warning',
+            category: 'bug',
             pattern: /useEffect\(\s*\(\)\s*=>\s*{[^}]*}\s*,\s*\[\s*\]\s*\)/,
             suggestion: 'Check if you really intend to run this only on mount. Ensure all utilized variables are in the dependency array.',
             url: 'https://react.dev/reference/react/useEffect#specifying-reactive-dependencies'
@@ -61,6 +68,7 @@ export const RULES: Record<SupportedLanguage, CodeQualityRule[]> = {
             id: 'hardcoded-secret',
             message: 'Possible hardcoded secret/token detected',
             severity: 'error',
+            category: 'vulnerability',
             pattern: /(api_key|apikey|token|secret)\s*[:=]\s*['"`][a-zA-Z0-9_\-]{20,}['"`]/i,
             suggestion: 'Use environment variables (process.env) instead of hardcoding secrets',
             url: 'https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html'
@@ -1376,6 +1384,8 @@ export interface QualityIssue {
     message: string;
     line: number;
     severity: Severity;
+    category?: IssueCategory;
+    effort?: number; // in minutes
     suggestion?: string;
     column?: number;
     url?: string;
@@ -1436,11 +1446,16 @@ export const analyzeCode = (code: string, language: SupportedLanguage): QualityI
                     const codeUpToMatch = normalizedCode.substring(0, match.index);
                     const lineNum = codeUpToMatch.split('\n').length;
 
+                    const effort = rule.severity === 'error' ? 20 : rule.severity === 'warning' ? 10 : 5;
+                    const category = rule.category || (rule.id.includes('security') || rule.id.includes('secret') ? 'vulnerability' : rule.severity === 'error' ? 'bug' : 'code_smell');
+
                     issues.push({
                         ruleId: rule.id,
                         message: rule.message,
                         line: lineNum,
                         severity: rule.severity,
+                        category,
+                        effort,
                         suggestion: rule.suggestion,
                         column: match.index - codeUpToMatch.lastIndexOf('\n'), // Approximate column
                         url: rule.url
@@ -1488,11 +1503,16 @@ export const analyzeCode = (code: string, language: SupportedLanguage): QualityI
                         return;
                     }
 
+                    const effort = rule.severity === 'error' ? 20 : rule.severity === 'warning' ? 10 : 5;
+                    const category = rule.category || (rule.id.includes('security') || rule.id.includes('secret') ? 'vulnerability' : rule.severity === 'error' ? 'bug' : 'code_smell');
+
                     issues.push({
                         ruleId: rule.id,
                         message: rule.message,
                         line: lineIndex + 1,
                         severity: rule.severity,
+                        category,
+                        effort,
                         suggestion: rule.suggestion,
                         column: match.index,
                         url: rule.url

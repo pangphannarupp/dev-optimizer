@@ -271,32 +271,124 @@ export const SourceComparator: React.FC = () => {
         if (files[0]) loadSource(files[0], src === 'A');
     };
 
-    const renderDiffView = (diff: Diff.Change[]) => (
-        <div className="font-mono text-xs md:text-sm bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
-            <div className="overflow-x-auto p-4 max-h-[600px] overflow-y-auto">
-                <table className="w-full border-collapse">
-                    <tbody>
-                        {diff.map((part, index) => (
-                            <tr key={index} className={clsx(
-                                part.added ? "bg-green-50 dark:bg-green-900/20" :
-                                    part.removed ? "bg-red-50 dark:bg-red-900/20" : ""
-                            )}>
-                                <td className="p-1 w-8 text-gray-400 select-none text-right border-r border-gray-100 dark:border-gray-700 pr-2">
-                                </td>
-                                <td className={clsx("p-1 pl-4 whitespace-pre-wrap break-all",
-                                    part.added ? "text-green-700 dark:text-green-300" :
-                                        part.removed ? "text-red-700 dark:text-red-300" :
-                                            "text-gray-600 dark:text-gray-300"
-                                )}>
-                                    {part.value}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+    const renderDiffView = (diff: Diff.Change[]) => {
+        // Expand diff into individual lines with metadata
+        interface LineInfo {
+            text: string;
+            type: 'added' | 'removed' | 'context';
+            lineA: number | null;
+            lineB: number | null;
+        }
+
+        const lines: LineInfo[] = [];
+        let lineA = 1;
+        let lineB = 1;
+
+        diff.forEach(part => {
+            const partLines = part.value.split('\n');
+            // Remove trailing empty string from split
+            if (partLines[partLines.length - 1] === '') partLines.pop();
+
+            partLines.forEach(text => {
+                if (part.added) {
+                    lines.push({ text, type: 'added', lineA: null, lineB: lineB++ });
+                } else if (part.removed) {
+                    lines.push({ text, type: 'removed', lineA: lineA++, lineB: null });
+                } else {
+                    lines.push({ text, type: 'context', lineA: lineA++, lineB: lineB++ });
+                }
+            });
+        });
+
+        const CONTEXT = 3;
+        const changedIndices = new Set(
+            lines.map((l, i) => l.type !== 'context' ? i : -1).filter(i => i !== -1)
+        );
+
+        // Build visible ranges: changed lines ± CONTEXT
+        const visible = new Set<number>();
+        changedIndices.forEach(idx => {
+            for (let i = Math.max(0, idx - CONTEXT); i <= Math.min(lines.length - 1, idx + CONTEXT); i++) {
+                visible.add(i);
+            }
+        });
+
+        if (visible.size === 0) {
+            return (
+                <div className="font-mono text-xs bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 p-6 text-center text-gray-400">
+                    Files are identical — no changes found.
+                </div>
+            );
+        }
+
+        // Render rows, inserting collapse indicators between gaps
+        const rows: React.ReactNode[] = [];
+        let prevIdx = -1;
+
+        Array.from(visible).sort((a, b) => a - b).forEach((idx) => {
+            if (prevIdx !== -1 && idx > prevIdx + 1) {
+                const skipped = idx - prevIdx - 1;
+                rows.push(
+                    <tr key={`skip-${idx}`} className="bg-gray-50 dark:bg-gray-900/50">
+                        <td className="py-1 px-2 text-gray-400 text-right text-[11px] select-none w-12 border-r border-gray-100 dark:border-gray-700">···</td>
+                        <td className="py-1 px-2 text-gray-400 text-right text-[11px] select-none w-12 border-r border-gray-200 dark:border-gray-600">···</td>
+                        <td className="py-1 pl-4 text-[11px] text-gray-400 italic">{skipped} unchanged line{skipped > 1 ? 's' : ''}</td>
+                    </tr>
+                );
+            }
+
+            const line = lines[idx];
+            rows.push(
+                <tr key={idx} className={clsx(
+                    line.type === 'added' ? 'bg-emerald-50 dark:bg-emerald-900/20' :
+                        line.type === 'removed' ? 'bg-rose-50 dark:bg-rose-900/20' : ''
+                )}>
+                    <td className="py-0.5 px-2 text-[11px] text-gray-400 dark:text-gray-600 select-none text-right w-12 border-r border-gray-100 dark:border-gray-700 font-mono">
+                        {line.lineA ?? ''}
+                    </td>
+                    <td className="py-0.5 px-2 text-[11px] text-gray-400 dark:text-gray-600 select-none text-right w-12 border-r border-gray-200 dark:border-gray-600 font-mono">
+                        {line.lineB ?? ''}
+                    </td>
+                    <td className={clsx(
+                        'py-0.5 pl-2 pr-4 font-mono text-xs whitespace-pre-wrap break-all',
+                        line.type === 'added' ? 'text-emerald-700 dark:text-emerald-300' :
+                            line.type === 'removed' ? 'text-rose-700 dark:text-rose-300' :
+                                'text-gray-600 dark:text-gray-400'
+                    )}>
+                        <span className={clsx(
+                            'mr-2 select-none font-bold',
+                            line.type === 'added' ? 'text-emerald-500' :
+                                line.type === 'removed' ? 'text-rose-500' : 'text-transparent'
+                        )}>
+                            {line.type === 'added' ? '+' : line.type === 'removed' ? '−' : ' '}
+                        </span>
+                        {line.text}
+                    </td>
+                </tr>
+            );
+
+            prevIdx = idx;
+        });
+
+        const addedCount = lines.filter(l => l.type === 'added').length;
+        const removedCount = lines.filter(l => l.type === 'removed').length;
+
+        return (
+            <div className="font-mono text-xs bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
+                {/* Header bar */}
+                <div className="flex items-center gap-4 px-4 py-2 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 text-xs">
+                    <span className="text-emerald-600 font-semibold">+{addedCount} additions</span>
+                    <span className="text-rose-600 font-semibold">−{removedCount} deletions</span>
+                    <span className="ml-auto text-gray-400">{changedIndices.size} changed line{changedIndices.size !== 1 ? 's' : ''}</span>
+                </div>
+                <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+                    <table className="w-full border-collapse">
+                        <tbody>{rows}</tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    );
+        );
+    };
 
 
 
@@ -425,6 +517,7 @@ export const SourceComparator: React.FC = () => {
                         multiple={false}
                         accept="*"
                         validator={() => true}
+                        dragDropText="Drag & drop zip file or file here"
                         supportedText={t('sourceCompare.supports')}
                         className={clsx("min-h-[200px]", sourceA ? "border-green-500 bg-green-50 dark:bg-green-900/10" : "")}
                     />
@@ -442,6 +535,7 @@ export const SourceComparator: React.FC = () => {
                         multiple={false}
                         accept="*"
                         validator={() => true}
+                        dragDropText="Drag & drop zip file or file here"
                         supportedText={t('sourceCompare.supports')}
                         className={clsx("min-h-[200px]", sourceB ? "border-blue-500 bg-blue-50 dark:bg-blue-900/10" : "")}
                     />
