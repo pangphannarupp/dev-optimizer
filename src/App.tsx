@@ -67,6 +67,7 @@ const ImageToPdf = lazy(() => import('./components/ImageToPdf').then(module => (
 const PdfToImage = lazy(() => import('./components/PdfToImage').then(module => ({ default: module.PdfToImage })));
 const MathSnap = lazy(() => import('./components/MathSnap').then(module => ({ default: module.MathSnap })));
 const ExamEditor = lazy(() => import('./components/ExamEditor').then(module => ({ default: module.ExamEditor })));
+const ScaScanner = lazy(() => import('./components/ScaScanner').then(module => ({ default: module.ScaScanner })));
 
 
 
@@ -821,6 +822,18 @@ function AppContent() {
                     className="h-full overflow-y-auto p-0"
                   >
                     <ExamEditor />
+                  </motion.main>
+                } />
+
+                <Route path="/sca-scanner" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-y-auto"
+                  >
+                    <ScaScanner />
                   </motion.main>
                 } />
 
