@@ -13,7 +13,7 @@
     "build:linux": "tsc && vite build && electron-builder --linux",
     "build:all": "tsc && vite build && electron-builder -mwl",
     "build:web": "tsc && cross-env IS_WEB_BUILD=true vite build",
-    "deploy": "npm run build:web && firebase deploy",
+    "deploy": "npm run build:web && npx -y firebase-tools deploy",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "upload:drive": "node scripts/upload-drive.cjs",

@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     Image as ImageIcon, Layers, Sparkles, QrCode, FileCode, Code, Key, Lock, Hash,
@@ -25,7 +26,7 @@ export interface Tool {
 export const useTools = () => {
     const { t } = useTranslation();
 
-    const tools: Tool[] = [
+    return useMemo((): Tool[] => [
         { id: 'translator', icon: Languages, label: t('translator.title', 'App Translator'), description: t('translator.description', 'Translate JSON, Android XML, iOS Strings & Excel') },
         { id: 'optimizer', icon: ImageIcon, label: t('app.optimizerTab'), description: 'Compress and optimize images' },
         { id: 'generator', icon: Layers, label: t('app.generatorTab'), description: 'Generate app icons and assets' },
@@ -56,7 +57,6 @@ export const useTools = () => {
         { id: 'mock-data', icon: Database, label: t('mockData.title'), description: t('mockData.description') },
         { id: 'markdown-editor', icon: FileCode, label: t('markdownEditor.title', 'Markdown Editor'), description: t('markdownEditor.description', 'Edit and Preview Markdown') },
         { id: 'developer-guide', icon: Book, label: t('developerGuide.title', 'Developer Guide'), description: t('developerGuide.description', 'Generate documentation from code') },
-        // { id: 'download', icon: Download, label: t('app.downloadTab', 'Download App'), description: 'Get the mobile app' },
         { id: 'code-playground', icon: Code, label: t('codePlayground.title', 'Code Playground'), description: t('codePlayground.description', 'Write and run code (Kotlin, Swift, Flutter, Web)') },
         { id: 'dsa-tutorial', icon: Binary, label: t('dsa.title', 'DSA Tutorial'), description: t('dsa.description', 'Learn Data Structures & Algorithms') },
         { id: 'programming-tutorial', icon: Terminal, label: 'Programming Tutorial', description: 'Learn Android, iOS, Web & More' },
@@ -72,7 +72,5 @@ export const useTools = () => {
         { id: 'math-snap', icon: Binary, label: t('mathSnap.title', 'Math Snap'), description: t('mathSnap.description', 'Convert LaTeX to Image') },
         { id: 'math-editor', icon: FileText, label: t('mathEditor.title', 'LaTeX Editor'), description: t('mathEditor.description', 'Write and preview LaTeX documents') },
         { id: 'sca-scanner', icon: ShieldAlert, label: t('scaScanner.title', 'SCA Vulnerability Scanner'), description: t('scaScanner.description', 'Scan for open-source vulnerabilities') },
-    ];
-
-    return tools;
+    ], [t]);
 };
