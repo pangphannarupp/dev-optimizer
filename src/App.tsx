@@ -68,6 +68,7 @@ const PdfToImage = lazy(() => import('./components/PdfToImage').then(module => (
 const MathSnap = lazy(() => import('./components/MathSnap').then(module => ({ default: module.MathSnap })));
 const ExamEditor = lazy(() => import('./components/ExamEditor').then(module => ({ default: module.ExamEditor })));
 const ScaScanner = lazy(() => import('./components/ScaScanner').then(module => ({ default: module.ScaScanner })));
+const Translator = lazy(() => import('./components/Translator').then(module => ({ default: module.Translator })));
 
 
 
@@ -834,6 +835,18 @@ function AppContent() {
                     className="h-full overflow-y-auto"
                   >
                     <ScaScanner />
+                  </motion.main>
+                } />
+
+                <Route path="/translator" element={
+                  <motion.main
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                    className="h-full overflow-hidden"
+                  >
+                    <Translator />
                   </motion.main>
                 } />
 

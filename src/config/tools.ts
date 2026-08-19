@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import {
     Image as ImageIcon, Layers, Sparkles, QrCode, FileCode, Code, Key, Lock, Hash,
     FileUp, Split, Film, Link, ScanLine, Palette, Zap, Clock, Monitor,
-    Smartphone, KeyRound, CheckCircle, Database, Book, Binary, Terminal, Mic, FileText, Download, FileSpreadsheet, Bot, FilePlus, FileImage, ShieldAlert
+    Smartphone, KeyRound, CheckCircle, Database, Book, Binary, Terminal, Mic, FileText, Download, FileSpreadsheet, Bot, FilePlus, FileImage, ShieldAlert, Languages
 } from 'lucide-react';
 
 export type ToolId =
@@ -11,7 +11,7 @@ export type ToolId =
     | 'density-converter' | 'regex-tester' | 'css-generator' | 'screenshot-framer'
     | 'totp-generator' | 'deeplink-generator' | 'qr' | 'svg-drawable' | 'base64'
     | 'json' | 'json-to-code' | 'csv-json' | 'validate-translation' | 'jwt' | 'encryption' | 'sha'
-    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground' | 'dsa-tutorial' | 'programming-tutorial' | 'screen-audio-maker' | 'cv-generator' | 'youtube-downloader' | 'project-translation-verifier' | 'watermark-remover' | 'error-code-generator' | 'test-automation' | 'image-to-pdf' | 'pdf-to-image' | 'math-snap' | 'math-editor' | 'sca-scanner';
+    | 'download' | 'editor' | 'code-quality' | 'mock-data' | 'markdown-editor' | 'developer-guide' | 'code-playground' | 'dsa-tutorial' | 'programming-tutorial' | 'screen-audio-maker' | 'cv-generator' | 'youtube-downloader' | 'project-translation-verifier' | 'watermark-remover' | 'error-code-generator' | 'test-automation' | 'image-to-pdf' | 'pdf-to-image' | 'math-snap' | 'math-editor' | 'sca-scanner' | 'translator';
 
 export interface Tool {
     id: ToolId;
@@ -26,6 +26,7 @@ export const useTools = () => {
     const { t } = useTranslation();
 
     const tools: Tool[] = [
+        { id: 'translator', icon: Languages, label: t('translator.title', 'App Translator'), description: t('translator.description', 'Translate JSON, Android XML, iOS Strings & Excel') },
         { id: 'optimizer', icon: ImageIcon, label: t('app.optimizerTab'), description: 'Compress and optimize images' },
         { id: 'generator', icon: Layers, label: t('app.generatorTab'), description: 'Generate app icons and assets' },
         { id: 'enhancer', icon: Sparkles, label: t('app.enhancerTab'), description: 'Enhance image quality' },

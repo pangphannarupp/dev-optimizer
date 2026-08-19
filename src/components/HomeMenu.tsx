@@ -145,6 +145,7 @@ export function HomeMenu({ onSettingsClick }: HomeMenuProps) {
                     {/* Favorites Section */}
                     {favoriteTools.length > 0 && (
                         <motion.section
+                            key="favorites-section"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, height: 0 }}
@@ -162,6 +163,7 @@ export function HomeMenu({ onSettingsClick }: HomeMenuProps) {
                     {/* All Tools Section */}
                     {otherTools.length > 0 && (
                         <motion.section
+                            key="all-tools-section"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                         >
@@ -177,11 +179,17 @@ export function HomeMenu({ onSettingsClick }: HomeMenuProps) {
                     )}
 
                     {filteredTools.length === 0 && (
-                        <div className="text-center py-12">
+                        <motion.div
+                            key="empty-tools-section"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="text-center py-12"
+                        >
                             <p className="text-gray-500 dark:text-gray-400 text-lg">
                                 {t('common.noResults', 'No tools found matching your search.')}
                             </p>
-                        </div>
+                        </motion.div>
                     )}
                 </AnimatePresence>
             </div>

@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { 
     ShieldAlert, ShieldCheck, Shield, AlertTriangle, Info, 
-    Upload, FileJson, ChevronDown, ChevronUp, PackageOpen
+    Upload, ChevronDown, ChevronUp, PackageOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -58,7 +57,6 @@ const SeverityBadge: React.FC<{ severity: string }> = ({ severity }) => {
 };
 
 export function ScaScanner() {
-    const { t } = useTranslation();
     const [report, setReport] = useState<NpmAuditReport | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [expandedVuln, setExpandedVuln] = useState<string | null>(null);

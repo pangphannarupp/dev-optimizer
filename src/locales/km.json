@@ -16,6 +16,11 @@
         "paramKey": "ឈ្មោះ",
         "paramValue": "តម្លៃ"
     },
+    "translator": {
+        "title": "កម្មវិធីបកប្រែពាក្យ (App Translator)",
+        "description": "បកប្រែឯកសារ JSON, Android XML, iOS Strings និង Excel ទៅជាភាសាច្រើនដោយឥតគិតថ្លៃ",
+        "loadedSuccess": "បានផ្ទុកជោគជ័យចំនួន {{count}} keys!"
+    },
     "app": {
         "title": "Dev Optimizer",
         "subtitle": "កែសម្រួលរូបភាពនិងបង្កើតរូបតំណាងកម្មវិធីរបស់អ្នក",

@@ -16,6 +16,11 @@
         "paramKey": "Key",
         "paramValue": "Value"
     },
+    "translator": {
+        "title": "App Translator",
+        "description": "Translate JSON, Android XML, iOS Strings & Excel files into multiple languages",
+        "loadedSuccess": "Successfully loaded {{count}} translation keys!"
+    },
     "app": {
         "title": "Dev Optimizer",
         "subtitle": "Optimize your images and generate app icons",
